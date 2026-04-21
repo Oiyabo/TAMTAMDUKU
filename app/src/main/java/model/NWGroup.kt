@@ -7,6 +7,15 @@ import java.time.LocalDate
 object NWGroup {
     val WorkType = listOf("Computer", "administration", "master of ceremony", "House Chores", "Heavy Work", "Driver / Delivery", "Tutor", "Freelance", "Other Job")
 
+    val IndonesianCities = listOf(
+        "Jakarta", "Surabaya", "Bandung", "Medan", "Semarang", "Makassar", "Palembang", "Tangerang", 
+        "South Tangerang", "Bekasi", "Depok", "Batam", "Bogor", "Padang", "Bandar Lampung", "Malang", 
+        "Denpasar", "Yogyakarta", "Banjarmasin", "Balikpapan", "Pontianak", "Surakarta", "Jambi", 
+        "Manado", "Pekanbaru", "Mataram", "Jayapura", "Ambon", "Kupang", "Bengkulu", "Palu", 
+        "Kendari", "Samarinda", "Gorontalo", "Mamuju", "Tanjung Pinang", "Pangkal Pinang", 
+        "Tarakan", "Sorong", "Banjarbaru", "Palangka Raya"
+    ).sorted()
+
     @RequiresApi(Build.VERSION_CODES.O)
     val NWG = listOf(
         NovaWorker("Front End", "Abdulilah", listOf(WorkType[0], WorkType[7]), "Saya sudah melakukan front selama 5 tahun. Project bisa anda lihat di profil.", "Jakarta", LocalDate.of(2019, 5, 10), 15000000.0, listOf("HTML", "CSS", "Javascript"), 4.5),
