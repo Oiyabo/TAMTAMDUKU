@@ -54,7 +54,7 @@ fun FilterSearchScreen(nav: NavHostController) {
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
             IconButton(onClick = { nav.popBackStack() }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
-            Text("Filter Pencarian", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+            Text("Filter Pencarian", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
             CompactField(namaQuery, { namaQuery = it }, "Nama Pekerja", placeholder = "Contoh: Budi")
             FilterDropdown("Tipe Pekerjaan", selectedWorkType, workTypeExpanded, { workTypeExpanded = it }, listOf("Semua Tipe" to "") + NWGroup.WorkType.map { it to it }) { selectedWorkType = it; workTypeExpanded = false }
             FilterDropdown("Lokasi", selectedLocation, locationExpanded, { locationExpanded = it }, listOf("Semua Lokasi" to "") + NWGroup.IndonesianCities.map { it to it }) { selectedLocation = it; locationExpanded = false }
@@ -117,9 +117,9 @@ fun SearchScreen(navCon: NavHostController) {
         Box(Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                    IconButton(onClick = { navCon.navigate("home") { popUpTo(navCon.graph.startDestinationId); launchSingleTop = true; restoreState = true } }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, null) }
-                    OutlinedTextField(searchText, { searchText = it }, Modifier.weight(1f), placeholder = { Text("Cari nama...") }, singleLine = true, leadingIcon = { Icon(Icons.Default.Search, null) }, shape = RoundedCornerShape(24.dp))
-                    IconButton(onClick = { saved?.set("nama", searchText); navCon.navigate("search/filterSearch") }) { Icon(Icons.Default.Info, null) }
+                    IconButton(onClick = { navCon.navigate("home") { popUpTo(navCon.graph.startDestinationId); launchSingleTop = true; restoreState = true } }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = MaterialTheme.colorScheme.primary) }
+                    OutlinedTextField(searchText, { searchText = it }, Modifier.weight(1f), placeholder = { Text("Cari nama...") }, singleLine = true, leadingIcon = { Icon(Icons.Default.Search, null, tint = MaterialTheme.colorScheme.primary) }, shape = RoundedCornerShape(24.dp))
+                    IconButton(onClick = { saved?.set("nama", searchText); navCon.navigate("search/filterSearch") }) { Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.primary) }
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     val filtered = NWGroup.NWG.filter { w ->
@@ -143,10 +143,16 @@ fun SearchScreen(navCon: NavHostController) {
 
 @Composable
 fun WorkerCard(w: model.NovaWorker) {
-    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp), elevation = CardDefaults.cardElevation(2.dp)) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
         Column(Modifier.padding(16.dp)) {
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
-                Text(w.nama, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(w.nama, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Default.Star, null, Modifier.size(16.dp), MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.width(4.dp))
@@ -157,7 +163,7 @@ fun WorkerCard(w: model.NovaWorker) {
             Text(w.deskripsi, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
             Spacer(Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Home, null, Modifier.size(14.dp), MaterialTheme.colorScheme.outline)
+                Icon(Icons.Default.LocationOn, null, Modifier.size(14.dp), MaterialTheme.colorScheme.outline)
                 Spacer(Modifier.width(4.dp))
                 Text(w.lokasi, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.outline)
             }
@@ -169,7 +175,7 @@ fun WorkerCard(w: model.NovaWorker) {
 fun HomeScreen(nav: NavHostController) {
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxSize().padding(24.dp), Arrangement.Center, Alignment.CenterHorizontally) {
-            Icon(Icons.Default.Home, null, Modifier.size(120.dp), MaterialTheme.colorScheme.primary)
+            Icon(Icons.Default.Build, null, Modifier.size(120.dp), MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(32.dp))
             Text("TamTamDuku", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
             Text("Temukan pekerja profesional terbaik di sekitar Anda.", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))

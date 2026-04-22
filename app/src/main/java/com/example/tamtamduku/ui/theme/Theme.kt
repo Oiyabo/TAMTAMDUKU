@@ -21,33 +21,49 @@ private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
+
+private val OrangeColorScheme = lightColorScheme(
+    primary = OrangePrimary,
+    onPrimary = OrangeOnPrimary,
+    primaryContainer = OrangePrimaryContainer,
+    onPrimaryContainer = OrangeOnPrimaryContainer,
+    secondary = OrangeSecondary,
+    onSecondary = OrangeOnSecondary,
+    secondaryContainer = OrangeSecondaryContainer,
+    onSecondaryContainer = OrangeOnSecondaryContainer,
+    tertiary = OrangeTertiary,
+    onTertiary = OrangeOnTertiary,
+    tertiaryContainer = OrangeTertiaryContainer,
+    onTertiaryContainer = OrangeOnTertiaryContainer,
+    error = OrangeError,
+    onError = OrangeOnError,
+    background = OrangeBackground,
+    onBackground = OrangeOnBackground,
+    surface = OrangeSurface,
+    onSurface = OrangeOnSurface,
+    surfaceVariant = OrangeSurfaceVariant,
+    onSurfaceVariant = OrangeOnSurfaceVariant,
+    outline = OrangeOutline,
+    outlineVariant = OrangeOutlineVariant
+)
+
+enum class AppTheme {
+    LIGHT, DARK, MAIN
+}
 
 @Composable
 fun TAMTAMDUKUTheme(
+    appTheme: AppTheme = AppTheme.MAIN,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val colorScheme = when (appTheme) {
+        AppTheme.LIGHT -> LightColorScheme
+        AppTheme.DARK -> DarkColorScheme
+        AppTheme.MAIN -> OrangeColorScheme
     }
 
     MaterialTheme(
