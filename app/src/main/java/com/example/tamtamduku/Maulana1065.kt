@@ -1,5 +1,6 @@
 package com.example.tamtamduku
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.*
@@ -129,7 +130,7 @@ fun SearchScreen(navCon: NavHostController) {
                     }
                     items(filtered) { worker ->
                         WorkerCard(worker, onClick = {
-                            navCon.navigate("detail/${worker.nama}")
+                            navCon.navigate("detail/${Uri.encode(worker.nama)}")
                         })
                     }
                     if (filtered.isEmpty()) item { Box(Modifier.fillMaxWidth().padding(32.dp), Alignment.Center) { Text("Tidak ada hasil", color = MaterialTheme.colorScheme.outline) } }
