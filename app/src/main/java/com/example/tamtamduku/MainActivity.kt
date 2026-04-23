@@ -15,10 +15,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.tamtamduku.ui.theme.AppTheme
 import com.example.tamtamduku.ui.theme.TAMTAMDUKUTheme
 
@@ -56,7 +58,7 @@ fun AppNavigation(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == "home" || currentRoute == "search" || currentRoute == "tracking") {
+            if (currentRoute == "home" || currentRoute == "search" || currentRoute?.startsWith("tracking") == true) {
                 Column {
                     HorizontalDivider(
                         thickness = 1.dp,
@@ -182,7 +184,13 @@ fun AppNavigation(
             composable("home") { HomeScreen(navCon) }
             composable("search") { SearchScreen(navCon) }
             composable("search/filterSearch") { FilterSearchScreen(navCon) }
-            composable("tracking") { TrackingPekerjaanScreen() }
+            composable("tracking") { TrackingPekerjaanScreen(navCon) }
+            composable(
+                "detail/{workerName}",
+                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                ServiceDetailScreen(navCon, backStackEntry.arguments?.getString("workerName"))
+            }
         }
     }
 }

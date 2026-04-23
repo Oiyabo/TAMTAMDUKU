@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.tamtamduku.ui.theme.TAMTAMDUKUTheme
 import model.AkunData
 import model.NWGroup
@@ -227,8 +229,9 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TrackingPekerjaanScreen() {
-    val daftarWorker = NWGroup.NWG
+fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val tabs = listOf("Tracking", "History")
 
     Column(
         modifier = Modifier
@@ -238,7 +241,6 @@ fun TrackingPekerjaanScreen() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(120.dp)
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -247,36 +249,80 @@ fun TrackingPekerjaanScreen() {
                         )
                     ),
                     shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
-                ),
+                )
+                .padding(bottom = 16.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Tracking Pekerjaan",
-                color = MaterialTheme.colorScheme.onPrimary,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.ExtraBold
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Spacer(modifier = Modifier.height(60.dp))
+                Text(
+                    text = "Aktivitas Jasa",
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                TabRow(
+                    selectedTabIndex = selectedTab,
+                    containerColor = Color.Transparent,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    divider = {},
+                    indicator = { tabPositions ->
+                        TabRowDefaults.SecondaryIndicator(
+                            Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    },
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                ) {
+                    tabs.forEachIndexed { index, title ->
+                        Tab(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            text = { 
+                                Text(
+                                    title, 
+                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
+                                    color = MaterialTheme.colorScheme.onPrimary
+                                ) 
+                            }
+                        )
+                    }
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        when (selectedTab) {
+            0 -> TrackingTabContent(navCon)
+            1 -> TransactionHistoryContent()
+        }
+    }
+}
 
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(daftarWorker) { worker ->
-                ItemWorker(worker)
-            }
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun TrackingTabContent(navCon: NavHostController? = null) {
+    val daftarWorker = NWGroup.NWG
+
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(daftarWorker) { worker ->
+            ItemWorker(worker, onClick = {
+                navCon?.navigate("detail/${worker.nama}")
+            })
         }
     }
 }
 
 @Composable
-fun ItemWorker(worker: NovaWorker) {
+fun ItemWorker(worker: NovaWorker, onClick: () -> Unit = {}) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .wrapContentHeight()
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
