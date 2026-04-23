@@ -43,7 +43,7 @@ import model.NWGroup
 import model.NovaWorker
 
 @Composable
-fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
+fun LoginScreen(onLoginSuccess: () -> Unit = {}, onToRegister: () -> Unit = {}) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -85,7 +85,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                                 fontWeight = FontWeight.ExtraBold
                             )
                         ) {
-                            append("TAM")
+                            append("V")
                         }
                         withStyle(
                             style = SpanStyle(
@@ -93,7 +93,15 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                                 fontWeight = FontWeight.ExtraBold
                             )
                         ) {
-                            append("TAM")
+                            append("O")
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.onSurface,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                        ) {
+                            append("CA")
                         }
                     },
                     fontSize = 44.sp,
@@ -215,7 +223,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                     Text(text = "Belum punya akun? ", fontSize = 14.sp, color = MaterialTheme.colorScheme.outline)
                     Text(
                         text = "Daftar di sini",
-                        modifier = Modifier.clickable { },
+                        modifier = Modifier.clickable { onToRegister() },
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.primary
@@ -276,9 +284,9 @@ fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
                             text = { 
                                 Text(
                                     title, 
-                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal,
-                                    color = MaterialTheme.colorScheme.onPrimary
-                                ) 
+                                    fontSize = 16.sp,
+                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal
+                                )
                             }
                         )
                     }
@@ -286,143 +294,24 @@ fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
             }
         }
 
-        when (selectedTab) {
-            0 -> TrackingTabContent(navCon)
-            1 -> TransactionHistoryContent(navCon)
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun TrackingTabContent(navCon: NavHostController? = null) {
-    val daftarWorker = NWGroup.NWG
-
-    LazyColumn(
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(daftarWorker) { worker ->
-            ItemWorker(worker, onClick = {
-                navCon?.navigate("detail/${Uri.encode(worker.nama)}")
-            })
-        }
-    }
-}
-
-@Composable
-fun ItemWorker(worker: NovaWorker, onClick: () -> Unit = {}) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = worker.pekerjaan,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Icon(
-                    imageVector = when {
-                        worker.pekerjaan.contains("AC", true) -> Icons.Default.Settings
-                        worker.pekerjaan.contains("Rumput", true) || worker.pekerjaan.contains("Kebun", true) -> Icons.Default.ThumbUp
-                        worker.pekerjaan.contains("Front End", true) || worker.pekerjaan.contains("Back End", true) || worker.pekerjaan.contains("Developer", true) -> Icons.Default.Build
-                        worker.pekerjaan.contains("Tutor", true) || worker.pekerjaan.contains("Guru", true) -> Icons.Default.Edit
-                        worker.pekerjaan.contains("Supir", true) || worker.pekerjaan.contains("Kurir", true) -> Icons.Default.LocationOn
-                        else -> Icons.Default.Info
-                    },
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Pekerja: ${worker.nama}",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            val progress = (worker.rating / 5.0).toFloat()
-            val status = when {
-                progress >= 1.0f -> "Selesai"
-                progress > 0.9f -> "Hampir Selesai"
-                progress > 0.5f -> "Sedang Dikerjakan"
-                else -> "Dalam Antrian"
-            }
-
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (progress >= 1.0f) {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = null,
-                            tint = Color(0xFF4CAF50),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                    }
+        if (selectedTab == 0) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
+                        imageVector = Icons.Default.DirectionsRun,
+                        contentDescription = null,
+                        modifier = Modifier.size(64.dp),
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = status,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = if (progress >= 1.0f) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary
+                        "Belum ada pekerjaan yang sedang berjalan",
+                        color = MaterialTheme.colorScheme.outline
                     )
                 }
-                Text(
-                    text = "${(progress * 100).toInt()}%",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (progress >= 1.0f) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary
-                )
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LinearProgressIndicator(
-                progress = { progress },
-                modifier = Modifier.fillMaxWidth().height(8.dp),
-                color = if (progress >= 1.0f) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.surface,
-                strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
-            )
+        } else {
+            TransactionHistoryContent(navCon)
         }
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun LoginScreenPreview() {
-    TAMTAMDUKUTheme {
-        LoginScreen()
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun TrackingPekerjaanPreview() {
-    TAMTAMDUKUTheme {
-        TrackingPekerjaanScreen()
     }
 }

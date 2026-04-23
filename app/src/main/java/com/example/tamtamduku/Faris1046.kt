@@ -261,32 +261,42 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                 tonalElevation = 8.dp,
                 color = MaterialTheme.colorScheme.surface
             ) {
-                Row(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .navigationBarsPadding(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    OutlinedButton(
-                        onClick = { },
-                        modifier = Modifier.weight(1f).height(50.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
-                    ) {
-                        Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text("Chat", fontWeight = FontWeight.Bold)
-                    }
+                Column(modifier = Modifier.padding(16.dp).navigationBarsPadding()) {
                     Button(
-                        onClick = { },
-                        modifier = Modifier.weight(1f).height(50.dp),
+                        onClick = { navCon.navigate("review/${Uri.encode(worker.nama)}") },
+                        modifier = Modifier.fillMaxWidth().height(50.dp).padding(bottom = 8.dp),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
                     ) {
-                        Icon(Icons.Default.ShoppingCart, contentDescription = null)
+                        Icon(Icons.Default.Star, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Memesan", fontWeight = FontWeight.Bold)
+                        Text("Beri Review", fontWeight = FontWeight.Bold)
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        OutlinedButton(
+                            onClick = { },
+                            modifier = Modifier.weight(1f).height(50.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                        ) {
+                            Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = null)
+                            Spacer(Modifier.width(8.dp))
+                            Text("Chat", fontWeight = FontWeight.Bold)
+                        }
+                        Button(
+                            onClick = { },
+                            modifier = Modifier.weight(1f).height(50.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        ) {
+                            Icon(Icons.Default.ShoppingCart, contentDescription = null)
+                            Spacer(Modifier.width(8.dp))
+                            Text("Memesan", fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }
