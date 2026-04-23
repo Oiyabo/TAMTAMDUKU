@@ -1,5 +1,6 @@
 package com.example.tamtamduku
 
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -196,9 +197,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}) {
                             Toast.makeText(context, "Email atau Password Salah!", Toast.LENGTH_SHORT).show()
                         }
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
@@ -234,14 +233,10 @@ fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
     val tabs = listOf("Tracking", "History")
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
+            modifier = Modifier.fillMaxWidth().background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             MaterialTheme.colorScheme.primaryContainer,
@@ -249,8 +244,7 @@ fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
                         )
                     ),
                     shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
-                )
-                .padding(bottom = 16.dp),
+                ).padding(bottom = 16.dp),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -294,7 +288,7 @@ fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
 
         when (selectedTab) {
             0 -> TrackingTabContent(navCon)
-            1 -> TransactionHistoryContent()
+            1 -> TransactionHistoryContent(navCon)
         }
     }
 }
@@ -310,7 +304,7 @@ fun TrackingTabContent(navCon: NavHostController? = null) {
     ) {
         items(daftarWorker) { worker ->
             ItemWorker(worker, onClick = {
-                navCon?.navigate("detail/${worker.nama}")
+                navCon?.navigate("detail/${Uri.encode(worker.nama)}")
             })
         }
     }
@@ -327,14 +321,8 @@ fun ItemWorker(worker: NovaWorker, onClick: () -> Unit = {}) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(20.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = worker.pekerjaan,
                     fontSize = 17.sp,
@@ -383,10 +371,7 @@ fun ItemWorker(worker: NovaWorker, onClick: () -> Unit = {}) {
                 else -> "Dalam Antrian"
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (progress >= 1.0f) {
                         Icon(
@@ -416,9 +401,7 @@ fun ItemWorker(worker: NovaWorker, onClick: () -> Unit = {}) {
 
             LinearProgressIndicator(
                 progress = { progress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp),
+                modifier = Modifier.fillMaxWidth().height(8.dp),
                 color = if (progress >= 1.0f) Color(0xFF4CAF50) else MaterialTheme.colorScheme.primary,
                 trackColor = MaterialTheme.colorScheme.surface,
                 strokeCap = androidx.compose.ui.graphics.StrokeCap.Round

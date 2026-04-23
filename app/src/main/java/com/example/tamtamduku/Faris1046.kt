@@ -1,8 +1,11 @@
 package com.example.tamtamduku
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,44 +32,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import model.NWGroup
+import model.Transak
+import model.TransakGroup
 import java.util.Locale
 
-data class TransactionItem(
-    val title: String,
-    val date: String,
-    val time: String,
-    val amount: String,
-    val status: String,
-    val icon: ImageVector,
-    val iconBgColor: Color,
-    val iconColor: Color
-)
-
-data class TransactionGroup(
-    val date: String,
-    val items: List<TransactionItem>
-)
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TransactionHistoryContent(innerPadding: PaddingValues = PaddingValues(0.dp)) {
-    val transactionGroups = listOf(
-        TransactionGroup(
-            date = "20 Mei 2024",
-            items = listOf(
-                TransactionItem("Jasa Potong Rumput Taman", "20 Mei 2024", "09:30", "Rp75.000", "Selesai", Icons.Default.ContentCut, Color(0xFFE8F5E9), Color(0xFF4CAF50)),
-                TransactionItem("Bersih-bersih Rumah", "20 Mei 2024", "08:00", "Rp120.000", "Selesai", Icons.Default.CleaningServices, Color(0xFFFFF3E0), Color(0xFFFF9800)),
-                TransactionItem("Membuat Website", "20 Mei 2024", "07:00", "Rp250.000", "Selesai", Icons.Default.Computer, Color(0xFFE3F2FD), Color(0xFF2196F3))
-            )
-        ),
-        TransactionGroup(
-            date = "19 Mei 2024",
-            items = listOf(
-                TransactionItem("Bersih-bersih Rumah", "19 Mei 2024", "10:00", "Rp80.000", "Dibatalkan", Icons.Default.CleaningServices, Color(0xFFFFF3E0), Color(0xFFFF9800)),
-                TransactionItem("Jasa Potong Rumput Taman", "19 Mei 2024", "08:00", "Rp75.000", "Selesai", Icons.Default.ContentCut, Color(0xFFE8F5E9), Color(0xFF4CAF50)),
-                TransactionItem("Membuat Website", "19 Mei 2024", "07:00", "Rp250.000", "Dibatalkan", Icons.Default.Computer, Color(0xFFE3F2FD), Color(0xFF2196F3))
-            )
-        )
-    )
+fun TransactionHistoryContent(
+    navCon: NavHostController? = null,
+    innerPadding: PaddingValues = PaddingValues(0.dp)
+) {
+    val transactionGroups = TransakGroup.TG
 
     LazyColumn(
         modifier = Modifier
@@ -82,7 +58,8 @@ fun TransactionHistoryContent(innerPadding: PaddingValues = PaddingValues(0.dp))
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -127,21 +104,25 @@ fun TransactionHistoryContent(innerPadding: PaddingValues = PaddingValues(0.dp))
                 )
             }
             items(group.items) { item ->
-                TransactionCard(item)
+                TransactionCard(item) {
+                    navCon?.navigate("detail/${Uri.encode(item.worker.nama)}")
+                }
             }
         }
     }
 }
 
 @Composable
-fun TransactionCard(item: TransactionItem) {
+fun TransactionCard(item: Transak, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.05f))
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -170,7 +151,7 @@ fun TransactionCard(item: TransactionItem) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = item.title,
+                        text = item.worker.pekerjaan,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -178,6 +159,13 @@ fun TransactionCard(item: TransactionItem) {
                     )
                     StatusBadge(status = item.status)
                 }
+                
+                Text(
+                    text = "Pekerja: ${item.worker.nama}",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontWeight = FontWeight.Medium
+                )
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
@@ -194,7 +182,7 @@ fun TransactionCard(item: TransactionItem) {
                     )
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -203,8 +191,9 @@ fun TransactionCard(item: TransactionItem) {
                         color = MaterialTheme.colorScheme.outline
                     )
                     Spacer(modifier = Modifier.width(8.dp))
+                    val formattedSalary = String.format(Locale.getDefault(), "%,.0f", item.worker.baseSalary)
                     Text(
-                        text = item.amount,
+                        text = "Rp$formattedSalary",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -224,8 +213,9 @@ fun TransactionCard(item: TransactionItem) {
 
 @Composable
 fun StatusBadge(status: String) {
-    val bgColor = if (status == "Selesai") Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-    val textColor = if (status == "Selesai") Color(0xFF4CAF50) else Color(0xFFF44336)
+    val isSelesai = status == "Selesai"
+    val bgColor = if (isSelesai) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
+    val textColor = if (isSelesai) Color(0xFF4CAF50) else Color(0xFFF44336)
 
     Surface(
         color = bgColor,
@@ -245,7 +235,9 @@ fun StatusBadge(status: String) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
-    val worker = NWGroup.NWG.find { it.nama == workerName } ?: NWGroup.NWG[0]
+    // Decode nama agar bisa dicari di database
+    val decodedName = workerName?.let { Uri.decode(it) }
+    val worker = NWGroup.NWG.find { it.nama == decodedName } ?: NWGroup.NWG[0]
 
     Scaffold(
         topBar = {
@@ -279,7 +271,7 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                         onClick = { },
                         modifier = Modifier.weight(1f).height(50.dp),
                         shape = RoundedCornerShape(12.dp),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
                     ) {
                         Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = null)
@@ -313,7 +305,8 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -323,7 +316,7 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                         Box(contentAlignment = Alignment.BottomCenter) {
                             AsyncImage(
                                 model = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1976&auto=format&fit=crop",
-                                contentDescription = null,
+                                contentDescription = "Worker Image",
                                 modifier = Modifier
                                     .size(100.dp)
                                     .clip(CircleShape)
@@ -335,7 +328,7 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                                 shape = RoundedCornerShape(12.dp),
                                 color = MaterialTheme.colorScheme.surface,
                                 shadowElevation = 2.dp,
-                                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
                             ) {
                                 Row(
                                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
@@ -387,7 +380,8 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -425,8 +419,9 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                     }
 
                     Column(horizontalAlignment = Alignment.End) {
+                        val formattedSalary = String.format(Locale.getDefault(), "%,.0f", worker.baseSalary)
                         Text(
-                            text = "Rp${String.format(Locale.getDefault(), "%,.0f", worker.baseSalary)}",
+                            text = "Rp$formattedSalary",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.primary
@@ -444,7 +439,8 @@ fun ServiceDetailScreen(navCon: NavHostController, workerName: String?) {
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
