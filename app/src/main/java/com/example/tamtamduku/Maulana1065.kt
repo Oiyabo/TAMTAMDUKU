@@ -127,7 +127,11 @@ fun SearchScreen(navCon: NavHostController) {
                         (fD == null || !w.joinDate.isBefore(LocalDate.ofEpochDay(fD!!))) && (fS.isEmpty() || w.skills.any { it in fS }) &&
                         (minG == null || w.baseSalary >= minG!!) && (maxG == null || w.baseSalary <= maxG!!) && (minR == null || w.rating >= minR!!) && (maxR == null || w.rating <= maxR!!)
                     }
-                    items(filtered) { WorkerCard(it) }
+                    items(filtered) { worker ->
+                        WorkerCard(worker, onClick = {
+                            navCon.navigate("detail/${worker.nama}")
+                        })
+                    }
                     if (filtered.isEmpty()) item { Box(Modifier.fillMaxWidth().padding(32.dp), Alignment.Center) { Text("Tidak ada hasil", color = MaterialTheme.colorScheme.outline) } }
                 }
             }
@@ -142,9 +146,11 @@ fun SearchScreen(navCon: NavHostController) {
 }
 
 @Composable
-fun WorkerCard(w: model.NovaWorker) {
+fun WorkerCard(w: model.NovaWorker, onClick: () -> Unit = {}) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(4.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)),
