@@ -6,8 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -15,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -59,9 +56,8 @@ fun AppNavigation(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == "home" || currentRoute == "search") {
+            if (currentRoute == "home" || currentRoute == "search" || currentRoute == "tracking") {
                 Column {
-                    // Thin orange line on top of Bottom Nav for better separation
                     HorizontalDivider(
                         thickness = 1.dp,
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
@@ -113,6 +109,27 @@ fun AppNavigation(
                                 }
                             }
                         )
+                        NavigationBarItem(
+                            icon = { Icon(Icons.Default.List, contentDescription = "Tracking") },
+                            label = { Text("Tracking") },
+                            selected = currentRoute == "tracking",
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                selectedTextColor = MaterialTheme.colorScheme.primary,
+                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                                unselectedIconColor = MaterialTheme.colorScheme.outline,
+                                unselectedTextColor = MaterialTheme.colorScheme.outline
+                            ),
+                            onClick = {
+                                if (currentRoute != "tracking") {
+                                    navCon.navigate("tracking") {
+                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            }
+                        )
                         // Theme Selector Dropdown in Bottom Nav
                         Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                             IconButton(onClick = { themeMenuExpanded = true }) {
@@ -152,12 +169,20 @@ fun AppNavigation(
     ) { innerPadding ->
         NavHost(
             navController = navCon,
-            startDestination = "home",
+            startDestination = "login",
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable("login") { 
+                LoginScreen(onLoginSuccess = { 
+                    navCon.navigate("home") { 
+                        popUpTo("login") { inclusive = true } 
+                    } 
+                }) 
+            }
             composable("home") { HomeScreen(navCon) }
             composable("search") { SearchScreen(navCon) }
             composable("search/filterSearch") { FilterSearchScreen(navCon) }
+            composable("tracking") { TrackingPekerjaanScreen() }
         }
     }
 }
