@@ -184,7 +184,7 @@ fun HomeScreen(nav: NavHostController) {
         Column(Modifier.fillMaxSize().padding(24.dp), Arrangement.Center, Alignment.CenterHorizontally) {
             Icon(Icons.Default.Build, null, Modifier.size(120.dp), MaterialTheme.colorScheme.primary)
             Spacer(Modifier.height(32.dp))
-            Text("TamTamDuku", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
+            Text("VOCA", style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
             Text("Temukan pekerja profesional terbaik di sekitar Anda.", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
             Spacer(Modifier.height(48.dp))
             Button({ nav.navigate("search") }, Modifier.fillMaxWidth().height(56.dp), shape = RoundedCornerShape(12.dp)) { Text("Mulai Cari Pekerja", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold) }

@@ -171,15 +171,24 @@ fun AppNavigation(
     ) { innerPadding ->
         NavHost(
             navController = navCon,
-            startDestination = "login",
+            startDestination = "register",
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable("register") {
+                RegisterScreen(
+                    onRegisterSuccess = { navCon.navigate("login") },
+                    onToLogin = { navCon.navigate("login") }
+                )
+            }
             composable("login") { 
-                LoginScreen(onLoginSuccess = { 
-                    navCon.navigate("home") { 
-                        popUpTo("login") { inclusive = true } 
-                    } 
-                }) 
+                LoginScreen(
+                    onLoginSuccess = { 
+                        navCon.navigate("home") { 
+                            popUpTo("login") { inclusive = true } 
+                        } 
+                    },
+                    onToRegister = { navCon.navigate("register") }
+                ) 
             }
             composable("home") { HomeScreen(navCon) }
             composable("search") { SearchScreen(navCon) }
@@ -190,6 +199,15 @@ fun AppNavigation(
                 arguments = listOf(navArgument("workerName") { type = NavType.StringType })
             ) { backStackEntry ->
                 ServiceDetailScreen(navCon, backStackEntry.arguments?.getString("workerName"))
+            }
+            composable(
+                "review/{workerName}",
+                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                ReviewScreen(
+                    onBack = { navCon.popBackStack() },
+                    workerName = backStackEntry.arguments?.getString("workerName")
+                )
             }
         }
     }
