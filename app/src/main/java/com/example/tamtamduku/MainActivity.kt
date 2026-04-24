@@ -171,7 +171,7 @@ fun AppNavigation(
     ) { innerPadding ->
         NavHost(
             navController = navCon,
-            startDestination = "register",
+            startDestination = "login",
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("register") {
