@@ -54,11 +54,13 @@ fun FilterSearchScreen(nav: NavHostController) {
 
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            IconButton(onClick = { nav.popBackStack() }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
-            Text("Filter Pencarian", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+            Row (Modifier, Arrangement.SpaceBetween, Alignment.CenterVertically) {
+                IconButton(onClick = { nav.popBackStack() }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back") }
+                Text("Filter Pencarian", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+            }
             CompactField(namaQuery, { namaQuery = it }, "Nama Pekerja", placeholder = "Contoh: Budi")
-            FilterDropdown("Tipe Pekerjaan", selectedWorkType, workTypeExpanded, { workTypeExpanded = it }, listOf("Semua Tipe" to "") + NWGroup.WorkType.map { it to it }) { selectedWorkType = it; workTypeExpanded = false }
-            FilterDropdown("Lokasi", selectedLocation, locationExpanded, { locationExpanded = it }, listOf("Semua Lokasi" to "") + NWGroup.IndonesianCities.map { it to it }) { selectedLocation = it; locationExpanded = false }
+            FilterDropdown("Tipe Pekerjaan", selectedWorkType, workTypeExpanded, { workTypeExpanded = it }, listOf("Semua Tipe" to "") + NWGroup.WorkType.map { it to it }, onSel = { selectedWorkType = it; workTypeExpanded = false }, onValueChange = { selectedWorkType = it; workTypeExpanded = true })
+            FilterDropdown("Lokasi", selectedLocation, locationExpanded, { locationExpanded = it }, listOf("Semua Lokasi" to "") + NWGroup.IndonesianCities.map { it to it }, onSel = { selectedLocation = it; locationExpanded = false }, onValueChange = { selectedLocation = it; locationExpanded = true })
             CompactField(selectedDate?.format(DateTimeFormatter.ofPattern("dd MMM yyyy")) ?: "", {}, "Bekerja dari", readOnly = true, trailingIcon = { IconButton(onClick = { showDatePicker = true }) { Icon(Icons.Default.DateRange, null) } }, modifier = Modifier.clickable { showDatePicker = true })
             CompactField(skillInput, { skillInput = it }, "Skill", placeholder = "Tambah skill...", trailingIcon = { IconButton(onClick = { if (skillInput.isNotBlank()) { val t = skillInput.trim(); if (!skills.contains(t)) skills = skills + t; skillInput = "" } }) { Icon(Icons.Default.Add, null) } }, keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done), keyboardActions = KeyboardActions(onDone = { if (skillInput.isNotBlank()) { val t = skillInput.trim(); if (!skills.contains(t)) skills = skills + t; skillInput = "" } }))
             if (skills.isNotEmpty()) Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), Arrangement.spacedBy(8.dp)) { skills.forEach { skill -> InputChip(selected = true, onClick = { skills = skills - skill }, label = { Text(skill) }, trailingIcon = { Icon(Icons.Default.Close, null, Modifier.size(16.dp)) }) } }
@@ -89,10 +91,13 @@ fun CompactField(value: String, onValueChange: (String) -> Unit, label: String, 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FilterDropdown(label: String, sel: String, exp: Boolean, onExp: (Boolean) -> Unit, items: List<Pair<String, String>>, onSel: (String) -> Unit) {
+fun FilterDropdown(label: String, sel: String, exp: Boolean, onExp: (Boolean) -> Unit, items: List<Pair<String, String>>, onSel: (String) -> Unit, onValueChange: (String) -> Unit) {
     ExposedDropdownMenuBox(expanded = exp, onExpandedChange = onExp) {
-        OutlinedTextField(value = sel, onValueChange = {}, modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth(), readOnly = true, label = { Text(label) }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = exp) }, shape = RoundedCornerShape(12.dp))
-        ExposedDropdownMenu(expanded = exp, onDismissRequest = { onExp(false) }) { items.forEach { (t, v) -> DropdownMenuItem(text = { Text(t) }, onClick = { onSel(v) }) } }
+        OutlinedTextField(value = sel, onValueChange = onValueChange, modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable).fillMaxWidth(), readOnly = false, singleLine = true, label = { Text(label) }, trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = exp) }, shape = RoundedCornerShape(12.dp))
+        val filteredItems = items.filter { it.first.contains(sel, ignoreCase = true) }
+        if (filteredItems.isNotEmpty()) {
+            ExposedDropdownMenu(expanded = exp, onDismissRequest = { onExp(false) }) { filteredItems.forEach { (t, v) -> DropdownMenuItem(text = { Text(t) }, onClick = { onSel(v); onExp(false) }) } }
+        }
     }
 }
 
@@ -120,7 +125,7 @@ fun SearchScreen(navCon: NavHostController) {
                 Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { navCon.navigate("home") { popUpTo(navCon.graph.startDestinationId); launchSingleTop = true; restoreState = true } }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, null, tint = MaterialTheme.colorScheme.primary) }
                     OutlinedTextField(searchText, { searchText = it }, Modifier.weight(1f), placeholder = { Text("Cari nama...") }, singleLine = true, leadingIcon = { Icon(Icons.Default.Search, null, tint = MaterialTheme.colorScheme.primary) }, shape = RoundedCornerShape(24.dp))
-                    IconButton(onClick = { saved?.set("nama", searchText); navCon.navigate("search/filterSearch") }) { Icon(Icons.Default.Info, null, tint = MaterialTheme.colorScheme.primary) }
+                    IconButton(onClick = { saved?.set("nama", searchText); navCon.navigate("search/filterSearch") }) { Icon(Icons.Default.Tune, null, tint = MaterialTheme.colorScheme.primary) }
                 }
                 LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     val filtered = NWGroup.NWG.filter { w ->
