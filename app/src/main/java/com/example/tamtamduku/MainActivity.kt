@@ -13,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -210,5 +211,15 @@ fun AppNavigation(
                 )
             }
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun AppNavigationPreview() {
+    TAMTAMDUKUTheme {
+        val navCon = rememberNavController()
+        AppNavigation(navCon = navCon, currentTheme = AppTheme.MAIN, onThemeChange = {})
     }
 }
