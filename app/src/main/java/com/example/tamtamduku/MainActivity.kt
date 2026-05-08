@@ -213,13 +213,3 @@ fun AppNavigation(
         }
     }
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun AppNavigationPreview() {
-    TAMTAMDUKUTheme {
-        val navCon = rememberNavController()
-        AppNavigation(navCon = navCon, currentTheme = AppTheme.MAIN, onThemeChange = {})
-    }
-}
