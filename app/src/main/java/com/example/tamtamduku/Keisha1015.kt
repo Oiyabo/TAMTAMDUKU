@@ -41,6 +41,7 @@ import com.example.tamtamduku.ui.theme.TAMTAMDUKUTheme
 import model.AkunData
 import model.NWGroup
 import model.NovaWorker
+import model.TransakGroup
 
 @Composable
 fun LoginScreen(onLoginSuccess: () -> Unit = {}, onToRegister: () -> Unit = {}) {
@@ -239,6 +240,7 @@ fun LoginScreen(onLoginSuccess: () -> Unit = {}, onToRegister: () -> Unit = {}) 
 fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Tracking", "History")
+    val trackingItems = TransakGroup.TrackingList
 
     Column(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
@@ -295,19 +297,32 @@ fun TrackingPekerjaanScreen(navCon: NavHostController? = null) {
         }
 
         if (selectedTab == 0) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Default.DirectionsRun,
-                        contentDescription = null,
-                        modifier = Modifier.size(64.dp),
-                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        "Belum ada pekerjaan yang sedang berjalan",
-                        color = MaterialTheme.colorScheme.outline
-                    )
+            if (trackingItems.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.Default.DirectionsRun,
+                            contentDescription = null,
+                            modifier = Modifier.size(64.dp),
+                            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            "Belum ada pekerjaan yang sedang berjalan",
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    }
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(vertical = 16.dp)
+                ) {
+                    items(trackingItems) { item ->
+                        TransactionCard(item) {
+                            navCon?.navigate("detail/${Uri.encode(item.worker.nama)}")
+                        }
+                    }
                 }
             }
         } else {
