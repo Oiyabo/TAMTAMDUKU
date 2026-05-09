@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -25,6 +25,8 @@ import androidx.navigation.navArgument
 import com.example.tamtamduku.ui.screens.auth.LoginScreen
 import com.example.tamtamduku.ui.screens.auth.RegisterScreen
 import com.example.tamtamduku.ui.screens.home.HomeScreen
+import com.example.tamtamduku.ui.screens.chat.ChatPage
+import com.example.tamtamduku.ui.screens.chat.PersonalChat
 import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
@@ -38,7 +40,6 @@ import java.nio.charset.StandardCharsets
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
-//    currentTheme: AppTheme,
     onThemeChange: (AppTheme) -> Unit,
     navCon: NavHostController = rememberNavController(),
     authViewModel: AuthViewModel = viewModel(),
@@ -50,7 +51,7 @@ fun AppNavigation(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == "home" || currentRoute == "tracking") {
+            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking") {
                 Column {
                     HorizontalDivider(
                         thickness = 1.dp,
@@ -68,6 +69,20 @@ fun AppNavigation(
                             onClick = {
                                 if (currentRoute != "home") {
                                     navCon.navigate("home") {
+                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            }
+                        )
+                        NavigationBarItem(
+                            icon = { Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Chat") },
+                            label = { Text("chat") },
+                            selected = currentRoute == "chat",
+                            onClick = {
+                                if (currentRoute != "chat") {
+                                    navCon.navigate("chat") {
                                         popUpTo(navCon.graph.startDestinationId) { saveState = true }
                                         launchSingleTop = true
                                         restoreState = true
@@ -101,7 +116,6 @@ fun AppNavigation(
                                 }
                             }
                         )
-                        // Theme Selector Dropdown
                         Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                             IconButton(onClick = { themeMenuExpanded = true }) {
                                 Icon(
@@ -142,6 +156,7 @@ fun AppNavigation(
             navController = navCon,
             startDestination = "login",
             modifier = Modifier.padding(innerPadding)
+//            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable("login") {
                 LoginScreen(
@@ -163,6 +178,22 @@ fun AppNavigation(
             }
             composable("home") {
                 HomeScreen(onNavigateToSearch = { navCon.navigate("search") })
+            }
+            composable("chat") {
+                ChatPage(
+                    onNavigateToPersonalChat = { userName ->
+                        navCon.navigate("personal_chat/$userName")
+                    }
+                )
+            }
+            composable(
+                "personal_chat/{userName}",
+                arguments = listOf(navArgument("userName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                PersonalChat(
+                    userName = backStackEntry.arguments?.getString("userName") ?: "",
+                    onBack = { navCon.popBackStack() }
+                )
             }
             composable("search") {
                 SearchScreen(
