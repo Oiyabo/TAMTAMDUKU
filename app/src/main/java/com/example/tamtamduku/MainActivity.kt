@@ -6,22 +6,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import com.example.tamtamduku.navigation.AppNavigation
 import com.example.tamtamduku.ui.theme.AppTheme
 import com.example.tamtamduku.ui.theme.TAMTAMDUKUTheme
 
@@ -38,177 +28,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navCon = rememberNavController()
-                    AppNavigation(navCon, currentTheme) { currentTheme = it }
-                }
-            }
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun AppNavigation(
-    navCon: NavHostController, 
-    currentTheme: AppTheme, 
-    onThemeChange: (AppTheme) -> Unit
-) {
-    val navBackStackEntry by navCon.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    var themeMenuExpanded by remember { mutableStateOf(false) }
-
-    Scaffold(
-        bottomBar = {
-            if (currentRoute == "home" || currentRoute == "search" || currentRoute?.startsWith("tracking") == true) {
-                Column {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                    AppNavigation(
+//                        currentTheme = currentTheme,
+                        onThemeChange = { currentTheme = it }
                     )
-                    NavigationBar(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                        contentColor = MaterialTheme.colorScheme.primary,
-                        tonalElevation = 8.dp
-                    ) {
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                            label = { Text("Home") },
-                            selected = currentRoute == "home",
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                selectedTextColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.outline,
-                                unselectedTextColor = MaterialTheme.colorScheme.outline
-                            ),
-                            onClick = {
-                                if (currentRoute != "home") {
-                                    navCon.navigate("home") {
-                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
-                            }
-                        )
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                            label = { Text("Search") },
-                            selected = currentRoute == "search",
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                selectedTextColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.outline,
-                                unselectedTextColor = MaterialTheme.colorScheme.outline
-                            ),
-                            onClick = {
-                                if (currentRoute != "search") {
-                                    navCon.navigate("search") {
-                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
-                            }
-                        )
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.List, contentDescription = "Tracking") },
-                            label = { Text("Tracking") },
-                            selected = currentRoute == "tracking",
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = MaterialTheme.colorScheme.primary,
-                                selectedTextColor = MaterialTheme.colorScheme.primary,
-                                indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                                unselectedIconColor = MaterialTheme.colorScheme.outline,
-                                unselectedTextColor = MaterialTheme.colorScheme.outline
-                            ),
-                            onClick = {
-                                if (currentRoute != "tracking") {
-                                    navCon.navigate("tracking") {
-                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
-                            }
-                        )
-                        // Theme Selector Dropdown in Bottom Nav
-                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                            IconButton(onClick = { themeMenuExpanded = true }) {
-                                Icon(
-                                    Icons.Default.Settings, 
-                                    contentDescription = "Theme",
-                                    tint = if (themeMenuExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                                )
-                            }
-                            DropdownMenu(
-                                expanded = themeMenuExpanded,
-                                onDismissRequest = { themeMenuExpanded = false }
-                            ) {
-                                AppTheme.entries.forEach { theme ->
-                                    DropdownMenuItem(
-                                        text = { Text(theme.name) },
-                                        onClick = {
-                                            onThemeChange(theme)
-                                            themeMenuExpanded = false
-                                        },
-                                        leadingIcon = {
-                                            val icon = when(theme) {
-                                                AppTheme.LIGHT -> Icons.Default.Build
-                                                AppTheme.DARK -> Icons.Default.Info
-                                                AppTheme.MAIN -> Icons.Default.Favorite
-                                            }
-                                            Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    }
                 }
-            }
-        }
-    ) { innerPadding ->
-        NavHost(
-            navController = navCon,
-            startDestination = "login",
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            composable("register") {
-                RegisterScreen(
-                    onRegisterSuccess = { navCon.navigate("login") },
-                    onToLogin = { navCon.navigate("login") }
-                )
-            }
-            composable("login") { 
-                LoginScreen(
-                    onLoginSuccess = { 
-                        navCon.navigate("home") { 
-                            popUpTo("login") { inclusive = true } 
-                        } 
-                    },
-                    onToRegister = { navCon.navigate("register") }
-                ) 
-            }
-            composable("home") { HomeScreen(navCon) }
-            composable("search") { SearchScreen(navCon) }
-            composable("search/filterSearch") { FilterSearchScreen(navCon) }
-            composable("tracking") { TrackingPekerjaanScreen(navCon) }
-            composable(
-                "detail/{workerName}",
-                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
-            ) { backStackEntry ->
-                ServiceDetailScreen(navCon, backStackEntry.arguments?.getString("workerName"))
-            }
-            composable(
-                "review/{workerName}",
-                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
-            ) { backStackEntry ->
-                ReviewScreen(
-                    onBack = { navCon.popBackStack() },
-                    workerName = backStackEntry.arguments?.getString("workerName")
-                )
             }
         }
     }
