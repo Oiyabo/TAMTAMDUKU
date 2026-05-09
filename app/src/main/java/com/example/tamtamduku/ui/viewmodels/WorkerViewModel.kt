@@ -1,0 +1,169 @@
+package com.example.tamtamduku.ui.viewmodels
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+//import com.example.tamtamduku.data.model.VocaWorker
+import com.example.tamtamduku.data.repository.WorkerRepository
+import com.example.tamtamduku.ui.screens.search.SearchUiState
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+
+@RequiresApi(Build.VERSION_CODES.O)
+class WorkerViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(SearchUiState())
+    val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
+
+    init {
+        loadWorkers()
+    }
+
+    private fun loadWorkers() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            repository.getWorkers().collect { workers ->
+                val workTypes = listOf("Semua Pekerjaan") + workers.map { it.pekerjaan }.distinct().sorted()
+                val locations = listOf("Semua Lokasi") + workers.map { it.lokasi }.distinct().sorted()
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    workers = workers,
+                    filteredWorkers = workers,
+                    workTypes = workTypes,
+                    locations = locations
+                ) }
+            }
+        }
+    }
+
+    fun onSearchQueryChange(query: String) {
+        _uiState.update { it.copy(searchQuery = query) }
+        applyFilters()
+    }
+
+    fun onWorkTypeChange(workType: String) {
+        _uiState.update { it.copy(selectedWorkType = workType) }
+        applyFilters()
+    }
+
+    fun onLocationChange(location: String) {
+        _uiState.update { it.copy(selectedLocation = location) }
+        applyFilters()
+    }
+
+    fun onDateChange(date: LocalDate?) {
+        _uiState.update { it.copy(selectedDate = date) }
+        applyFilters()
+    }
+
+    fun onMinGajiChange(value: String) {
+        _uiState.update { it.copy(minGaji = value) }
+        applyFilters()
+    }
+
+    fun onMaxGajiChange(value: String) {
+        _uiState.update { it.copy(maxGaji = value) }
+        applyFilters()
+    }
+
+    fun onMinRateChange(value: String) {
+        _uiState.update { it.copy(minRate = value) }
+        applyFilters()
+    }
+
+    fun onMaxRateChange(value: String) {
+        _uiState.update { it.copy(maxRate = value) }
+        applyFilters()
+    }
+
+    fun onSkillInputChange(value: String) {
+        _uiState.update { it.copy(skillInput = value) }
+    }
+
+    fun onAddSkill() {
+        _uiState.update { 
+            if (it.skillInput.isNotBlank() && !it.skills.contains(it.skillInput)) {
+                it.copy(
+                    skills = it.skills + it.skillInput.trim(),
+                    skillInput = ""
+                )
+            } else it
+        }
+        applyFilters()
+    }
+
+    fun onRemoveSkill(skill: String) {
+        _uiState.update { it.copy(skills = it.skills - skill) }
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        val state = _uiState.value
+        val filtered = state.workers.filter { worker ->
+            val matchesQuery = state.searchQuery.isEmpty() ||
+                    worker.nama.contains(state.searchQuery, ignoreCase = true) ||
+                    worker.pekerjaan.contains(state.searchQuery, ignoreCase = true)
+
+            val matchesType = state.selectedWorkType == "Semua Pekerjaan" ||
+                    worker.pekerjaan == state.selectedWorkType
+
+            val matchesLocation = state.selectedLocation == "Semua Lokasi" ||
+                    worker.lokasi == state.selectedLocation
+
+            val matchesDate = state.selectedDate == null || !worker.joinDate.isBefore(state.selectedDate)
+
+            val minGajiVal = state.minGaji.toDoubleOrNull()
+            val matchesMinGaji = minGajiVal == null || worker.baseSalary >= minGajiVal
+
+            val maxGajiVal = state.maxGaji.toDoubleOrNull()
+            val matchesMaxGaji = maxGajiVal == null || worker.baseSalary <= maxGajiVal
+
+            val minRateVal = state.minRate.toDoubleOrNull()
+            val matchesMinRate = minRateVal == null || worker.rating >= minRateVal
+
+            val maxRateVal = state.maxRate.toDoubleOrNull()
+            val matchesMaxRate = maxRateVal == null || worker.rating <= maxRateVal
+            
+            val matchesSkills = state.skills.isEmpty() || state.skills.all { s -> 
+                worker.skills.any { ws -> ws.contains(s, ignoreCase = true) }
+            }
+
+            matchesQuery && matchesType && matchesLocation && matchesDate &&
+                    matchesMinGaji && matchesMaxGaji && matchesMinRate && matchesMaxRate && matchesSkills
+        }
+        _uiState.update { it.copy(filteredWorkers = filtered) }
+    }
+
+    fun onResetFilter() {
+        _uiState.update {
+            it.copy(
+                searchQuery = "",
+                selectedWorkType = "Semua Pekerjaan",
+                selectedLocation = "Semua Lokasi",
+                selectedDate = null,
+                skills = emptyList(),
+                skillInput = "",
+                minGaji = "",
+                maxGaji = "",
+                minRate = "",
+                maxRate = "",
+                filteredWorkers = it.workers
+            )
+        }
+    }
+
+    fun isAnyFilterActive(): Boolean {
+        val s = _uiState.value
+        return s.searchQuery.isNotEmpty() ||
+                s.selectedWorkType != "Semua Pekerjaan" ||
+                s.selectedLocation != "Semua Lokasi" ||
+                s.selectedDate != null ||
+                s.skills.isNotEmpty() ||
+                s.minGaji.isNotEmpty() ||
+                s.maxGaji.isNotEmpty() ||
+                s.minRate.isNotEmpty() ||
+                s.maxRate.isNotEmpty()
+    }
+}
