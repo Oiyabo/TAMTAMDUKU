@@ -31,9 +31,11 @@ import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
+import com.example.tamtamduku.ui.screens.profile.ProfileScreen
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
+import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 import com.example.tamtamduku.ui.theme.AppTheme
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -45,7 +47,8 @@ fun AppNavigation(
     navCon: NavHostController = rememberNavController(),
     authViewModel: AuthViewModel = viewModel(),
     workerViewModel: WorkerViewModel = viewModel(),
-    trackingViewModel: TrackingViewModel = viewModel()
+    trackingViewModel: TrackingViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = viewModel()
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -53,7 +56,7 @@ fun AppNavigation(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking") {
+            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile") {
                 Column {
                     HorizontalDivider(
                         thickness = 1.dp,
@@ -80,7 +83,7 @@ fun AppNavigation(
                         )
                         NavigationBarItem(
                             icon = { Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Chat") },
-                            label = { Text("chat") },
+                            label = { Text("Chat") },
                             selected = currentRoute == "chat",
                             onClick = {
                                 if (currentRoute != "chat") {
@@ -95,7 +98,7 @@ fun AppNavigation(
                         NavigationBarItem(
                             icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                             label = { Text("Search") },
-                            selected = false,
+                            selected = currentRoute == "search",
                             onClick = {
                                 navCon.navigate("search") {
                                     popUpTo(navCon.graph.startDestinationId) { saveState = true }
@@ -118,37 +121,20 @@ fun AppNavigation(
                                 }
                             }
                         )
-                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                            IconButton(onClick = { themeMenuExpanded = true }) {
-                                Icon(
-                                    Icons.Default.Settings,
-                                    contentDescription = "Theme",
-                                    tint = if (themeMenuExpanded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                                )
-                            }
-                            DropdownMenu(
-                                expanded = themeMenuExpanded,
-                                onDismissRequest = { themeMenuExpanded = false }
-                            ) {
-                                AppTheme.entries.forEach { theme ->
-                                    DropdownMenuItem(
-                                        text = { Text(theme.name) },
-                                        onClick = {
-                                            onThemeChange(theme)
-                                            themeMenuExpanded = false
-                                        },
-                                        leadingIcon = {
-                                            val icon = when(theme) {
-                                                AppTheme.LIGHT -> Icons.Default.LightMode
-                                                AppTheme.DARK -> Icons.Default.DarkMode
-                                                AppTheme.MAIN -> Icons.Default.Favorite
-                                            }
-                                            Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
-                                        }
-                                    )
+                        NavigationBarItem(
+                            icon = { Icon(Icons.Default.Person, contentDescription = "Profile") },
+                            label = { Text("Profil") },
+                            selected = currentRoute == "profile",
+                            onClick = {
+                                if (currentRoute != "profile") {
+                                    navCon.navigate("profile") {
+                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                 }
                             }
-                        }
+                        )
                     }
                 }
             }
@@ -207,6 +193,17 @@ fun AppNavigation(
             }
             composable("tracking") {
                 TrackingScreen(navCon = navCon, viewModel = trackingViewModel)
+            }
+            composable("profile") {
+                ProfileScreen(
+                    viewModel = profileViewModel,
+                    onBack = { navCon.popBackStack() },
+                    onLogout = {
+                        navCon.navigate("login") {
+                            popUpTo(0) { inclusive = true }
+                        }
+                    }
+                )
             }
             composable(
                 "detail/{workerName}",
