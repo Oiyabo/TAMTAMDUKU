@@ -1,8 +1,15 @@
 package com.example.tamtamduku.data.remote
 
+import com.example.tamtamduku.data.model.UserAccount
 import retrofit2.http.GET
 
 interface WorkerApiService {
     @GET("Oiyabo/1ddd47fed8ecd8b5d753c6fc02d54122/raw/")
     suspend fun getWorkers(): List<WorkerDto>
+
+    @GET("keishaara/90e0232ea3222284acd17e5b2f5cc986/raw/")
+    suspend fun getTrackingPekerjaan(): List<TrackingPekerjaanDto>
+
+    @GET("keishaara/7ce4702edb6b028d5653928e77267a25/raw/")
+    suspend fun getUserAccount(): UserAccount
 }

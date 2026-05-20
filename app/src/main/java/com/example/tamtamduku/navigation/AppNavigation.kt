@@ -33,6 +33,7 @@ import com.example.tamtamduku.ui.screens.detail.ReviewScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
+import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.theme.AppTheme
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -43,7 +44,8 @@ fun AppNavigation(
     onThemeChange: (AppTheme) -> Unit,
     navCon: NavHostController = rememberNavController(),
     authViewModel: AuthViewModel = viewModel(),
-    workerViewModel: WorkerViewModel = viewModel()
+    workerViewModel: WorkerViewModel = viewModel(),
+    trackingViewModel: TrackingViewModel = viewModel()
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -156,7 +158,6 @@ fun AppNavigation(
             navController = navCon,
             startDestination = "login",
             modifier = Modifier.padding(innerPadding)
-//            modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
         ) {
             composable("login") {
                 LoginScreen(
@@ -205,7 +206,7 @@ fun AppNavigation(
                 )
             }
             composable("tracking") {
-                TrackingScreen(navCon = navCon, viewModel = workerViewModel)
+                TrackingScreen(navCon = navCon, viewModel = trackingViewModel)
             }
             composable(
                 "detail/{workerName}",

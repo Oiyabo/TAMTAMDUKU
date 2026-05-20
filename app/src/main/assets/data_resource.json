@@ -1,0 +1,178 @@
+{
+  "akun_data": {
+    "email": "user@tamtam.com",
+    "password": "pas123"
+  },
+  "work_types": [
+    "Computer",
+    "administration",
+    "master of ceremony",
+    "House Chores",
+    "Heavy Work",
+    "Driver / Delivery",
+    "Tutor",
+    "Freelance",
+    "Other Job"
+  ],
+  "workers": [
+    {
+      "pekerjaan": "Front End",
+      "nama": "Abdulilah",
+      "workType": ["Computer", "Freelance"],
+      "deskripsi": "Saya sudah melakukan front selama 5 tahun. Project bisa anda lihat di profil.",
+      "lokasi": "Jakarta",
+      "joinDate": "2019-05-10",
+      "baseSalary": 15000000.0,
+      "skills": ["HTML", "CSS", "Javascript"],
+      "rating": 4.5
+    },
+    {
+      "pekerjaan": "Back End",
+      "nama": "Budi Santoso",
+      "workType": ["Computer"],
+      "deskripsi": "Ahli Node.js dan SQL Server. Berpengalaman dalam membangun API skala besar.",
+      "lokasi": "Surabaya",
+      "joinDate": "2020-03-15",
+      "baseSalary": 18000000.0,
+      "skills": ["Node.js", "SQL Server", "Express"],
+      "rating": 4.8
+    },
+    {
+      "pekerjaan": "Mobile Developer",
+      "nama": "Cahyo Wijaya",
+      "workType": ["Computer", "Freelance"],
+      "deskripsi": "Fokus pada Flutter dan Android Native (Kotlin).",
+      "lokasi": "Bandung",
+      "joinDate": "2021-01-20",
+      "baseSalary": 16000000.0,
+      "skills": ["Flutter", "Kotlin", "Dart"],
+      "rating": 4.7
+    },
+    {
+      "pekerjaan": "UI/UX Designer",
+      "nama": "Dewi Lestari",
+      "workType": ["Computer", "Freelance"],
+      "deskripsi": "Menciptakan desain yang user-friendly dan estetis.",
+      "lokasi": "Yogyakarta",
+      "joinDate": "2022-06-05",
+      "baseSalary": 12000000.0,
+      "skills": ["Figma", "Adobe XD", "Prototyping"],
+      "rating": 4.9
+    },
+    {
+      "pekerjaan": "Full Stack",
+      "nama": "Eko Prasetyo",
+      "workType": ["Computer"],
+      "deskripsi": "Bisa mengerjakan sisi client dan server dengan baik.",
+      "lokasi": "Semarang",
+      "joinDate": "2018-11-12",
+      "baseSalary": 20000000.0,
+      "skills": ["React", "Node.js", "MongoDB"],
+      "rating": 4.6
+    },
+    {
+      "pekerjaan": "Data Analyst",
+      "nama": "Fitriani",
+      "workType": ["Computer", "administration"],
+      "deskripsi": "Menganalisis data untuk insight bisnis yang lebih baik.",
+      "lokasi": "Medan",
+      "joinDate": "2021-09-30",
+      "baseSalary": 14000000.0,
+      "skills": ["Python", "SQL", "Tableau"],
+      "rating": 4.4
+    },
+    {
+      "pekerjaan": "DevOps Engineer",
+      "nama": "Gita Permata",
+      "workType": ["Computer"],
+      "deskripsi": "Spesialis dalam otomasi cloud dan CI/CD.",
+      "lokasi": "Makassar",
+      "joinDate": "2020-07-01",
+      "baseSalary": 19000000.0,
+      "skills": ["Docker", "Kubernetes", "AWS"],
+      "rating": 4.7
+    },
+    {
+      "pekerjaan": "QA Engineer",
+      "nama": "Hani Nuraini",
+      "workType": ["Computer"],
+      "deskripsi": "Memastikan kualitas software dengan testing manual dan otomatis.",
+      "lokasi": "Palembang",
+      "joinDate": "2022-02-14",
+      "baseSalary": 11000000.0,
+      "skills": ["Selenium", "Appium", "JMeter"],
+      "rating": 4.3
+    },
+    {
+      "pekerjaan": "Graphic Designer",
+      "nama": "Indra Kusuma",
+      "workType": ["Computer", "Freelance", "Other Job"],
+      "deskripsi": "Desain kreatif untuk branding.",
+      "lokasi": "Malang",
+      "joinDate": "2019-12-25",
+      "baseSalary": 9000000.0,
+      "skills": ["Photoshop", "Illustrator", "Canva"],
+      "rating": 4.5
+    },
+    {
+      "pekerjaan": "Project Manager",
+      "nama": "Jaka Tarub",
+      "workType": ["administration"],
+      "deskripsi": "Mengelola tim dan timeline proyek dengan efisien.",
+      "lokasi": "Denpasar",
+      "joinDate": "2017-08-18",
+      "baseSalary": 25000000.0,
+      "skills": ["Agile", "Scrum", "Trello"],
+      "rating": 4.8
+    },
+    {
+      "pekerjaan": "Asisten Rumah Tangga",
+      "nama": "Nina",
+      "workType": ["House Chores"],
+      "deskripsi": "Jujur dan rajin bersih-bersih rumah.",
+      "lokasi": "Bekasi",
+      "joinDate": "2022-10-05",
+      "baseSalary": 3500000.0,
+      "skills": ["Cleaning", "Cooking"],
+      "rating": 4.7
+    },
+    {
+      "pekerjaan": "Kuli Bangunan",
+      "nama": "Putra",
+      "workType": ["Heavy Work"],
+      "deskripsi": "Tenaga kuat untuk renovasi rumah.",
+      "lokasi": "Jakarta",
+      "joinDate": "2021-03-01",
+      "baseSalary": 5000000.0,
+      "skills": ["Construction", "Lifting"],
+      "rating": 4.9
+    },
+    {
+      "pekerjaan": "Tutor Matematika",
+      "nama": "Maman",
+      "workType": ["Tutor", "Freelance"],
+      "deskripsi": "Mengajar matematika SMA.",
+      "lokasi": "Tangerang",
+      "joinDate": "2021-08-15",
+      "baseSalary": 3000000.0,
+      "skills": ["Math", "Teaching"],
+      "rating": 4.4
+    }
+  ],
+  "tracking_list": [
+    {
+      "worker_name": "Putra",
+      "date": "21 Mei 2024",
+      "time": "10:00",
+      "status": "Sedang Berjalan",
+      "icon_type": "Construction"
+    },
+    {
+      "worker_name": "Maman",
+      "date": "21 Mei 2024",
+      "time": "13:00",
+      "status": "Menuju Lokasi",
+      "icon_type": "School"
+    }
+  ]
+}
