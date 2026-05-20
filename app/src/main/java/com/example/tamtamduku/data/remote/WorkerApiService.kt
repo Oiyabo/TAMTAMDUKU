@@ -12,4 +12,7 @@ interface WorkerApiService {
 
     @GET("keishaara/7ce4702edb6b028d5653928e77267a25/raw/")
     suspend fun getUserAccount(): UserAccount
+
+    @GET("MFarisAdithya/4a9d7b7f6beb4f1789d5e0a67b3b6215/raw/b335ae19c5d92c691011cc847c875ddc7877fb0d/gistfile1.txt")
+    suspend fun getTransactions(): List<TransactionGroupDto>
 }
