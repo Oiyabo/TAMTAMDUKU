@@ -1,5 +1,6 @@
 package com.example.tamtamduku.navigation
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
@@ -37,8 +38,6 @@ import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 import com.example.tamtamduku.ui.theme.AppTheme
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -52,7 +51,6 @@ fun AppNavigation(
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    var themeMenuExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         bottomBar = {
@@ -187,7 +185,7 @@ fun AppNavigation(
                     viewModel = workerViewModel,
                     onBack = { navCon.popBackStack() },
                     onNavigateToDetail = { workerName ->
-                        navCon.navigate("detail/${URLEncoder.encode(workerName, StandardCharsets.UTF_8.toString())}")
+                        navCon.navigate("detail/${Uri.encode(workerName)}")
                     }
                 )
             }

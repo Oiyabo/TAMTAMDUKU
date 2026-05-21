@@ -41,12 +41,18 @@ fun ServiceDetailScreen(
     workerName: String?
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val decodedName = workerName?.let { Uri.decode(it) }
-    val worker = uiState.workers.find { it.nama == decodedName }
+    
+    // NavHost automatically decodes the path parameter. 
+    // We search directly in the list from uiState.
+    val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
 
     if (worker == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            if (uiState.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Text("Pekerja tidak ditemukan", color = MaterialTheme.colorScheme.outline)
+            }
         }
         return
     }
