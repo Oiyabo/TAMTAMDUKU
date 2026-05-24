@@ -15,50 +15,51 @@ import kotlinx.coroutines.flow.flow
 class WorkerRepository {
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWorkers(): Flow<List<VocaWorker>> = flow {
-        try {
+        val domainWorkers = try {
             val response = RetrofitClient.apiService.getWorkers()
-            val domainWorkers = response.map { it.toDomainModel() }
-            emit(domainWorkers)
+            response.map { it.toDomainModel() }
         } catch (_: Exception) {
-            emit(emptyList())
+            emptyList()
         }
+        emit(domainWorkers)
     }
 
     fun getChats(): Flow<List<VocaChat>> = flow {
-        try {
+        val chats = try {
             val response = RetrofitClient.chatApiService.getChat()
-            emit(response.chats)
+            response.chats
         } catch (_: Exception) {
-            emit(emptyList())
+            emptyList()
         }
+        emit(chats)
     }
 
     fun getTrackingPekerjaan(): Flow<List<TrackingPekerjaan>> = flow {
-        try {
+        val domainTracking = try {
             val response = RetrofitClient.apiService.getTrackingPekerjaan()
-            val domainTracking = response.map { it.toDomainModel() }
-            emit(domainTracking)
+            response.map { it.toDomainModel() }
         } catch (_: Exception) {
-            emit(emptyList())
+            emptyList()
         }
+        emit(domainTracking)
     }
 
     fun getUserAccount(): Flow<UserAccount?> = flow {
-        try {
-            val response = RetrofitClient.apiService.getUserAccount()
-            emit(response)
+        val account = try {
+            RetrofitClient.apiService.getUserAccount()
         } catch (_: Exception) {
-            emit(null)
+            null
         }
+        emit(account)
     }
 
     fun getTransactions(): Flow<List<TransactionGroup>> = flow {
-        try {
+        val domainTransactions = try {
             val response = RetrofitClient.apiService.getTransactions()
-            val domainTransactions = response.map { it.toDomainModel() }
-            emit(domainTransactions)
+            response.map { it.toDomainModel() }
         } catch (_: Exception) {
-            emit(emptyList())
+            emptyList()
         }
+        emit(domainTransactions)
     }
 }
