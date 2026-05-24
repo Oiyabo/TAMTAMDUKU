@@ -13,7 +13,8 @@ import kotlinx.coroutines.launch
 data class AuthUiState(
     val isLoading: Boolean = false,
     val userAccount: UserAccount? = null,
-    val loginError: String? = null
+    val loginError: String? = null,
+    val registrationSuccess: Boolean = false
 )
 
 class AuthViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
@@ -46,8 +47,17 @@ class AuthViewModel(private val repository: WorkerRepository = WorkerRepository(
         }
     }
 
-    fun register(onSuccess: () -> Unit) {
-        // TODO: Implement register logic
-        onSuccess()
+    fun register(name: String, email: String, phone: String, password: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            // Simulating API call for registration
+            // In a real app, we would send this to the repository
+            _uiState.update { it.copy(
+                isLoading = false,
+                registrationSuccess = true,
+                userAccount = UserAccount(name = name, email = email, password = password)
+            ) }
+            onSuccess()
+        }
     }
 }

@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     AppNavigation(
-//                        currentTheme = currentTheme,
                         onThemeChange = { currentTheme = it }
                     )
                 }

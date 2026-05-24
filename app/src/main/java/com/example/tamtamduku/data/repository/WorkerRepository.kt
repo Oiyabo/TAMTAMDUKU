@@ -7,6 +7,7 @@ import com.example.tamtamduku.data.model.VocaChat
 import com.example.tamtamduku.data.model.TrackingPekerjaan
 import com.example.tamtamduku.data.model.UserAccount
 import com.example.tamtamduku.data.model.TransactionGroup
+import com.example.tamtamduku.data.model.Review
 import com.example.tamtamduku.data.remote.RetrofitClient
 import com.example.tamtamduku.data.remote.toDomainModel
 import kotlinx.coroutines.flow.Flow
@@ -61,5 +62,15 @@ class WorkerRepository {
             emptyList()
         }
         emit(domainTransactions)
+    }
+
+    fun getReviews(): Flow<List<Review>> = flow {
+        val reviews = try {
+            val response = RetrofitClient.apiService.getReviews()
+            response.reviews
+        } catch (_: Exception) {
+            emptyList()
+        }
+        emit(reviews)
     }
 }
