@@ -2,6 +2,8 @@ package com.example.tamtamduku.ui.screens.search
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -21,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,7 +49,7 @@ fun SearchScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showFilterSheet by remember { mutableStateOf(false) }
 
-    Surface(color = MaterialTheme.colorScheme.background) {
+    Surface(color = Color(0xFFFFF9F5)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 Row(
@@ -54,29 +57,38 @@ fun SearchScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", tint = Color.Black)
                     }
                     OutlinedTextField(
                         value = uiState.searchQuery,
                         onValueChange = viewModel::onSearchQueryChange,
-                        modifier = Modifier.weight(1f),
-                        placeholder = { Text("Cari nama...") },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp),
+                        placeholder = { Text("Search", color = Color.Gray) },
                         singleLine = true,
-                        leadingIcon = { Icon(Icons.Default.Search, null, tint = MaterialTheme.colorScheme.primary) },
-                        trailingIcon = {
-                            if (uiState.searchQuery.isNotEmpty()) {
-                                IconButton(onClick = { viewModel.onSearchQueryChange("") }) {
-                                    Icon(Icons.Default.Close, "Clear")
-                                }
-                            }
-                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color.Black
+                        ),
                         shape = RoundedCornerShape(24.dp)
                     )
-                    IconButton(onClick = { showFilterSheet = true }) {
+                    IconButton(
+                        onClick = { showFilterSheet = true },
+                        modifier = Modifier
+                            .background(Color.White, RoundedCornerShape(8.dp))
+                            .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
+                            .padding(4.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Tune,
                             contentDescription = "Filter",
-                            tint = if (viewModel.isAnyFilterActive()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = Color.Black
                         )
                     }
                 }
