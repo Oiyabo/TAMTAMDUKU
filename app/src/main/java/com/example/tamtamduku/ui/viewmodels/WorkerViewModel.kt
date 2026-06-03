@@ -9,7 +9,9 @@ import com.example.tamtamduku.data.repository.WorkerRepository
 import com.example.tamtamduku.ui.screens.search.SearchUiState
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 class WorkerViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
@@ -53,7 +55,7 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
         applyFilters()
     }
 
-    fun onDateChange(date: LocalDate?) {
+    fun onDateChange(date: Long?) {
         _uiState.update { it.copy(selectedDate = date) }
         applyFilters()
     }
@@ -112,7 +114,11 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
             val matchesLocation = state.selectedLocation == "Semua Lokasi" ||
                     worker.lokasi == state.selectedLocation
 
-            val matchesDate = state.selectedDate == null || !worker.joinDate.isBefore(state.selectedDate)
+            val matchesDate = if (state.selectedDate != null) {
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val selectedDateStr = sdf.format(Date(state.selectedDate))
+                worker.joinDate >= selectedDateStr
+            } else true
 
             val minGajiVal = state.minGaji.toDoubleOrNull()
             val matchesMinGaji = minGajiVal == null || worker.baseSalary >= minGajiVal

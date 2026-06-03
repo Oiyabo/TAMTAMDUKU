@@ -10,15 +10,38 @@ import com.example.tamtamduku.data.model.TransactionGroup
 import com.example.tamtamduku.data.model.Review
 import com.example.tamtamduku.data.remote.RetrofitClient
 import com.example.tamtamduku.data.remote.toDomainModel
+import com.example.tamtamduku.data.remote.WorkerDto
+import com.example.tamtamduku.data.remote.TrackingPekerjaanDto
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.tasks.await
+import com.google.gson.Gson
 
 class WorkerRepository {
+    private val db = FirebaseFirestore.getInstance()
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWorkers(): Flow<List<VocaWorker>> = flow {
         val domainWorkers = try {
-            val response = RetrofitClient.apiService.getWorkers()
-            response.map { it.toDomainModel() }
+            val snapshot = db.collection("workers").get().await()
+            snapshot.documents.mapNotNull { doc ->
+                try {
+                    val jobTitle = doc.getString("jobTitle") ?: ""
+                    val name = doc.getString("name") ?: ""
+                    val workTypes = doc.get("workTypes") as? List<String> ?: emptyList()
+                    val description = doc.getString("description") ?: ""
+                    val city = doc.getString("city") ?: ""
+                    val startDate = doc.getString("startDate") ?: ""
+                    val salary = doc.getDouble("salary") ?: 0.0
+                    val skills = doc.get("skills") as? List<String> ?: emptyList()
+                    val rating = doc.getDouble("rating") ?: 0.0
+
+                    WorkerDto(jobTitle, name, workTypes, description, city, startDate, salary, skills, rating).toDomainModel()
+                } catch (e: Exception) {
+                    null
+                }
+            }
         } catch (_: Exception) {
             emptyList()
         }
@@ -27,8 +50,16 @@ class WorkerRepository {
 
     fun getChats(): Flow<List<VocaChat>> = flow {
         val chats = try {
-            val response = RetrofitClient.chatApiService.getChat()
-            response.chats
+            val snapshot = db.collection("chats").get().await()
+            val gson = Gson()
+            snapshot.documents.mapNotNull { doc ->
+                try {
+                    val jsonString = gson.toJson(doc.data)
+                    gson.fromJson(jsonString, com.example.tamtamduku.data.model.VocaChat::class.java)
+                } catch (e: Exception) {
+                    null
+                }
+            }
         } catch (_: Exception) {
             emptyList()
         }
@@ -37,8 +68,20 @@ class WorkerRepository {
 
     fun getTrackingPekerjaan(): Flow<List<TrackingPekerjaan>> = flow {
         val domainTracking = try {
-            val response = RetrofitClient.apiService.getTrackingPekerjaan()
-            response.map { it.toDomainModel() }
+            val snapshot = db.collection("tracking_pekerjaan").get().await()
+            snapshot.documents.mapNotNull { doc ->
+                try {
+                    val workerName = doc.getString("worker_name") ?: ""
+                    val date = doc.getString("date") ?: ""
+                    val time = doc.getString("time") ?: ""
+                    val status = doc.getString("status") ?: ""
+                    val iconType = doc.getString("icon_type") ?: ""
+
+                    TrackingPekerjaanDto(workerName, date, time, status, iconType).toDomainModel()
+                } catch (e: Exception) {
+                    null
+                }
+            }
         } catch (_: Exception) {
             emptyList()
         }
@@ -47,7 +90,15 @@ class WorkerRepository {
 
     fun getUserAccount(): Flow<UserAccount?> = flow {
         val account = try {
-            RetrofitClient.apiService.getUserAccount()
+            val doc = db.collection("user_account").document("tamtamduku").get().await()
+            if (doc.exists()) {
+                val nama = doc.getString("nama") ?: ""
+                val email = doc.getString("email") ?: ""
+                val password = doc.getString("password") ?: ""
+                UserAccount(nama, email, password)
+            } else {
+                null
+            }
         } catch (_: Exception) {
             null
         }
@@ -56,8 +107,16 @@ class WorkerRepository {
 
     fun getTransactions(): Flow<List<TransactionGroup>> = flow {
         val domainTransactions = try {
-            val response = RetrofitClient.apiService.getTransactions()
-            response.map { it.toDomainModel() }
+            val snapshot = db.collection("transactions").get().await()
+            val gson = Gson()
+            snapshot.documents.mapNotNull { doc ->
+                try {
+                    val jsonString = gson.toJson(doc.data)
+                    gson.fromJson(jsonString, com.example.tamtamduku.data.remote.TransactionGroupDto::class.java).toDomainModel()
+                } catch (e: Exception) {
+                    null
+                }
+            }
         } catch (_: Exception) {
             emptyList()
         }
@@ -65,12 +124,6 @@ class WorkerRepository {
     }
 
     fun getReviews(): Flow<List<Review>> = flow {
-        val reviews = try {
-            val response = RetrofitClient.apiService.getReviews()
-            response.reviews
-        } catch (_: Exception) {
-            emptyList()
-        }
-        emit(reviews)
+        emit(emptyList<Review>())
     }
 }

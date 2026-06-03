@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
         enableEdgeToEdge()
         setContent {
             var currentTheme by remember { mutableStateOf(AppTheme.MAIN) }

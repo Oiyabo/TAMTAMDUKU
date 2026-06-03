@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "264088478214",
+    "project_id": "tamtamduku-9647d",
+    "storage_bucket": "tamtamduku-9647d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264088478214:android:c026511d04736ac1899987",
+        "android_client_info": {
+          "package_name": "com.example.tamtamduku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZeF7B8na0czUefWKVH0Qg5NnY7fgax88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
