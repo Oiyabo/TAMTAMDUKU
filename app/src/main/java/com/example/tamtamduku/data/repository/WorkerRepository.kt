@@ -49,21 +49,64 @@ class WorkerRepository {
     }
 
     fun getChats(): Flow<List<VocaChat>> = flow {
-        val chats = try {
-            val snapshot = db.collection("chats").get().await()
-            val gson = Gson()
-            snapshot.documents.mapNotNull { doc ->
-                try {
-                    val jsonString = gson.toJson(doc.data)
-                    gson.fromJson(jsonString, com.example.tamtamduku.data.model.VocaChat::class.java)
-                } catch (e: Exception) {
-                    null
-                }
-            }
-        } catch (_: Exception) {
-            emptyList()
-        }
-        emit(chats)
+        val domainChats = listOf(
+            com.example.tamtamduku.data.model.VocaChat(
+                id = "1",
+                name = "Bang Jeno",
+                lastMessage = "Sudah saya Acc, pak. Saya langsung meluncur.",
+                time = "20:30",
+                unreadCount = 0,
+                messages = listOf(
+                    com.example.tamtamduku.data.model.Messages("Halo, apakah bapak bisa menerima pekerjan?", true, "20:30"),
+                    com.example.tamtamduku.data.model.Messages("Iya, Saya ada waktu Pak.", false, "20:30"),
+                    com.example.tamtamduku.data.model.Messages("Baik, Kalau Begitu Pak, Saya akan langsung Pesan", true, "20:30"),
+                    com.example.tamtamduku.data.model.Messages("Baik, Pak. Saya tunggu.", false, "20:30"),
+                    com.example.tamtamduku.data.model.Messages("Sudah saya Acc, pak. Saya langsung meluncur.", false, "20:30"),
+                    com.example.tamtamduku.data.model.Messages("mantap.", true, "20:30")
+                )
+            ),
+            com.example.tamtamduku.data.model.VocaChat(
+                id = "2",
+                name = "Bang Lijen",
+                lastMessage = "Oke, siap laksanakan.",
+                time = "14:15",
+                unreadCount = 1,
+                messages = listOf(com.example.tamtamduku.data.model.Messages("Oke, siap laksanakan.", false, "14:15"))
+            ),
+            com.example.tamtamduku.data.model.VocaChat(
+                id = "3",
+                name = "M. Faris Adithya",
+                lastMessage = "Siap Pak, Akan Segera Saya Check",
+                time = "02:30",
+                unreadCount = 0,
+                messages = listOf(com.example.tamtamduku.data.model.Messages("Siap Pak, Akan Segera Saya Check", false, "02:30"))
+            ),
+            com.example.tamtamduku.data.model.VocaChat(
+                id = "4",
+                name = "Keisha Aurel",
+                lastMessage = "Terima kasih banyak!",
+                time = "Kemarin",
+                unreadCount = 0,
+                messages = listOf(com.example.tamtamduku.data.model.Messages("Terima kasih banyak!", false, "Kemarin"))
+            ),
+            com.example.tamtamduku.data.model.VocaChat(
+                id = "5",
+                name = "Annisa Syifa",
+                lastMessage = "Tolong konfirmasi jadwalnya ya.",
+                time = "Senin",
+                unreadCount = 2,
+                messages = listOf(com.example.tamtamduku.data.model.Messages("Tolong konfirmasi jadwalnya ya.", false, "Senin"))
+            ),
+            com.example.tamtamduku.data.model.VocaChat(
+                id = "6",
+                name = "Maulana Ramadhan",
+                lastMessage = "Baik pak, saya meluncur.",
+                time = "Minggu",
+                unreadCount = 0,
+                messages = listOf(com.example.tamtamduku.data.model.Messages("Baik pak, saya meluncur.", false, "Minggu"))
+            )
+        )
+        emit(domainChats)
     }
 
     fun getTrackingPekerjaan(): Flow<List<TrackingPekerjaan>> = flow {

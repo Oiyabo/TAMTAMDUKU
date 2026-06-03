@@ -1,25 +1,29 @@
 package com.example.tamtamduku.ui.screens.chat
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Undo
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.data.model.VocaChat
 import com.example.tamtamduku.ui.viewmodels.ChatViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatPage(
     onNavigateToPersonalChat: (String) -> Unit,
@@ -27,35 +31,69 @@ fun ChatPage(
 ) {
     val chats by viewModel.chats.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val bgColor = Color(0xFFFFFDFB)
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Pesan",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
+    Scaffold(
+        topBar = {
+            Column(modifier = Modifier.background(bgColor)) {
+                // Title centered
+                Box(
+                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Chat",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 24.sp,
+                        color = Color.Black
+                    )
+                }
+                
+                // Search Bar Row
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 8.dp)
-                )
-                IconButton(onClick = { /* TODO: Implement Search */ }) {
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
-                        Icons.Default.Search,
+                        imageVector = Icons.AutoMirrored.Filled.Undo,
+                        contentDescription = "Back",
+                        tint = Color.Black,
+                        modifier = Modifier.size(28.dp).clickable { /* undo */ }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = {},
+                        modifier = Modifier.weight(1f).height(50.dp),
+                        placeholder = { 
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Text("Nama / Chat", color = Color.Gray, fontSize = 14.sp)
+                                Text("(Faris, Adit)", color = Color.LightGray, fontSize = 14.sp)
+                            }
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color.Gray,
+                            unfocusedBorderColor = Color.Gray,
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White
+                        )
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Icon(
+                        imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = Color.Black,
+                        modifier = Modifier.size(28.dp).clickable { /* search */ }
                     )
                 }
             }
-
+        },
+        containerColor = bgColor
+    ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -63,7 +101,10 @@ fun ChatPage(
             } else {
                 ChatList(
                     chats = chats,
-                    onNavigateToPersonalChat = onNavigateToPersonalChat
+                    onNavigateToPersonalChat = {
+                        viewModel.markAsRead(it)
+                        onNavigateToPersonalChat(it)
+                    }
                 )
             }
         }
@@ -84,8 +125,8 @@ fun ChatList(
                 onNavigateToPersonalChat(chat.name)
             }
             HorizontalDivider(
-                thickness = 0.5.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
+                thickness = 1.dp,
+                color = Color.Black
             )
         }
     }
@@ -97,20 +138,20 @@ fun ChatItem(chat: VocaChat, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(vertical = 12.dp),
+            .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
             modifier = Modifier
-                .size(50.dp)
+                .size(56.dp)
                 .clip(CircleShape),
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = Color.DarkGray
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = chat.name.take(1),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = Color.White
                 )
             }
         }
@@ -124,30 +165,32 @@ fun ChatItem(chat: VocaChat, onClick: () -> Unit) {
             ) {
                 Text(
                     text = chat.name,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
                 Text(
                     text = chat.time,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
                 )
             }
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = chat.lastMessage,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline,
+                    fontSize = 14.sp,
+                    color = Color.DarkGray,
                     maxLines = 1
                 )
                 if (chat.unreadCount > 0) {
                     Badge(
-                        containerColor = MaterialTheme.colorScheme.primary
+                        containerColor = Color(0xFFF97316)
                     ) {
-                        Text(chat.unreadCount.toString(), color = MaterialTheme.colorScheme.onPrimary)
+                        Text(chat.unreadCount.toString(), color = Color.White)
                     }
                 }
             }

@@ -37,6 +37,7 @@ import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+import com.example.tamtamduku.ui.viewmodels.ChatViewModel
 import com.example.tamtamduku.ui.theme.AppTheme
 import com.example.tamtamduku.ui.screens.payment.PaymentTestScreen
 
@@ -48,7 +49,8 @@ fun AppNavigation(
     authViewModel: AuthViewModel = viewModel(),
     workerViewModel: WorkerViewModel = viewModel(),
     trackingViewModel: TrackingViewModel = viewModel(),
-    profileViewModel: ProfileViewModel = viewModel()
+    profileViewModel: ProfileViewModel = viewModel(),
+    chatViewModel: ChatViewModel = viewModel()
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -181,6 +183,7 @@ fun AppNavigation(
             }
             composable("chat") {
                 ChatPage(
+                    viewModel = chatViewModel,
                     onNavigateToPersonalChat = { userName ->
                         navCon.navigate("personal_chat/$userName")
                     }
@@ -191,6 +194,7 @@ fun AppNavigation(
                 arguments = listOf(navArgument("userName") { type = NavType.StringType })
             ) { backStackEntry ->
                 PersonalChat(
+                    viewModel = chatViewModel,
                     userName = backStackEntry.arguments?.getString("userName") ?: "",
                     onBack = { navCon.popBackStack() }
                 )

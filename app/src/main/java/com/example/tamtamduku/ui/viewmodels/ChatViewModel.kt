@@ -38,4 +38,25 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
     fun getChatByName(name: String): VocaChat? {
         return _chats.value.find { it.name == name }
     }
+
+    fun markAsRead(userName: String) {
+        _chats.value = _chats.value.map {
+            if (it.name == userName) it.copy(unreadCount = 0) else it
+        }
+    }
+
+    fun sendMessage(userName: String, text: String, time: String = "Now") {
+        _chats.value = _chats.value.map { chat ->
+            if (chat.name == userName) {
+                val newMessage = com.example.tamtamduku.data.model.Messages(text, true, time)
+                chat.copy(
+                    messages = chat.messages + newMessage,
+                    lastMessage = text,
+                    time = time
+                )
+            } else {
+                chat
+            }
+        }
+    }
 }
