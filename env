@@ -1,0 +1,8 @@
+# Midtrans Configuration
+# Copy/Move this file to your Firebase Functions folder if you are deploying functions.
+
+# Client Key for Android (already configured in local.properties)
+MIDTRANS_CLIENT_KEY="Mid-client-QEB7l3tFjqjumyka"
+
+# Server Key for Backend (Firebase Functions / Node.js)
+MIDTRANS_SERVER_KEY="Mid-server-tgIBiICa6OjM7SHNX0r8FUEK"

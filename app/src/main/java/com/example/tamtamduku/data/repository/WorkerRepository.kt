@@ -67,24 +67,15 @@ class WorkerRepository {
     }
 
     fun getTrackingPekerjaan(): Flow<List<TrackingPekerjaan>> = flow {
-        val domainTracking = try {
-            val snapshot = db.collection("tracking_pekerjaan").get().await()
-            snapshot.documents.mapNotNull { doc ->
-                try {
-                    val workerName = doc.getString("worker_name") ?: ""
-                    val date = doc.getString("date") ?: ""
-                    val time = doc.getString("time") ?: ""
-                    val status = doc.getString("status") ?: ""
-                    val iconType = doc.getString("icon_type") ?: ""
-
-                    TrackingPekerjaanDto(workerName, date, time, status, iconType).toDomainModel()
-                } catch (e: Exception) {
-                    null
-                }
-            }
-        } catch (_: Exception) {
-            emptyList()
-        }
+        val domainTracking = listOf(
+            TrackingPekerjaan(
+                workerName = "Bang Jeno",
+                date = "21 Mei 2024",
+                time = "10:00",
+                status = "Sedang Berjalan",
+                iconType = "Construction"
+            )
+        )
         emit(domainTracking)
     }
 

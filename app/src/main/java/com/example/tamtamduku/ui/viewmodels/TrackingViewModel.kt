@@ -51,4 +51,14 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
             }
         }
     }
+
+    fun markAsSelesai(workerName: String) {
+        _uiState.update { state ->
+            state.copy(
+                trackingItems = state.trackingItems.map {
+                    if (it.workerName == workerName) it.copy(status = "Selesai") else it
+                }
+            )
+        }
+    }
 }

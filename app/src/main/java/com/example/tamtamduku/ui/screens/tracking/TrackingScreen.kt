@@ -38,7 +38,7 @@ fun TrackingScreen(
     val tabs = listOf("Tracking", "History")
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+        modifier = Modifier.fillMaxSize().background(Color(0xFFFFFDFB))
     ) {
         Box(
             modifier = Modifier.fillMaxWidth().background(
@@ -96,7 +96,7 @@ fun TrackingScreen(
                 CircularProgressIndicator()
             }
         } else if (selectedTab == 0) {
-            TrackingContent(uiState.trackingItems)
+            TrackingContent(uiState.trackingItems, navCon)
         } else {
             HistoryContent(uiState.transactionGroups, navCon)
         }
@@ -104,7 +104,7 @@ fun TrackingScreen(
 }
 
 @Composable
-fun TrackingContent(items: List<TrackingPekerjaan>) {
+fun TrackingContent(items: List<TrackingPekerjaan>, navCon: NavHostController) {
     if (items.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -128,7 +128,9 @@ fun TrackingContent(items: List<TrackingPekerjaan>) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(items) { item ->
-                TrackingCard(item)
+                TrackingCard(item) {
+                    navCon.navigate("status_pekerjaan/${Uri.encode(item.workerName)}")
+                }
             }
         }
     }
@@ -208,9 +210,9 @@ fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGro
 }
 
 @Composable
-fun TrackingCard(item: TrackingPekerjaan) {
+fun TrackingCard(item: TrackingPekerjaan, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)

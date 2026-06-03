@@ -238,6 +238,16 @@ fun AppNavigation(
                     workerName = backStackEntry.arguments?.getString("workerName")
                 )
             }
+            composable(
+                "status_pekerjaan/{workerName}",
+                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                com.example.tamtamduku.ui.screens.tracking.StatusPekerjaanScreen(
+                    navCon = navCon,
+                    workerName = backStackEntry.arguments?.getString("workerName") ?: "",
+                    viewModel = trackingViewModel
+                )
+            }
             composable("payment_test") {
                 PaymentTestScreen(
                     onNavigateBack = { navCon.popBackStack() }
