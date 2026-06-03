@@ -33,9 +33,9 @@ import com.example.tamtamduku.ui.components.CompactField
 import com.example.tamtamduku.ui.components.FilterDropdown
 import com.example.tamtamduku.ui.components.WorkerCard
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -152,15 +152,13 @@ fun FilterSheetContent(
 
     if (showDatePicker.value) {
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = uiState.selectedDate?.atStartOfDay(ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+            initialSelectedDateMillis = uiState.selectedDate
         )
         DatePickerDialog(
             onDismissRequest = { showDatePicker.value = false },
             confirmButton = {
                 TextButton(onClick = {
-                    viewModel.onDateChange(datePickerState.selectedDateMillis?.let {
-                        Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
-                    })
+                    viewModel.onDateChange(datePickerState.selectedDateMillis)
                     showDatePicker.value = false
                 }) { Text("OK") }
             },
@@ -199,8 +197,11 @@ fun FilterSheetContent(
             onValueChange = viewModel::onLocationChange
         )
 
+        val dateFormat = remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
+        val formattedDate = uiState.selectedDate?.let { dateFormat.format(Date(it)) } ?: ""
+        
         CompactField(
-            value = uiState.selectedDate?.format(DateTimeFormatter.ofPattern("dd MMM yyyy")) ?: "",
+            value = formattedDate,
             onValueChange = {},
             label = "Bekerja dari",
             readOnly = true,

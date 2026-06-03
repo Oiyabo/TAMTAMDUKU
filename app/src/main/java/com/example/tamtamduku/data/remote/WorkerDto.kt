@@ -1,8 +1,6 @@
 package com.example.tamtamduku.data.remote
 
 import com.example.tamtamduku.data.model.VocaWorker
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 data class WorkerDto(
     val jobTitle: String,
@@ -23,7 +21,7 @@ fun WorkerDto.toDomainModel(): VocaWorker {
         workType = workTypes,
         deskripsi = description,
         lokasi = city,
-        joinDate = LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE),
+        joinDate = startDate,
         baseSalary = salary,
         skills = skills,
         rating = rating

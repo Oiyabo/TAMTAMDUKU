@@ -1,7 +1,6 @@
 package com.example.tamtamduku.ui.screens.search
 
 import com.example.tamtamduku.data.model.VocaWorker
-import java.time.LocalDate
 
 data class SearchUiState(
     val workers: List<VocaWorker> = emptyList(),
@@ -10,7 +9,7 @@ data class SearchUiState(
     val searchQuery: String = "",
     val selectedWorkType: String = "Semua Pekerjaan",
     val selectedLocation: String = "Semua Lokasi",
-    val selectedDate: LocalDate? = null,
+    val selectedDate: Long? = null,
     val skills: List<String> = emptyList(),
     val skillInput: String = "",
     val minGaji: String = "",

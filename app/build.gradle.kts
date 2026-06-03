@@ -1,6 +1,10 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -15,6 +19,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        val properties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(FileInputStream(localPropertiesFile))
+        }
+        val midtransKey = properties.getProperty("MIDTRANS_CLIENT_KEY") ?: "\"\""
+        buildConfigField("String", "MIDTRANS_CLIENT_KEY", midtransKey)
     }
 
     buildTypes {
@@ -29,16 +41,15 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        isCoreLibraryDesugaringEnabled = true
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
     implementation(libs.androidx.material3)
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,4 +73,13 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.gson)
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
+
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    implementation(libs.midtrans.uikit)
 }

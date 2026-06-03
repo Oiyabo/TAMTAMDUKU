@@ -38,6 +38,7 @@ import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 import com.example.tamtamduku.ui.theme.AppTheme
+import com.example.tamtamduku.ui.screens.payment.PaymentTestScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -54,7 +55,7 @@ fun AppNavigation(
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile") {
+            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile" || currentRoute == "payment_test") {
                 Column {
                     HorizontalDivider(
                         thickness = 1.dp,
@@ -112,6 +113,20 @@ fun AppNavigation(
                             onClick = {
                                 if (currentRoute != "tracking") {
                                     navCon.navigate("tracking") {
+                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }
+                            }
+                        )
+                        NavigationBarItem(
+                            icon = { Icon(Icons.Default.Payments, contentDescription = "Payment") },
+                            label = { Text("Pay") },
+                            selected = currentRoute == "payment_test",
+                            onClick = {
+                                if (currentRoute != "payment_test") {
+                                    navCon.navigate("payment_test") {
                                         popUpTo(navCon.graph.startDestinationId) { saveState = true }
                                         launchSingleTop = true
                                         restoreState = true
@@ -221,6 +236,11 @@ fun AppNavigation(
                     viewModel = workerViewModel,
                     onBack = { navCon.popBackStack() },
                     workerName = backStackEntry.arguments?.getString("workerName")
+                )
+            }
+            composable("payment_test") {
+                PaymentTestScreen(
+                    onNavigateBack = { navCon.popBackStack() }
                 )
             }
         }
