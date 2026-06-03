@@ -132,7 +132,7 @@ fun ProfilTabContent(worker: VocaWorker) {
 }
 
 @Composable
-fun UlasanTabContent() {
+fun UlasanTabContent(worker: VocaWorker) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -154,10 +154,16 @@ fun UlasanTabContent() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(end = 16.dp)
                 ) {
-                    Text("4.0", fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF8C00))
+                    Text(worker.rating.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF8C00))
                     Row {
-                        repeat(4) { Icon(Icons.Default.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(14.dp)) }
-                        Icon(Icons.Outlined.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(14.dp))
+                        repeat(5) { index ->
+                            Icon(
+                                imageVector = if (index < worker.rating.toInt()) Icons.Default.Star else Icons.Outlined.Star,
+                                contentDescription = null,
+                                tint = Color(0xFFFFC107),
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
                     }
                     Text("120 Ulasan", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(top = 4.dp))
                 }
@@ -273,14 +279,15 @@ fun PortofolioTabContent() {
                 verticalAlignment = Alignment.Top
             ) {
                 // Mock Image Thumbnail
-                Box(
+                AsyncImage(
+                    model = "https://picsum.photos/seed/${portfolio.title.replace(" ", "")}/200/150",
+                    contentDescription = "Portfolio Image",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(80.dp, 60.dp)
-                        .background(Color(0xFFF0F5FF), RoundedCornerShape(8.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Gambar", fontSize = 10.sp, color = Color.Gray)
-                }
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color(0xFFF0F5FF))
+                )
                 
                 Spacer(modifier = Modifier.width(12.dp))
                 

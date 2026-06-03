@@ -229,7 +229,7 @@ fun ServiceDetailScreen(
             // Tab Content
             when (selectedTabIndex) {
                 0 -> ProfilTabContent(worker = worker)
-                1 -> UlasanTabContent()
+                1 -> UlasanTabContent(worker = worker)
                 2 -> PortofolioTabContent()
             }
         }
