@@ -154,9 +154,11 @@ fun AppNavigation(
             }
         }
     ) { innerPadding ->
+        val startDestination = if (authViewModel.uiState.value.isLoggedIn) "home" else "login"
+
         NavHost(
             navController = navCon,
-            startDestination = "login",
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable("login") {
@@ -233,8 +235,10 @@ fun AppNavigation(
                     viewModel = profileViewModel,
                     onBack = { navCon.popBackStack() },
                     onLogout = {
-                        navCon.navigate("login") {
-                            popUpTo(0) { inclusive = true }
+                        authViewModel.logout {
+                            navCon.navigate("login") {
+                                popUpTo(0) { inclusive = true }
+                            }
                         }
                     }
                 )
