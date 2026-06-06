@@ -57,4 +57,8 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
     fun getTransactionByInvoice(invoiceId: String): Transaction? {
         return _uiState.value.transactions.find { it.invoiceNumber == invoiceId }
     }
+
+    fun addTransaction(transaction: Transaction) {
+        _uiState.update { it.copy(transactions = listOf(transaction) + it.transactions) }
+    }
 }
