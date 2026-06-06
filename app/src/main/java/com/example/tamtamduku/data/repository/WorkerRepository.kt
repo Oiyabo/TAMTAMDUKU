@@ -6,7 +6,7 @@ import com.example.tamtamduku.data.model.VocaWorker
 import com.example.tamtamduku.data.model.VocaChat
 import com.example.tamtamduku.data.model.TrackingPekerjaan
 import com.example.tamtamduku.data.model.UserAccount
-import com.example.tamtamduku.data.model.TransactionGroup
+
 import com.example.tamtamduku.data.model.Review
 import com.example.tamtamduku.data.remote.RetrofitClient
 import com.example.tamtamduku.data.remote.toDomainModel
@@ -23,9 +23,17 @@ class WorkerRepository {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWorkers(): Flow<List<VocaWorker>> = flow {
+        val mockMarketplaceWorkers = listOf(
+            VocaWorker("Teknisi AC", "Budi Santoso", listOf("Perbaikan", "Instalasi"), "Berpengalaman lebih dari 5 tahun menangani berbagai merek AC.", "Jakarta", "2021-05-10", 150000.0, listOf("Cuci AC", "Isi Freon", "Bongkar Pasang"), 4.8),
+            VocaWorker("Data Analyst", "M. Faris Adithya", listOf("Analisis Data", "Konsultasi Bisnis"), "Membantu Anda menganalisis data untuk pengambilan keputusan strategis perusahaan.", "Jakarta", "2019-02-10", 250000.0, listOf("Python", "SQL", "Tableau"), 4.9),
+            VocaWorker("Jasa Kebersihan", "Siti Rahma", listOf("Cleaning Service", "Setrika"), "Siap membuat rumah Anda bersih berkilau dan wangi.", "Surabaya", "2022-01-20", 80000.0, listOf("Sapu & Pel", "Cuci Piring", "Setrika"), 4.9),
+            VocaWorker("Montir Listrik", "Bambang Listrik", listOf("Instalasi Listrik", "Servis Elektronik"), "Melayani perbaikan korsleting dan pemasangan panel listrik rumah.", "Yogyakarta", "2019-08-05", 100000.0, listOf("Korsleting", "Pasang Lampu", "Panel Listrik"), 4.7),
+            VocaWorker("Web Developer", "Kanemoto", listOf("Pembuatan Website", "Maintenance Web"), "Mengembangkan website perusahaan yang responsif, cepat, dan profesional.", "Bandung", "2020-06-12", 300000.0, listOf("React", "Kotlin", "Firebase"), 4.8)
+        )
+
         val domainWorkers = try {
             val snapshot = db.collection("workers").get().await()
-            snapshot.documents.mapNotNull { doc ->
+            val list = snapshot.documents.mapNotNull { doc ->
                 try {
                     val jobTitle = doc.getString("jobTitle") ?: ""
                     val name = doc.getString("name") ?: ""
@@ -42,8 +50,9 @@ class WorkerRepository {
                     null
                 }
             }
+            if (list.isEmpty()) mockMarketplaceWorkers else list
         } catch (_: Exception) {
-            emptyList()
+            mockMarketplaceWorkers
         }
         emit(domainWorkers)
     }
@@ -105,23 +114,7 @@ class WorkerRepository {
         emit(account)
     }
 
-    fun getTransactions(): Flow<List<TransactionGroup>> = flow {
-        val domainTransactions = try {
-            val snapshot = db.collection("transactions").get().await()
-            val gson = Gson()
-            snapshot.documents.mapNotNull { doc ->
-                try {
-                    val jsonString = gson.toJson(doc.data)
-                    gson.fromJson(jsonString, com.example.tamtamduku.data.remote.TransactionGroupDto::class.java).toDomainModel()
-                } catch (e: Exception) {
-                    null
-                }
-            }
-        } catch (_: Exception) {
-            emptyList()
-        }
-        emit(domainTransactions)
-    }
+
 
     fun getReviews(): Flow<List<Review>> = flow {
         emit(emptyList<Review>())

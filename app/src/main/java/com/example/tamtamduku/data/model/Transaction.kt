@@ -1,16 +1,10 @@
 package com.example.tamtamduku.data.model
 
 data class Transaction(
+    val invoiceNumber: String,
     val workerName: String,
+    val workerProfession: String,
     val date: String,
-    val time: String,
-    val status: String,
-    val icon: String,
-    val iconBgColor: String,
-    val iconColor: String
-)
-
-data class TransactionGroup(
-    val date: String,
-    val items: List<Transaction>
+    val price: Double,
+    val status: String // "Selesai", "Dibatalkan", "Dikerjakan"
 )

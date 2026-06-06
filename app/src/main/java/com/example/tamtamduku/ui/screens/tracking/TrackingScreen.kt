@@ -1,205 +1,136 @@
 package com.example.tamtamduku.ui.screens.tracking
 
-import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.tamtamduku.data.model.TrackingPekerjaan
+import coil.compose.AsyncImage
 import com.example.tamtamduku.data.model.Transaction
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
+import java.text.NumberFormat
 import java.util.Locale
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrackingScreen(
     navCon: NavHostController,
-    viewModel: TrackingViewModel
+    viewModel: TrackingViewModel,
+    onNavigateToHasilKerja: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Tracking", "History")
+    var selectedFilter by remember { mutableStateOf("Semua") }
+    val filters = listOf("Semua", "Selesai", "Dibatalkan", "Dikerjakan")
 
-    Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth().background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primaryContainer,
-                        MaterialTheme.colorScheme.primary
-                    )
-                ),
-                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
-            ).padding(bottom = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(60.dp))
-                Text(
-                    text = "Aktivitas Jasa",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                TabRow(
-                    selectedTabIndex = selectedTab,
-                    containerColor = Color.Transparent,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    divider = {},
-                    indicator = { tabPositions ->
-                        TabRowDefaults.SecondaryIndicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    },
-                    modifier = Modifier.padding(horizontal = 32.dp)
-                ) {
-                    tabs.forEachIndexed { index, title ->
-                        Tab(
-                            selected = selectedTab == index,
-                            onClick = { selectedTab = index },
-                            text = { 
-                                Text(
-                                    title, 
-                                    fontSize = 16.sp,
-                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal
-                                )
-                            }
-                        )
+    Scaffold(
+        contentWindowInsets = WindowInsets(0.dp),
+        topBar = {
+            TopAppBar(
+                windowInsets = WindowInsets(0.dp),
+                title = { Text("Riwayat Transaksi", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+                navigationIcon = {
+                    IconButton(onClick = { navCon.popBackStack() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                     }
-                }
-            }
-        }
-
-        if (uiState.isLoading) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        } else if (selectedTab == 0) {
-            TrackingContent(uiState.trackingItems)
-        } else {
-            HistoryContent(uiState.transactionGroups, navCon)
-        }
-    }
-}
-
-@Composable
-fun TrackingContent(items: List<TrackingPekerjaan>) {
-    if (items.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = Icons.Default.DirectionsRun,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    "Belum ada pekerjaan yang sedang berjalan",
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            )
+        },
+        containerColor = Color.White
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            items(items) { item ->
-                TrackingCard(item)
-            }
-        }
-    }
-}
+            // Filter Tabs
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                filters.forEach { filter ->
+                    val isSelected = selectedFilter == filter
+                    val bgColor = if (isSelected) Color(0xFFFF8C00) else Color.White
+                    val contentColor = if (isSelected) Color.White else Color.Black
+                    val borderColor = if (isSelected) Color(0xFFFF8C00) else Color.LightGray
 
-@Composable
-fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGroup>, navCon: NavHostController) {
-    if (groups.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Belum ada riwayat transaksi", color = MaterialTheme.colorScheme.outline)
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            item {
-                Card(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Surface(
+                        modifier = Modifier.clickable { selectedFilter = filter },
+                        shape = RoundedCornerShape(8.dp),
+                        color = bgColor,
+                        border = BorderStroke(1.dp, borderColor)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
-                                .padding(4.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.DateRange,
-                                contentDescription = "Calendar",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("Filter Periode", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
-                            Text("Semua", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                        }
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Dropdown",
-                            tint = MaterialTheme.colorScheme.onSurface
+                        Text(
+                            text = filter,
+                            color = contentColor,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            fontSize = 14.sp
                         )
                     }
                 }
             }
 
-            groups.forEach { group ->
-                item {
-                    Text(
-                        text = group.date,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+            // Transaction List
+            if (uiState.isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
                 }
-                items(group.items) { item ->
-                    TransactionCard(item) {
-                        navCon.navigate("detail/${Uri.encode(item.workerName)}")
+            } else {
+                val filteredTransactions = if (selectedFilter == "Semua") {
+                    uiState.transactions
+                } else {
+                    val statusMap = mapOf(
+                        "Selesai" to "Selesai",
+                        "Dibatalkan" to "Batal",
+                        "Dikerjakan" to "Dikerjakan"
+                    )
+                    uiState.transactions.filter { it.status == statusMap[selectedFilter] }
+                }
+
+                if (filteredTransactions.isEmpty()) {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Tidak ada transaksi", color = Color.Gray)
+                    }
+                } else {
+                    LazyColumn(
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        items(filteredTransactions) { transaction ->
+                            TransactionCard(transaction) {
+                                if (transaction.status == "Selesai") {
+                                    onNavigateToHasilKerja(transaction.invoiceNumber)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -208,144 +139,131 @@ fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGro
 }
 
 @Composable
-fun TrackingCard(item: TrackingPekerjaan) {
+fun TransactionCard(transaction: Transaction, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        border = BorderStroke(1.dp, Color(0xFFEEEEEE))
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val icon = when(item.iconType) {
-                "Construction" -> Icons.Default.Build
-                "School" -> Icons.Default.School
-                else -> Icons.Default.Work
-            }
-            
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.size(48.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
-                }
-            }
-            
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Column(modifier = Modifier.weight(1f)) {
-                Text(item.workerName, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text("${item.date} • ${item.time}", color = MaterialTheme.colorScheme.outline, fontSize = 14.sp)
-            }
-            
-            Text(
-                item.status,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-        }
-    }
-}
-
-@Composable
-fun TransactionCard(item: Transaction, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.05f))
-    ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
+            // Worker Avatar
+            AsyncImage(
+                model = "https://i.pravatar.cc/150?u=${transaction.workerName}",
+                contentDescription = "Profile",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(48.dp)
-                    .background(Color(android.graphics.Color.parseColor(item.iconBgColor)), RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = getIconForName(item.icon),
-                    contentDescription = null,
-                    tint = Color(android.graphics.Color.parseColor(item.iconColor)),
-                    modifier = Modifier.size(24.dp)
-                )
-            }
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.LightGray)
+            )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
+                // Top Row: Invoice and Price
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Jasa Pekerjaan", // Default as it's not in the Gist
-                        fontSize = 14.sp,
+                        text = transaction.invoiceNumber,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        fontSize = 12.sp,
+                        color = Color.Black
                     )
-                    StatusBadge(status = item.status)
+                    Text(
+                        text = formatRupiah(transaction.price),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Color(0xFFFF8C00)
+                    )
                 }
-                
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                // Worker Name
                 Text(
-                    text = "Pekerja: ${item.workerName}",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium
+                    text = transaction.workerName,
+                    fontSize = 14.sp,
+                    color = Color.Black
                 )
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.size(12.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "${item.date}  •  ${item.time}",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
+                // Worker Profession
+                Text(
+                    text = transaction.workerProfession,
+                    fontSize = 12.sp,
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Bottom Row: Date and Status
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.CalendarToday,
+                            contentDescription = "Date",
+                            modifier = Modifier.size(12.dp),
+                            tint = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = transaction.date,
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
+                    }
+
+                    StatusBadge(status = transaction.status)
                 }
             }
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.padding(start = 8.dp)
-            )
         }
     }
 }
 
 @Composable
 fun StatusBadge(status: String) {
-    val isSelesai = status == "Selesai"
-    val bgColor = if (isSelesai) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-    val textColor = if (isSelesai) Color(0xFF4CAF50) else Color(0xFFF44336)
+    val bgColor: Color
+    val textColor: Color
+    
+    when (status) {
+        "Selesai" -> {
+            bgColor = Color(0xFF81C784) // Green
+            textColor = Color.Black
+        }
+        "Batal" -> {
+            bgColor = Color(0xFFE57373) // Red
+            textColor = Color.Black
+        }
+        "Dikerjakan" -> {
+            bgColor = Color(0xFFFFD54F) // Yellow
+            textColor = Color.Black
+        }
+        else -> {
+            bgColor = Color.LightGray
+            textColor = Color.Black
+        }
+    }
 
     Surface(
         color = bgColor,
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(4.dp)
     ) {
         Text(
             text = status,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             fontSize = 10.sp,
             fontWeight = FontWeight.Bold,
             color = textColor
@@ -353,13 +271,7 @@ fun StatusBadge(status: String) {
     }
 }
 
-fun getIconForName(name: String): ImageVector {
-    return when (name) {
-        "Computer" -> Icons.Default.Computer
-        "CleaningServices" -> Icons.Default.CleaningServices
-        "Gamepad" -> Icons.Default.Gamepad
-        "Park" -> Icons.Default.Park
-        "Code" -> Icons.Default.Code
-        else -> Icons.Default.Work
-    }
+fun formatRupiah(number: Double): String {
+    val formatRupiah = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
+    return formatRupiah.format(number).replace("Rp", "Rp").replace(",00", "")
 }
