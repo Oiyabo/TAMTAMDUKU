@@ -3,7 +3,6 @@ package com.example.tamtamduku.navigation
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,6 +30,7 @@ import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
+import com.example.tamtamduku.ui.screens.tracking.HasilKerjaScreen
 import com.example.tamtamduku.ui.screens.profile.AccountScreen
 import com.example.tamtamduku.ui.screens.profile.EditProfileScreen
 import com.example.tamtamduku.ui.screens.profile.EditAddressScreen
@@ -43,7 +42,6 @@ import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 import com.example.tamtamduku.ui.theme.AppTheme
-import com.example.tamtamduku.ui.screens.payment.PaymentTestScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -57,10 +55,11 @@ fun AppNavigation(
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val authUiState by authViewModel.uiState.collectAsState()
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile" || currentRoute == "payment_test") {
+            if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile") {
                 Column {
                     HorizontalDivider(
                         thickness = 1.dp,
@@ -86,34 +85,8 @@ fun AppNavigation(
                             }
                         )
                         NavigationBarItem(
-                            icon = { Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Chat") },
-                            label = { Text("Chat") },
-                            selected = currentRoute == "chat",
-                            onClick = {
-                                if (currentRoute != "chat") {
-                                    navCon.navigate("chat") {
-                                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }
-                            }
-                        )
-                        NavigationBarItem(
-                            icon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                            label = { Text("Search") },
-                            selected = currentRoute == "search",
-                            onClick = {
-                                navCon.navigate("search") {
-                                    popUpTo(navCon.graph.startDestinationId) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            }
-                        )
-                        NavigationBarItem(
-                            icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Tracking") },
-                            label = { Text("Tracking") },
+                            icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Riwayat") },
+                            label = { Text("Riwayat") },
                             selected = currentRoute == "tracking",
                             onClick = {
                                 if (currentRoute != "tracking") {
@@ -126,12 +99,12 @@ fun AppNavigation(
                             }
                         )
                         NavigationBarItem(
-                            icon = { Icon(Icons.Default.Payments, contentDescription = "Payment") },
-                            label = { Text("Pay") },
-                            selected = currentRoute == "payment_test",
+                            icon = { Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Chat") },
+                            label = { Text("Chat") },
+                            selected = currentRoute == "chat",
                             onClick = {
-                                if (currentRoute != "payment_test") {
-                                    navCon.navigate("payment_test") {
+                                if (currentRoute != "chat") {
+                                    navCon.navigate("chat") {
                                         popUpTo(navCon.graph.startDestinationId) { saveState = true }
                                         launchSingleTop = true
                                         restoreState = true
@@ -158,7 +131,7 @@ fun AppNavigation(
             }
         }
     ) { innerPadding ->
-        val startDestination = if (authViewModel.uiState.value.isLoggedIn) "home" else "login"
+        val startDestination = if (authUiState.isLoggedIn) "home" else "login"
 
         NavHost(
             navController = navCon,
@@ -212,7 +185,27 @@ fun AppNavigation(
                 )
             }
             composable("tracking") {
-                TrackingScreen(navCon = navCon, viewModel = trackingViewModel)
+                TrackingScreen(
+                    navCon = navCon, 
+                    viewModel = trackingViewModel,
+                    onNavigateToHasilKerja = { invoiceId ->
+                        navCon.navigate("hasil_kerja/$invoiceId")
+                    }
+                )
+            }
+            composable(
+                "hasil_kerja/{invoiceId}",
+                arguments = listOf(navArgument("invoiceId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val invoiceId = backStackEntry.arguments?.getString("invoiceId") ?: ""
+                val transaction = trackingViewModel.getTransactionByInvoice(invoiceId)
+                HasilKerjaScreen(
+                    transaction = transaction,
+                    onBack = { navCon.popBackStack() },
+                    onReview = { workerName ->
+                        navCon.navigate("review/${Uri.encode(workerName)}")
+                    }
+                )
             }
             composable("profile") {
                 AccountScreen(
@@ -275,11 +268,6 @@ fun AppNavigation(
                     viewModel = workerViewModel,
                     onBack = { navCon.popBackStack() },
                     workerName = backStackEntry.arguments?.getString("workerName")
-                )
-            }
-            composable("payment_test") {
-                PaymentTestScreen(
-                    onNavigateBack = { navCon.popBackStack() }
                 )
             }
         }
