@@ -157,7 +157,13 @@ fun AppNavigation(
                 )
             }
             composable("home") {
-                HomeScreen(onNavigateToSearch = { navCon.navigate("search") })
+                HomeScreen(
+                    viewModel = workerViewModel,
+                    onNavigateToSearch = { navCon.navigate("search") },
+                    onNavigateToDetail = { workerName ->
+                        navCon.navigate("detail/${Uri.encode(workerName)}")
+                    }
+                )
             }
             composable("chat") {
                 ChatPage(
