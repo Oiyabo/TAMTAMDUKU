@@ -32,7 +32,12 @@ import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
-import com.example.tamtamduku.ui.screens.profile.ProfileScreen
+import com.example.tamtamduku.ui.screens.profile.AccountScreen
+import com.example.tamtamduku.ui.screens.profile.EditProfileScreen
+import com.example.tamtamduku.ui.screens.profile.EditAddressScreen
+import com.example.tamtamduku.ui.screens.profile.AddressListScreen
+import com.example.tamtamduku.ui.screens.profile.ReportListScreen
+import com.example.tamtamduku.ui.screens.profile.CreateReportScreen
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
@@ -210,9 +215,12 @@ fun AppNavigation(
                 TrackingScreen(navCon = navCon, viewModel = trackingViewModel)
             }
             composable("profile") {
-                ProfileScreen(
+                AccountScreen(
                     viewModel = profileViewModel,
                     onBack = { navCon.popBackStack() },
+                    onNavigateToEditProfile = { navCon.navigate("edit_profile") },
+                    onNavigateToAddress = { navCon.navigate("address") },
+                    onNavigateToReportList = { navCon.navigate("report_list") },
                     onLogout = {
                         authViewModel.logout {
                             navCon.navigate("login") {
@@ -220,6 +228,33 @@ fun AppNavigation(
                             }
                         }
                     }
+                )
+            }
+            composable("edit_profile") {
+                EditProfileScreen(
+                    onBack = { navCon.popBackStack() }
+                )
+            }
+            composable("address") {
+                AddressListScreen(
+                    onBack = { navCon.popBackStack() },
+                    onNavigateToEditAddress = { navCon.navigate("edit_address") }
+                )
+            }
+            composable("edit_address") {
+                EditAddressScreen(
+                    onBack = { navCon.popBackStack() }
+                )
+            }
+            composable("report_list") {
+                ReportListScreen(
+                    onBack = { navCon.popBackStack() },
+                    onNavigateToCreateReport = { navCon.navigate("create_report") }
+                )
+            }
+            composable("create_report") {
+                CreateReportScreen(
+                    onBack = { navCon.popBackStack() }
                 )
             }
             composable(

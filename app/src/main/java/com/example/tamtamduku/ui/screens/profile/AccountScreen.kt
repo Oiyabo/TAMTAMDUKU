@@ -26,9 +26,12 @@ import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(
+fun AccountScreen(
     onBack: () -> Unit,
     onLogout: () -> Unit,
+    onNavigateToEditProfile: () -> Unit,
+    onNavigateToAddress: () -> Unit,
+    onNavigateToReportList: () -> Unit,
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -100,11 +103,6 @@ fun ProfileScreen(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
-                    Text(
-                        text = uiState.role,
-                        fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                    )
                 }
             }
 
@@ -117,29 +115,24 @@ fun ProfileScreen(
 
             // Menu Items
             ProfileMenuItem(
-                icon = Icons.Default.PersonOutline,
-                title = "Profil Saya",
-                onClick = { /* Navigate to Profile Detail */ }
+                icon = Icons.Default.Edit,
+                title = "Edit Profil",
+                onClick = onNavigateToEditProfile
             )
             ProfileMenuItem(
                 icon = Icons.Default.LocationOn,
                 title = "Alamat Saya",
-                onClick = { /* Navigate to Addresses */ }
+                onClick = onNavigateToAddress
             )
             ProfileMenuItem(
-                icon = Icons.Default.Payment,
-                title = "Metode Pembayaran",
-                onClick = { /* Navigate to Payments */ }
+                icon = Icons.Default.Report,
+                title = "Lapor Masalah",
+                onClick = onNavigateToReportList
             )
             ProfileMenuItem(
-                icon = Icons.Default.History,
-                title = "Riwayat Transaksi",
-                onClick = { /* Navigate to History */ }
-            )
-            ProfileMenuItem(
-                icon = Icons.Default.Info,
-                title = "Pusat Bantuan",
-                onClick = { /* Navigate to Help Center */ }
+                icon = Icons.Default.Engineering,
+                title = "Pekerja Favorit",
+                onClick = { /* Navigate to Pekerja Favorit */ }
             )
             ProfileMenuItem(
                 icon = Icons.Default.Settings,
@@ -160,14 +153,14 @@ fun ProfileScreen(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Logout,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.error
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
                     text = "Keluar",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.error
                 )
             }
             
@@ -202,6 +195,7 @@ fun ProfileMenuItem(
                 Text(
                     text = title,
                     fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
