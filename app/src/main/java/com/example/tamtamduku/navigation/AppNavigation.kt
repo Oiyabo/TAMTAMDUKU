@@ -32,6 +32,7 @@ import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
+import com.example.tamtamduku.ui.screens.tracking.HasilKerjaScreen
 import com.example.tamtamduku.ui.screens.profile.ProfileScreen
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
@@ -205,7 +206,27 @@ fun AppNavigation(
                 )
             }
             composable("tracking") {
-                TrackingScreen(navCon = navCon, viewModel = trackingViewModel)
+                TrackingScreen(
+                    navCon = navCon, 
+                    viewModel = trackingViewModel,
+                    onNavigateToHasilKerja = { invoiceId ->
+                        navCon.navigate("hasil_kerja/${Uri.encode(invoiceId)}")
+                    }
+                )
+            }
+            composable(
+                "hasil_kerja/{invoiceId}",
+                arguments = listOf(navArgument("invoiceId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val invoiceId = backStackEntry.arguments?.getString("invoiceId") ?: ""
+                val transaction = trackingViewModel.getTransactionByInvoice(invoiceId)
+                HasilKerjaScreen(
+                    transaction = transaction,
+                    onBack = { navCon.popBackStack() },
+                    onReview = { workerName ->
+                        navCon.navigate("review/${Uri.encode(workerName)}")
+                    }
+                )
             }
             composable("profile") {
                 ProfileScreen(

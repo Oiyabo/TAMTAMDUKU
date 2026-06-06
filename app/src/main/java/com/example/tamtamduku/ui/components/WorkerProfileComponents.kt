@@ -4,14 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.BusinessCenter
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
@@ -23,49 +20,91 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.tamtamduku.data.model.VocaWorker
 import java.util.Locale
 
-// --- MOCK DATA ---
+// --- MOCK DATA LOGIC ---
 data class MockExperience(val duration: String, val role: String, val period: String)
 data class MockReview(val name: String, val timeAgo: String, val rating: Int, val text: String, val service: String)
-data class MockPortfolio(val title: String, val description: String, val tags: List<String>)
+data class MockPortfolio(val title: String, val description: String, val tags: List<String>, val imageUrl: String)
 
-val mockExperiences = listOf(
-    MockExperience("5 Tahun", "System Analyst di Tech Solution", "Jan 2020 - Sekarang"),
-    MockExperience("2 Tahun", "Junior System Analyst di Inovatech", "Jan 2018 - Des 2019")
-)
+fun generateMockExperiences(worker: VocaWorker): List<MockExperience> {
+    return listOf(
+        MockExperience("5 Tahun", "Senior ${worker.pekerjaan}", "Jan 2020 - Sekarang"),
+        MockExperience("2 Tahun", "Junior ${worker.pekerjaan}", "Jan 2018 - Des 2019")
+    )
+}
+
+fun generateMockPortfolios(worker: VocaWorker): List<MockPortfolio> {
+    val job = worker.pekerjaan.lowercase()
+    val keyword = when {
+        job.contains("apoteker") || job.contains("medis") || job.contains("dokter") -> "medicine,doctor"
+        job.contains("teknisi") || job.contains("listrik") || job.contains("ac") -> "technician,repair"
+        job.contains("ledeng") || job.contains("bangunan") || job.contains("tukang") -> "construction,plumbing"
+        job.contains("developer") || job.contains("programmer") -> "coding,computer"
+        job.contains("desain") || job.contains("graphic") -> "design,art"
+        job.contains("bersih") || job.contains("cleaning") -> "cleaning,house"
+        else -> "work,professional"
+    }
+
+    return listOf(
+        MockPortfolio(
+            title = "Proyek ${worker.pekerjaan} 1",
+            description = "Penyelesaian tugas dan tanggung jawab terkait ${worker.pekerjaan} dengan standar kualitas tinggi.",
+            tags = worker.skills.take(2),
+            imageUrl = "https://loremflickr.com/200/150/$keyword?random=1"
+        ),
+        MockPortfolio(
+            title = "Proyek ${worker.pekerjaan} 2",
+            description = "Kolaborasi dan implementasi solusi inovatif dalam bidang ${worker.pekerjaan}.",
+            tags = worker.skills.takeLast(2),
+            imageUrl = "https://loremflickr.com/200/150/$keyword?random=2"
+        ),
+        MockPortfolio(
+            title = "Proyek ${worker.pekerjaan} 3",
+            description = "Penanganan kasus khusus dan pemeliharaan sistem di sektor ${worker.pekerjaan}.",
+            tags = worker.skills.take(1),
+            imageUrl = "https://loremflickr.com/200/150/$keyword?random=3"
+        )
+    )
+}
 
 val mockReviews = listOf(
-    MockReview("Maulana Ramadhan", "2 hari lalu", 5, "Hasil analisisnya sangat bagus", "Requirement Analysis"),
-    MockReview("Keisha Aurel Ratu", "2 hari lalu", 5, "Dokumentasi UML lengkap", "UML Design"),
-    MockReview("Annisa Syifa Hakim", "2 hari lalu", 5, "Hasil ERD sesuai kebutuhan", "Database Design")
+    MockReview("Maulana Ramadhan", "2 hari lalu", 5, "Sangat profesional dan cepat", "Pelayanan Reguler"),
+    MockReview("Keisha Aurel Ratu", "2 hari lalu", 5, "Puas sekali dengan hasil kerjanya", "Konsultasi"),
+    MockReview("Annisa Syifa Hakim", "2 hari lalu", 4, "Bagus dan sesuai ekspektasi", "Pengerjaan Proyek")
 )
 
-val mockPortfolios = listOf(
-    MockPortfolio("Sistem Informasi Akademik", "Perancangan sistem akademik menggunakan UML (Use Case Diagram)", listOf("UML", "System Design")),
-    MockPortfolio("Perancangan Database", "Perancangan struktur database untuk sistem manajemen proyek", listOf("ERD", "Database Design")),
-    MockPortfolio("Dokumentasi Requirement", "Dokumentasi kebutuhan sistem beserta use case dan spesifikasi fungsional", listOf("Requirement Analysis", "SQL"))
-)
+fun getRatingDistribution(rating: Double): List<Float> {
+    return when {
+        rating >= 4.8 -> listOf(0.85f, 0.10f, 0.05f, 0f, 0f)
+        rating >= 4.5 -> listOf(0.60f, 0.30f, 0.10f, 0f, 0f)
+        rating >= 4.0 -> listOf(0.40f, 0.40f, 0.15f, 0.05f, 0f)
+        rating >= 3.5 -> listOf(0.20f, 0.40f, 0.30f, 0.10f, 0f)
+        rating >= 3.0 -> listOf(0.10f, 0.20f, 0.40f, 0.20f, 0.10f)
+        else -> listOf(0.05f, 0.10f, 0.20f, 0.30f, 0.35f)
+    }
+}
 // -----------------
 
 @Composable
 fun ProfilTabContent(worker: VocaWorker) {
+    val experiences = generateMockExperiences(worker)
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Tentang Saya
         Column {
             Text("Tentang Saya", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
             Text(
-                text = worker.deskripsi,
+                text = worker.deskripsi.ifBlank { "Halo, saya adalah seorang ${worker.pekerjaan} profesional yang siap membantu Anda." },
                 fontSize = 14.sp,
                 color = Color.DarkGray,
                 lineHeight = 20.sp
@@ -73,21 +112,23 @@ fun ProfilTabContent(worker: VocaWorker) {
         }
 
         // Keahlian
-        Column {
-            Text("Keahlian", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
-            @OptIn(ExperimentalLayoutApi::class)
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                worker.skills.forEach { skill ->
-                    Box(
-                        modifier = Modifier
-                            .background(Color(0xFFFFF0E6), RoundedCornerShape(8.dp))
-                            .border(1.dp, Color(0xFFFFE0CC), RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
-                    ) {
-                        Text(text = skill, color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+        if (worker.skills.isNotEmpty()) {
+            Column {
+                Text("Keahlian", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
+                @OptIn(ExperimentalLayoutApi::class)
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    worker.skills.forEach { skill ->
+                        Box(
+                            modifier = Modifier
+                                .background(Color(0xFFFFF0E6), RoundedCornerShape(8.dp))
+                                .border(1.dp, Color(0xFFFFE0CC), RoundedCornerShape(8.dp))
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            Text(text = skill, color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                        }
                     }
                 }
             }
@@ -96,7 +137,7 @@ fun ProfilTabContent(worker: VocaWorker) {
         // Pengalaman
         Column {
             Text("Pengalaman", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 12.dp))
-            mockExperiences.forEach { exp ->
+            experiences.forEach { exp ->
                 Row(
                     modifier = Modifier.padding(bottom = 16.dp),
                     verticalAlignment = Alignment.Top
@@ -127,12 +168,14 @@ fun ProfilTabContent(worker: VocaWorker) {
             Text("Minimal pemesanan 2 jam", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(top = 4.dp))
         }
         
-        Spacer(modifier = Modifier.height(100.dp)) // padding for bottom action bar
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
 @Composable
 fun UlasanTabContent(worker: VocaWorker) {
+    val distribution = getRatingDistribution(worker.rating)
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -170,8 +213,7 @@ fun UlasanTabContent(worker: VocaWorker) {
                 
                 // Progress Bars
                 Column(modifier = Modifier.weight(1f)) {
-                    val progressValues = listOf(0.25f, 0.25f, 0.25f, 0f, 0f)
-                    progressValues.forEachIndexed { index, progress ->
+                    distribution.forEachIndexed { index, progress ->
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 2.dp)) {
                             Row(modifier = Modifier.width(50.dp)) {
                                 repeat(5 - index) { Icon(Icons.Default.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(10.dp)) }
@@ -210,7 +252,6 @@ fun UlasanTabContent(worker: VocaWorker) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Terbaru", fontSize = 12.sp, color = Color.DarkGray)
                 Spacer(modifier = Modifier.width(4.dp))
-                // Just mock swap icon
                 Text("↑↓", color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
         }
@@ -257,19 +298,21 @@ fun UlasanTabContent(worker: VocaWorker) {
             }
         }
         
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
 @Composable
-fun PortofolioTabContent() {
+fun PortofolioTabContent(worker: VocaWorker) {
+    val portfolios = generateMockPortfolios(worker)
+    
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        mockPortfolios.forEach { portfolio ->
+        portfolios.forEach { portfolio ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -278,9 +321,9 @@ fun PortofolioTabContent() {
                     .padding(12.dp),
                 verticalAlignment = Alignment.Top
             ) {
-                // Mock Image Thumbnail
+                // Image Thumbnail
                 AsyncImage(
-                    model = "https://picsum.photos/seed/${portfolio.title.replace(" ", "")}/200/150",
+                    model = portfolio.imageUrl,
                     contentDescription = "Portfolio Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -300,7 +343,11 @@ fun PortofolioTabContent() {
                         lineHeight = 16.sp,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    @OptIn(ExperimentalLayoutApi::class)
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
                         portfolio.tags.forEach { tag ->
                             Box(
                                 modifier = Modifier
@@ -314,6 +361,6 @@ fun PortofolioTabContent() {
                 }
             }
         }
-        Spacer(modifier = Modifier.height(100.dp))
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }

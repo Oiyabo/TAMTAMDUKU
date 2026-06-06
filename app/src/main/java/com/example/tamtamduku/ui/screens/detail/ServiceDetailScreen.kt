@@ -62,8 +62,10 @@ fun ServiceDetailScreen(
     val tabs = listOf("Profil", "Ulasan", "Portofolio")
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             TopAppBar(
+                windowInsets = WindowInsets(0.dp),
                 title = { Text("Detail Profil Pekerja", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navCon.popBackStack() }) {
@@ -92,8 +94,7 @@ fun ServiceDetailScreen(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .navigationBarsPadding(),
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -131,7 +132,7 @@ fun ServiceDetailScreen(
         ) {
             // Profile Header
             Column(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AsyncImage(
@@ -230,7 +231,7 @@ fun ServiceDetailScreen(
             when (selectedTabIndex) {
                 0 -> ProfilTabContent(worker = worker)
                 1 -> UlasanTabContent(worker = worker)
-                2 -> PortofolioTabContent()
+                2 -> PortofolioTabContent(worker = worker)
             }
         }
     }
