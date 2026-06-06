@@ -9,11 +9,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -75,11 +80,14 @@ fun WorkerCard(
                         color = Color.Black,
                         modifier = Modifier.weight(1f)
                     )
+                    var isFavorite by remember { mutableStateOf(false) }
                     Icon(
-                        imageVector = Icons.Default.Bookmark,
-                        contentDescription = "Bookmark",
-                        tint = Color.Black,
-                        modifier = Modifier.size(24.dp)
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.Bookmark,
+                        contentDescription = "Favorite/Bookmark",
+                        tint = if (isFavorite) Color.Red else Color.Black,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { isFavorite = !isFavorite }
                     )
                 }
 
@@ -146,32 +154,57 @@ fun WorkerCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
+                var expanded by remember { mutableStateOf(false) }
+
                 Box(
-                    modifier = Modifier
-                        .background(Color(0xFFFF8C00), RoundedCornerShape(percent = 50))
-                        .border(1.dp, Color.Black, RoundedCornerShape(percent = 50))
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
+                    Box(
+                        modifier = Modifier
+                            .background(Color(0xFFFF8C00), RoundedCornerShape(percent = 50))
+                            .border(1.dp, Color.Black, RoundedCornerShape(percent = 50))
+                            .clickable { expanded = true }
+                            .padding(horizontal = 12.dp, vertical = 6.dp)
                     ) {
-                        val formattedPrice = String.format("Rp. %,d", worker.baseSalary.toInt()).replace(',', '.')
-                        Text(
-                            text = "$formattedPrice (Basic)",
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            val formattedPrice = String.format("Rp. %,d", worker.baseSalary.toInt()).replace(',', '.')
+                            Text(
+                                text = "$formattedPrice (Basic)",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = "Expand",
+                                tint = Color.Black,
+                                modifier = Modifier
+                                    .size(16.dp)
+                                    .background(Color.Transparent, CircleShape)
+                                    .border(1.dp, Color.Black, CircleShape)
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.background(Color.White)
+                    ) {
+                        val premiumPrice = String.format("Rp. %,d", (worker.baseSalary * 1.5).toInt()).replace(',', '.')
+                        val vipPrice = String.format("Rp. %,d", (worker.baseSalary * 2.0).toInt()).replace(',', '.')
+                        
+                        DropdownMenuItem(
+                            text = { Text("Layanan Premium - $premiumPrice", color = Color.Black, fontSize = 12.sp) },
+                            onClick = { expanded = false }
                         )
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Expand",
-                            tint = Color.Black,
-                            modifier = Modifier
-                                .size(16.dp)
-                                .background(Color.Transparent, CircleShape)
-                                .border(1.dp, Color.Black, CircleShape)
+                        DropdownMenuItem(
+                            text = { Text("Layanan VIP - $vipPrice", color = Color.Black, fontSize = 12.sp) },
+                            onClick = { expanded = false }
                         )
                     }
                 }
