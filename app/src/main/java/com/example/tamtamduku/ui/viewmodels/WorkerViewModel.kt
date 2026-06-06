@@ -26,7 +26,8 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
     private fun loadWorkers() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            repository.getWorkers().collect { workers ->
+            repository.getWorkers().collect { allWorkers ->
+                val workers = allWorkers.take(5)
                 val workTypes = listOf("Semua Pekerjaan") + workers.map { it.pekerjaan }.distinct().sorted()
                 val locations = listOf("Semua Lokasi") + workers.map { it.lokasi }.distinct().sorted()
                 _uiState.update { it.copy(

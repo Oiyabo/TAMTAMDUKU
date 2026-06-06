@@ -1,9 +1,10 @@
 package com.example.tamtamduku.ui.viewmodels
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tamtamduku.data.model.TrackingPekerjaan
-import com.example.tamtamduku.data.model.TransactionGroup
+import com.example.tamtamduku.data.model.Transaction
 import com.example.tamtamduku.data.repository.WorkerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,8 +14,7 @@ import kotlinx.coroutines.launch
 
 data class TrackingUiState(
     val isLoading: Boolean = false,
-    val trackingItems: List<TrackingPekerjaan> = emptyList(),
-    val transactionGroups: List<TransactionGroup> = emptyList(),
+    val transactions: List<Transaction> = emptyList(),
     val errorMessage: String? = null
 )
 
@@ -24,32 +24,38 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
     val uiState: StateFlow<TrackingUiState> = _uiState.asStateFlow()
 
     init {
-        fetchTrackingData()
         fetchTransactionData()
     }
 
-    fun fetchTrackingData() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun fetchTransactionData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            repository.getTrackingPekerjaan().collect { items ->
+            repository.getWorkers().collect { workers ->
+                val statuses = listOf("Dikerjakan", "Selesai", "Batal")
+                
+                // Generate mocked transactions based on workers
+                val mockTransactions = workers.mapIndexed { index, worker ->
+                    Transaction(
+                        invoiceNumber = "#INV-25050${index + 1}",
+                        workerName = worker.nama,
+                        workerProfession = worker.pekerjaan,
+                        date = "3 Mei 2025",
+                        price = worker.baseSalary,
+                        status = statuses[index % statuses.size]
+                    )
+                }
+
                 _uiState.update { it.copy(
                     isLoading = false,
-                    trackingItems = items
+                    transactions = mockTransactions
                 ) }
             }
         }
     }
 
-    fun fetchTransactionData() {
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
-            repository.getTransactions().collect { groups ->
-                _uiState.update { it.copy(
-                    isLoading = false,
-                    transactionGroups = groups
-                ) }
-            }
-        }
+    fun getTransactionByInvoice(invoiceId: String): Transaction? {
+        return _uiState.value.transactions.find { it.invoiceNumber == invoiceId }
     }
 
     fun markAsSelesai(workerName: String) {

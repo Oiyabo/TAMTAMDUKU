@@ -38,7 +38,7 @@ fun TrackingScreen(
     val tabs = listOf("Tracking", "History")
 
     Column(
-        modifier = Modifier.fillMaxSize().background(Color(0xFFFFFDFB))
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth().background(
@@ -96,7 +96,7 @@ fun TrackingScreen(
                 CircularProgressIndicator()
             }
         } else if (selectedTab == 0) {
-            TrackingContent(uiState.trackingItems, navCon)
+            TrackingContent(uiState.trackingItems)
         } else {
             HistoryContent(uiState.transactionGroups, navCon)
         }
@@ -104,7 +104,7 @@ fun TrackingScreen(
 }
 
 @Composable
-fun TrackingContent(items: List<TrackingPekerjaan>, navCon: NavHostController) {
+fun TrackingContent(items: List<TrackingPekerjaan>) {
     if (items.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -128,9 +128,7 @@ fun TrackingContent(items: List<TrackingPekerjaan>, navCon: NavHostController) {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(items) { item ->
-                TrackingCard(item) {
-                    navCon.navigate("status_pekerjaan/${Uri.encode(item.workerName)}")
-                }
+                TrackingCard(item)
             }
         }
     }
@@ -210,9 +208,9 @@ fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGro
 }
 
 @Composable
-fun TrackingCard(item: TrackingPekerjaan, onClick: () -> Unit) {
+fun TrackingCard(item: TrackingPekerjaan) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
