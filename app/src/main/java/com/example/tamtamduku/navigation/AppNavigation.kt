@@ -29,10 +29,6 @@ import com.example.tamtamduku.ui.screens.chat.PersonalChat
 import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
-import com.example.tamtamduku.ui.screens.detail.PaymentScreen
-import com.example.tamtamduku.ui.screens.detail.OtpVerificationScreen
-import com.example.tamtamduku.ui.screens.detail.PaymentSuccessScreen
-import com.example.tamtamduku.ui.screens.notification.NotificationsScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
 import com.example.tamtamduku.ui.screens.tracking.HasilKerjaScreen
 import com.example.tamtamduku.ui.screens.profile.AccountScreen
@@ -156,29 +152,12 @@ fun AppNavigation(
             composable("register") {
                 RegisterScreen(
                     viewModel = authViewModel,
-                    onRegisterSuccess = { navCon.navigate("register_otp") },
+                    onRegisterSuccess = { navCon.navigate("login") },
                     onToLogin = { navCon.navigate("login") }
                 )
             }
-            composable("register_otp") {
-                OtpVerificationScreen(
-                    workerName = "",
-                    paymentMethod = "",
-                    workerViewModel = workerViewModel,
-                    trackingViewModel = trackingViewModel,
-                    onBack = { navCon.popBackStack() },
-                    onOtpVerified = { _, _ ->
-                        navCon.navigate("login") {
-                            popUpTo("register") { inclusive = true }
-                        }
-                    }
-                )
-            }
             composable("home") {
-                HomeScreen(
-                    onNavigateToSearch = { navCon.navigate("search") },
-                    onNavigateToNotifications = { navCon.navigate("notifications") }
-                )
+                HomeScreen(onNavigateToSearch = { navCon.navigate("search") })
             }
             composable("chat") {
                 ChatPage(
@@ -289,56 +268,6 @@ fun AppNavigation(
                     viewModel = workerViewModel,
                     onBack = { navCon.popBackStack() },
                     workerName = backStackEntry.arguments?.getString("workerName")
-                )
-            }
-            composable(
-                "payment/{workerName}",
-                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
-                PaymentScreen(
-                    workerName = workerName,
-                    workerViewModel = workerViewModel,
-                    trackingViewModel = trackingViewModel,
-                    onBack = { navCon.popBackStack() },
-                    onPaymentSuccess = { invoiceId, totalAmount, paymentMethod ->
-                        navCon.navigate("payment_success/${Uri.encode(workerName)}/$invoiceId/$totalAmount/$paymentMethod") {
-                            popUpTo("payment/$workerName") { inclusive = true }
-                        }
-                    }
-                )
-            }
-            composable(
-                "payment_success/{workerName}/{invoiceId}/{totalAmount}/{paymentMethod}",
-                arguments = listOf(
-                    navArgument("workerName") { type = NavType.StringType },
-                    navArgument("invoiceId") { type = NavType.StringType },
-                    navArgument("totalAmount") { type = NavType.FloatType },
-                    navArgument("paymentMethod") { type = NavType.StringType }
-                )
-            ) { backStackEntry ->
-                val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
-                val invoiceId = backStackEntry.arguments?.getString("invoiceId") ?: ""
-                val totalAmount = backStackEntry.arguments?.getFloat("totalAmount")?.toDouble() ?: 0.0
-                val paymentMethod = backStackEntry.arguments?.getString("paymentMethod") ?: ""
-                PaymentSuccessScreen(
-                    workerName = workerName,
-                    invoiceId = invoiceId,
-                    totalAmount = totalAmount,
-                    paymentMethod = paymentMethod,
-                    workerViewModel = workerViewModel,
-                    onDone = {
-                        navCon.navigate("tracking") {
-                            popUpTo("home") { saveState = true }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    }
-                )
-            }
-            composable("notifications") {
-                NotificationsScreen(
-                    onBack = { navCon.popBackStack() }
                 )
             }
         }
