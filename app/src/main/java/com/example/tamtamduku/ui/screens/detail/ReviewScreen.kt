@@ -2,44 +2,17 @@ package com.example.tamtamduku.ui.screens.detail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -58,52 +32,94 @@ fun ReviewScreen(
     workerName: String?
 ) {
     var reviewText by remember { mutableStateOf("") }
-    var rating by remember { mutableIntStateOf(5) }
+    var rating by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
 
     val uiState by viewModel.uiState.collectAsState()
     val worker = remember(workerName, uiState.workers) {
         uiState.workers.find { it.nama == workerName }
     }
+    
+    val bgColor = Color(0xFFFFFDFB)
+    val primaryOrange = Color(0xFFF97316)
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
                     Text(
-                        "Beri Rating & Review",
+                        "Beri Rating & Ulasan",
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleMedium
+                        color = Color.White,
+                        fontSize = 18.sp
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryOrange)
             )
-        }
+        },
+        containerColor = bgColor
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 24.dp)
                 .verticalScroll(scrollState)
         ) {
             Spacer(modifier = Modifier.height(24.dp))
+            
+            // Worker Info
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(Color.DarkGray)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(
+                        text = worker?.nama?.uppercase() ?: "JENO",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = worker?.pekerjaan ?: "Design Analyst",
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        repeat(5) {
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = null,
+                                tint = Color(0xFFFFD700),
+                                modifier = Modifier.size(14.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("5.0 (328)", fontSize = 12.sp, color = Color.Gray)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Rating
-            Text("Berikan Rating", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
+            Text("Berikan Rating", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                "Seberapa puas Anda dengan jasa dari ${worker?.nama ?: "Pekerja"}?",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                "Seberapa puas Anda dengan layanan dari ${worker?.nama?.split(" ")?.get(0) ?: "Jeno"}?",
+                fontSize = 14.sp,
+                color = Color.DarkGray
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -118,84 +134,51 @@ fun ReviewScreen(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = if (index < rating) Color(0xFFFFD700) else Color.LightGray,
-                            modifier = Modifier.size(40.dp)
+                            tint = if (index < rating) Color(0xFFFFD700) else Color.White,
+                            modifier = Modifier.size(48.dp)
                         )
                     }
                 }
             }
-
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
             Text(
-                text = when(rating) {
-                    1 -> "Sangat Buruk"
-                    2 -> "Buruk"
-                    3 -> "Cukup"
-                    4 -> "Puas"
-                    else -> "Sangat Puas"
-                },
+                text = "Beri Opini Anda",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                color = Color(0xFF4CAF50),
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.bodyMedium
+                color = Color.DarkGray,
+                fontSize = 12.sp
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Tulis Review
-            Text("Tulis Review", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
+            Text("Tulis Ulasan", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 "Ceritakan pengalaman Anda dengan layanan yang diberikan.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.Gray
+                fontSize = 14.sp,
+                color = Color.DarkGray
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = reviewText,
                 onValueChange = { if (it.length <= 500) reviewText = it },
-                placeholder = { Text("Pekerja sangat profesional, datang tepat waktu...") },
+                placeholder = { Text("Pekerja sangat profesinal\nSangat recommended!!", color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp),
+                    .height(120.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color(0xFFE0E0E0)
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                    focusedBorderColor = primaryOrange
                 )
             )
-
-            Text(
-                text = "${reviewText.length}/500",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End,
-                style = MaterialTheme.typography.bodySmall,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Bagian Tambah Foto
-            Text("Tambah Foto (Opsional)", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodyLarge)
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-                // Tombol Tambah Foto
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .border(1.dp, Color.LightGray, RoundedCornerShape(8.dp))
-                        .clickable { /* Logika ambil foto */ },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "Tambah Foto",
-                        tint = Color.Gray
-                    )
-                }
-            }
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -204,22 +187,12 @@ fun ReviewScreen(
                 onClick = { onBack() },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = primaryOrange)
             ) {
-                Text("Kirim Review", color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold)
+                Text("Kirim Ulasan", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "Review Anda akan membantu pengguna lain membuat keputusan yang lebih baik.",
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center,
-                color = Color.Gray,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-            )
 
             Spacer(modifier = Modifier.height(40.dp))
         }

@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
@@ -167,7 +168,7 @@ fun HomeScreen(onNavigateToSearch: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CategoryItem(icon = Icons.Default.TrendingUp, label = "DA")
+                CategoryItem(icon = Icons.AutoMirrored.Filled.TrendingUp, label = "DA")
                 CategoryItem(icon = Icons.Default.Bolt, label = "Listrik")
                 CategoryItem(icon = Icons.Default.AcUnit, label = "AC")
                 CategoryItem(icon = Icons.Default.Code, label = "Dev")

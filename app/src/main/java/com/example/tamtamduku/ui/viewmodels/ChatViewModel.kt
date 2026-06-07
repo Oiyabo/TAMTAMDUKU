@@ -46,17 +46,32 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
     }
 
     fun sendMessage(userName: String, text: String, time: String = "Now") {
-        _chats.value = _chats.value.map { chat ->
-            if (chat.name == userName) {
-                val newMessage = com.example.tamtamduku.data.model.Messages(text, true, time)
-                chat.copy(
-                    messages = chat.messages + newMessage,
-                    lastMessage = text,
-                    time = time
-                )
-            } else {
-                chat
+        val currentChats = _chats.value
+        val existingChat = currentChats.find { it.name == userName }
+        if (existingChat != null) {
+            _chats.value = currentChats.map { chat ->
+                if (chat.name == userName) {
+                    val newMessage = com.example.tamtamduku.data.model.Messages(text, true, time)
+                    chat.copy(
+                        messages = chat.messages + newMessage,
+                        lastMessage = text,
+                        time = time
+                    )
+                } else {
+                    chat
+                }
             }
+        } else {
+            val newMessage = com.example.tamtamduku.data.model.Messages(text, true, time)
+            val newChat = VocaChat(
+                id = System.currentTimeMillis().toString(),
+                name = userName,
+                lastMessage = text,
+                time = time,
+                unreadCount = 0,
+                messages = listOf(newMessage)
+            )
+            _chats.value = currentChats + newChat
         }
     }
 }

@@ -32,7 +32,9 @@ import com.example.tamtamduku.ui.screens.search.SearchScreen
 import com.example.tamtamduku.ui.screens.detail.ServiceDetailScreen
 import com.example.tamtamduku.ui.screens.detail.ReviewScreen
 import com.example.tamtamduku.ui.screens.tracking.TrackingScreen
+import com.example.tamtamduku.ui.screens.tracking.StatusPekerjaanScreen
 import com.example.tamtamduku.ui.screens.profile.ProfileScreen
+import com.example.tamtamduku.ui.screens.profile.FavoriteWorkersScreen
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
@@ -211,6 +213,7 @@ fun AppNavigation(
                 ProfileScreen(
                     viewModel = profileViewModel,
                     onBack = { navCon.popBackStack() },
+                    onNavigateToFavorite = { navCon.navigate("favorite_workers") },
                     onLogout = {
                         navCon.navigate("login") {
                             popUpTo(0) { inclusive = true }
@@ -238,10 +241,23 @@ fun AppNavigation(
                     workerName = backStackEntry.arguments?.getString("workerName")
                 )
             }
+            composable(
+                "status_pekerjaan/{workerName}",
+                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
+            ) { backStackEntry ->
+                StatusPekerjaanScreen(
+                    navCon = navCon,
+                    viewModel = trackingViewModel,
+                    workerName = backStackEntry.arguments?.getString("workerName") ?: ""
+                )
+            }
             composable("payment_test") {
                 PaymentTestScreen(
                     onNavigateBack = { navCon.popBackStack() }
                 )
+            }
+            composable("favorite_workers") {
+                FavoriteWorkersScreen(navCon = navCon)
             }
         }
     }

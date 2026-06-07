@@ -87,7 +87,7 @@ fun StatusPekerjaanScreen(
             ) {
                 Text(
                     text = if (isSelesai) "Selesai" else "Sedang Dikerjakan",
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                     fontWeight = FontWeight.Bold,
                     color = if (isSelesai) Color(0xFF4CAF50) else Color.Black
                 )
@@ -150,7 +150,7 @@ fun StatusPekerjaanScreen(
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
                         text = if (isSelesai) "100%" else "60%",
-                        color = if (isSelesai) primaryOrange else yellowBadge,
+                        color = if (isSelesai) primaryOrange else primaryOrange,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -185,13 +185,15 @@ fun StatusPekerjaanScreen(
                         fontSize = 16.sp,
                         modifier = Modifier.weight(1f)
                     )
-                    OutlinedButton(
-                        onClick = { navCon.navigate("personal_chat/$workerName") },
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = primaryOrange),
-                        border = BorderStroke(1.dp, primaryOrange)
-                    ) {
-                        Text("Chat")
-                    }
+                    Text(
+                        text = "Chat",
+                        color = primaryOrange,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .clickable { navCon.navigate("personal_chat/$workerName") }
+                            .padding(8.dp)
+                    )
                 }
             }
 
@@ -207,12 +209,14 @@ fun StatusPekerjaanScreen(
                     .height(56.dp)
                     .padding(bottom = 24.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = primaryOrange),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isSelesai) primaryOrange else Color(0xFFD1D5DB)
+                ),
                 enabled = true
             ) {
                 Text(
                     text = "Konfirmasi Pekerjaan Selesai",
-                    color = Color.White,
+                    color = if (isSelesai) Color.White else Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -234,7 +238,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
                 Icon(
                     imageVector = if (isCompleted) Icons.Default.Check else Icons.Default.Remove,
                     contentDescription = null,
-                    tint = if (isCompleted) Color.White else Color.Black,
+                    tint = Color.Black,
                     modifier = Modifier.size(20.dp)
                 )
             }

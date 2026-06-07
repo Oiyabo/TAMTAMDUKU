@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -101,19 +102,30 @@ fun PersonalChat(
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            if (chat == null) {
+            val isLoading by viewModel.isLoading.collectAsState()
+            if (isLoading && chat == null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             } else {
+                val messages = chat?.messages ?: emptyList()
+                val listState = rememberLazyListState()
+                
+                LaunchedEffect(messages.size) {
+                    if (messages.isNotEmpty()) {
+                        listState.animateScrollToItem(messages.size - 1)
+                    }
+                }
+
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.Bottom,
                     contentPadding = PaddingValues(vertical = 16.dp)
                 ) {
-                    items(chat.messages) { message ->
+                    items(messages) { message ->
                         MessageBubble(message, primaryOrange, yellowBubble)
                         Spacer(modifier = Modifier.height(12.dp))
                     }

@@ -2,7 +2,6 @@ package com.example.tamtamduku.ui.screens.tracking
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,8 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.tamtamduku.data.model.Transaction
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import com.example.tamtamduku.util.formatRupiah
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,7 +41,7 @@ fun HasilKerjaScreen(
 
     val descText = when {
         transaction.workerProfession.contains("AC", ignoreCase = true) -> 
-            "Telah dilakukan servis cuci AC dan pengecekan freon secara menyeluruh."
+            "Telah dilakukan servis cuci AC and pengecekan freon secara menyeluruh."
         transaction.workerProfession.contains("Data", ignoreCase = true) ->
             "Telah diselesaikan analisis data untuk kebutuhan perusahaan."
         transaction.workerProfession.contains("Kebersihan", ignoreCase = true) || transaction.workerProfession.contains("Cleaning", ignoreCase = true) ->
@@ -114,7 +112,7 @@ fun HasilKerjaScreen(
                 }
             }
         },
-        containerColor = Color(0xFFFAF9F6) // Slight off-white background
+        containerColor = Color(0xFFFAF9F6)
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -125,7 +123,6 @@ fun HasilKerjaScreen(
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Worker Info Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -179,7 +176,7 @@ fun HasilKerjaScreen(
 
                     Column(horizontalAlignment = Alignment.End) {
                         Surface(
-                            color = Color(0xFF81C784), // Green
+                            color = Color(0xFF81C784),
                             shape = RoundedCornerShape(4.dp)
                         ) {
                             Text(
@@ -203,11 +200,10 @@ fun HasilKerjaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Completion Notice Card
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFFF1F8E9), // Light green background
+                color = Color(0xFFF1F8E9),
                 border = BorderStroke(1.dp, Color(0xFFDCEDC8))
             ) {
                 Row(
@@ -240,7 +236,6 @@ fun HasilKerjaScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Hasil Pekerjaan Section
             Text(
                 text = "Hasil Pekerjaan",
                 fontWeight = FontWeight.Bold,
@@ -250,7 +245,6 @@ fun HasilKerjaScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Description Card
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -283,11 +277,10 @@ fun HasilKerjaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Freelancer Note Card
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFFF5F5F5), // Light gray background
+                color = Color(0xFFF5F5F5),
                 border = BorderStroke(1.dp, Color(0xFFE0E0E0))
             ) {
                 Row(

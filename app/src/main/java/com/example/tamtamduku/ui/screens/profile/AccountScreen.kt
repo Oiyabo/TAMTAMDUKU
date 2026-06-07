@@ -26,12 +26,10 @@ import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountScreen(
+fun ProfileScreen(
     onBack: () -> Unit,
     onLogout: () -> Unit,
-    onNavigateToEditProfile: () -> Unit,
-    onNavigateToAddress: () -> Unit,
-    onNavigateToReportList: () -> Unit,
+    onNavigateToFavorite: () -> Unit = {},
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -117,22 +115,22 @@ fun AccountScreen(
             ProfileMenuItem(
                 icon = Icons.Default.Edit,
                 title = "Edit Profil",
-                onClick = onNavigateToEditProfile
+                onClick = { /* Navigate to Edit Profile */ }
             )
             ProfileMenuItem(
                 icon = Icons.Default.LocationOn,
                 title = "Alamat Saya",
-                onClick = onNavigateToAddress
+                onClick = { /* Navigate to Address */ }
             )
             ProfileMenuItem(
                 icon = Icons.Default.Report,
                 title = "Lapor Masalah",
-                onClick = onNavigateToReportList
+                onClick = { /* Navigate to Reports */ }
             )
             ProfileMenuItem(
                 icon = Icons.Default.Engineering,
                 title = "Pekerja Favorit",
-                onClick = { /* Navigate to Pekerja Favorit */ }
+                onClick = onNavigateToFavorite
             )
             ProfileMenuItem(
                 icon = Icons.Default.Settings,

@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.tamtamduku.data.model.TrackingPekerjaan
 import com.example.tamtamduku.data.model.Transaction
+import com.example.tamtamduku.data.model.TransactionGroup
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
-import java.util.Locale
 
 @Composable
 fun TrackingScreen(
@@ -96,7 +96,12 @@ fun TrackingScreen(
                 CircularProgressIndicator()
             }
         } else if (selectedTab == 0) {
-            TrackingContent(uiState.trackingItems)
+            TrackingContent(
+                items = uiState.trackingItems,
+                onItemClick = { item ->
+                    navCon.navigate("status_pekerjaan/${Uri.encode(item.workerName)}")
+                }
+            )
         } else {
             HistoryContent(uiState.transactionGroups, navCon)
         }
@@ -104,7 +109,7 @@ fun TrackingScreen(
 }
 
 @Composable
-fun TrackingContent(items: List<TrackingPekerjaan>) {
+fun TrackingContent(items: List<TrackingPekerjaan>, onItemClick: (TrackingPekerjaan) -> Unit) {
     if (items.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -124,18 +129,18 @@ fun TrackingContent(items: List<TrackingPekerjaan>) {
     } else {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(items) { item ->
-                TrackingCard(item)
+                TrackingCard(item = item, onClick = { onItemClick(item) })
             }
         }
     }
 }
 
 @Composable
-fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGroup>, navCon: NavHostController) {
+fun HistoryContent(groups: List<TransactionGroup>, navCon: NavHostController) {
     if (groups.isEmpty()) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text("Belum ada riwayat transaksi", color = MaterialTheme.colorScheme.outline)
@@ -197,7 +202,7 @@ fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGro
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
-                items(group.items) { item ->
+                items(items = group.items) { item ->
                     TransactionCard(item) {
                         navCon.navigate("detail/${Uri.encode(item.workerName)}")
                     }
@@ -208,9 +213,11 @@ fun HistoryContent(groups: List<com.example.tamtamduku.data.model.TransactionGro
 }
 
 @Composable
-fun TrackingCard(item: TrackingPekerjaan) {
+fun TrackingCard(item: TrackingPekerjaan, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -291,7 +298,7 @@ fun TransactionCard(item: Transaction, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Jasa Pekerjaan", // Default as it's not in the Gist
+                        text = "Jasa Pekerjaan",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
