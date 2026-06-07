@@ -1,5 +1,6 @@
 package com.example.tamtamduku.ui.screens.detail
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
@@ -110,7 +111,7 @@ fun ServiceDetailScreen(
                     
                     // Ajukan Permintaan Button
                     Button(
-                        onClick = { /* TODO: Ajukan Permintaan action */ },
+                        onClick = { navCon.navigate("payment/${Uri.encode(worker.nama)}") },
                         modifier = Modifier
                             .weight(1f)
                             .height(50.dp),
