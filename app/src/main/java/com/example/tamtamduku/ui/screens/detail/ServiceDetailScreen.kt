@@ -101,7 +101,7 @@ fun ServiceDetailScreen(
                 ) {
                     // Chat Button
                     IconButton(
-                        onClick = { /* TODO: Chat action */ },
+                        onClick = { navCon.navigate("personal_chat/${Uri.encode(worker.nama)}") },
                         modifier = Modifier
                             .size(50.dp)
                             .background(Color(0xFFFF8C00), RoundedCornerShape(12.dp))
@@ -111,7 +111,7 @@ fun ServiceDetailScreen(
                     
                     // Ajukan Permintaan Button
                     Button(
-                        onClick = { navCon.navigate("payment/${Uri.encode(worker.nama)}") },
+                        onClick = { navCon.navigate("request_form/${Uri.encode(worker.nama)}") },
                         modifier = Modifier
                             .weight(1f)
                             .height(50.dp),

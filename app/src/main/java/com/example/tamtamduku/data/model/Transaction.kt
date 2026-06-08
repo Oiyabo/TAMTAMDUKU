@@ -1,14 +1,33 @@
 package com.example.tamtamduku.data.model
 
+data class TransactionData(
+    val id: String = "",
+    val invoiceNumber: String = "",
+    val userId: String = "",
+    val workerId: String = "",
+    val status: String = "", // "Menunggu Konfirmasi", "Dikerjakan", "Menuju Lokasi", "Selesai", "Dibatalkan"
+    val date: String = "",
+    val price: Double = 0.0,
+    val tracking: Tracking? = null
+)
+
 data class Transaction(
-    val invoiceNumber: String,
-    val workerName: String,
-    val workerProfession: String,
-    val date: String,
-    val time: String = "10:00",
-    val price: Double,
-    val status: String, // "Selesai", "Dibatalkan", "Dikerjakan"
+    val id: String = "",
+    val invoiceNumber: String = "",
+    val workerId: String = "",
+    val workerName: String = "",
+    val workerProfession: String = "",
+    val status: String = "",
+    val date: String = "",
+    val price: Double = 0.0,
+    val tracking: Tracking? = null,
     val icon: String = "Work",
     val iconColor: String = "#FF7A00",
     val iconBgColor: String = "#FFF4E5"
+)
+
+data class Tracking(
+    val estimasiWaktu: String = "",
+    val posisiSaatIni: String = "",
+    val iconType: String = ""
 )

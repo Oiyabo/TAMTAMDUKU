@@ -21,14 +21,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    viewModel: ProfileViewModel = viewModel()
 ) {
-    var name by remember { mutableStateOf("Bang Lijen") }
-    var email by remember { mutableStateOf("banglijen@gmail.com") }
-    var address by remember { mutableStateOf("GIK LIC") }
+    val uiState by viewModel.uiState.collectAsState()
+
+    var name by remember(uiState.name) { mutableStateOf(if(uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
+    var email by remember(uiState.email) { mutableStateOf(if(uiState.email.isEmpty()) "banglijen@gmail.com" else uiState.email) }
+    var address by remember(uiState.address) { mutableStateOf(if(uiState.address.isEmpty()) "GIK LIC" else uiState.address) }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 

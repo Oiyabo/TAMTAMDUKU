@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-//import com.example.tamtamduku.data.model.VocaWorker
 import com.example.tamtamduku.data.repository.WorkerRepository
 import com.example.tamtamduku.ui.screens.search.SearchUiState
 import kotlinx.coroutines.flow.*
@@ -118,7 +117,7 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
             val matchesDate = if (state.selectedDate != null) {
                 val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                 val selectedDateStr = sdf.format(Date(state.selectedDate))
-                worker.joinDate >= selectedDateStr
+                worker.tanggalGabung >= selectedDateStr
             } else true
 
             val minGajiVal = state.minGaji.toDoubleOrNull()
@@ -128,10 +127,10 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
             val matchesMaxGaji = maxGajiVal == null || worker.baseSalary <= maxGajiVal
 
             val minRateVal = state.minRate.toDoubleOrNull()
-            val matchesMinRate = minRateVal == null || worker.rating >= minRateVal
+            val matchesMinRate = minRateVal == null || worker.reviewSummary.averageRating >= minRateVal
 
             val maxRateVal = state.maxRate.toDoubleOrNull()
-            val matchesMaxRate = maxRateVal == null || worker.rating <= maxRateVal
+            val matchesMaxRate = maxRateVal == null || worker.reviewSummary.averageRating <= maxRateVal
             
             val matchesSkills = state.skills.isEmpty() || state.skills.all { s -> 
                 worker.skills.any { ws -> ws.contains(s, ignoreCase = true) }

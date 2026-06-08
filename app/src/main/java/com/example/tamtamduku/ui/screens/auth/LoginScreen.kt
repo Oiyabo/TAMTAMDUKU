@@ -112,10 +112,10 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(48.dp))
 
-                // Email Input
+                // Email / Username Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Masukkan Email",
+                        text = "Masukkan Email atau Username",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
                         color = Color.Black,
@@ -124,7 +124,7 @@ fun LoginScreen(
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        placeholder = { Text("Email", color = Color.Black) },
+                        placeholder = { Text("Email atau Username", color = Color.Black) },
                         trailingIcon = { Icon(imageVector = Icons.Outlined.Email, contentDescription = "Email Icon", tint = Color.Black) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),

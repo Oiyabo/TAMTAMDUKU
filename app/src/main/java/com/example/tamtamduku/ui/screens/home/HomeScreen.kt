@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onNavigateToSearch: () -> Unit) {
+fun HomeScreen(
+    onNavigateToSearch: () -> Unit,
+    onNavigateToNotifications: () -> Unit = {}
+) {
     Scaffold(
         containerColor = Color(0xFFFFFDF8),
         topBar = {
@@ -54,7 +57,7 @@ fun HomeScreen(onNavigateToSearch: () -> Unit) {
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = "Notifications",
-                    modifier = Modifier.size(28.dp),
+                    modifier = Modifier.size(28.dp).clickable { onNavigateToNotifications() },
                     tint = Color.Black
                 )
             }

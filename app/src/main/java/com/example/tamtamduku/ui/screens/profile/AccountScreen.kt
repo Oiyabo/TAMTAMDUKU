@@ -30,6 +30,10 @@ fun ProfileScreen(
     onBack: () -> Unit,
     onLogout: () -> Unit,
     onNavigateToFavorite: () -> Unit = {},
+    onNavigateToEditProfile: () -> Unit = {},
+    onNavigateToAddress: () -> Unit = {},
+    onNavigateToReport: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -115,17 +119,17 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Default.Edit,
                 title = "Edit Profil",
-                onClick = { /* Navigate to Edit Profile */ }
+                onClick = onNavigateToEditProfile
             )
             ProfileMenuItem(
                 icon = Icons.Default.LocationOn,
                 title = "Alamat Saya",
-                onClick = { /* Navigate to Address */ }
+                onClick = onNavigateToAddress
             )
             ProfileMenuItem(
                 icon = Icons.Default.Report,
                 title = "Lapor Masalah",
-                onClick = { /* Navigate to Reports */ }
+                onClick = onNavigateToReport
             )
             ProfileMenuItem(
                 icon = Icons.Default.Engineering,
@@ -135,7 +139,7 @@ fun ProfileScreen(
             ProfileMenuItem(
                 icon = Icons.Default.Settings,
                 title = "Pengaturan",
-                onClick = { /* Navigate to Settings */ }
+                onClick = onNavigateToSettings
             )
 
             Spacer(modifier = Modifier.height(32.dp))

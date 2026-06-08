@@ -1,20 +1,18 @@
 package com.example.tamtamduku.data.model
 
-data class ChatResponse(
-    val chats: List<VocaChat>
+data class ChatList(
+    val id: String = "",
+    val roomId: String = "",
+    val workerId: String = "",
+    val userId: String = "",
+    val lastMessage: String = "",
+    val unreadCount: Int = 0,
+    val lastUpdated: String = ""
 )
 
-data class Messages(
-    val text: String,
-    val isFromMe: Boolean,
-    val time: String
-)
-
-data class VocaChat(
-    val id: String,
-    val name: String,
-    val lastMessage: String,
-    val time: String,
-    val unreadCount: Int,
-    val messages: List<Messages>
+data class ChatMessage(
+    val id: String = "",
+    val senderId: String = "",
+    val text: String = "",
+    val time: String = ""
 )

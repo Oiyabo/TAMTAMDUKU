@@ -19,7 +19,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://s3-ap-southeast-1.amazonaws.com/midtrans-mvn-repo") }
     }
 }
 

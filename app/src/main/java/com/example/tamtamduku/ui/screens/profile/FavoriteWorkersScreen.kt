@@ -1,5 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,6 +16,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,27 +25,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.tamtamduku.data.model.VocaWorker
+import com.example.tamtamduku.ui.viewmodels.FavoriteWorkersViewModel
 
-data class FavoriteWorker(
-    val name: String,
-    val role: String,
-    val rating: Double,
-    val reviews: Int,
-    val price: String
-)
-
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteWorkersScreen(navCon: NavHostController) {
+fun FavoriteWorkersScreen(
+    navCon: NavHostController,
+    viewModel: FavoriteWorkersViewModel = viewModel()
+) {
     val bgColor = Color(0xFFFFFDFB)
-    val workers = listOf(
-        FavoriteWorker("Jeno Lee", "Data Analys", 5.0, 328, "Rp. 800.000 (Basic)"),
-        FavoriteWorker("Tor Asep", "Engineering", 5.0, 128, "Rp. 800.000 (Basic)"),
-        FavoriteWorker("Ujang Listrik", "Teknisi Listrik", 5.0, 128, "Rp. 800.000 (Basic)"),
-        FavoriteWorker("Reano Putra", "Teknisi AC", 5.0, 128, "Rp. 800.000 (Basic)"),
-        FavoriteWorker("Kanemoto", "Tukang Kayu", 5.0, 128, "Rp. 800.000 (Basic)")
-    )
+    val workers by viewModel.favoriteWorkers.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         topBar = {
@@ -64,23 +62,33 @@ fun FavoriteWorkersScreen(navCon: NavHostController) {
         },
         containerColor = bgColor
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 24.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(workers) { worker ->
-                FavoriteWorkerCard(worker)
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = Color(0xFFF97316))
+            }
+        } else if (workers.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
+                Text("Tidak ada pekerja favorit", color = Color.Gray, fontSize = 16.sp)
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = 24.dp),
+                contentPadding = PaddingValues(vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(workers) { worker ->
+                    FavoriteWorkerCard(worker)
+                }
             }
         }
     }
 }
 
 @Composable
-fun FavoriteWorkerCard(worker: FavoriteWorker) {
+fun FavoriteWorkerCard(worker: VocaWorker) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -118,9 +126,9 @@ fun FavoriteWorkerCard(worker: FavoriteWorker) {
             Spacer(modifier = Modifier.width(16.dp))
             
             Column {
-                Text(text = worker.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = worker.nama, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = worker.role, fontSize = 12.sp, color = Color.DarkGray)
+                Text(text = worker.pekerjaan, fontSize = 12.sp, color = Color.DarkGray)
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     repeat(5) {
@@ -132,8 +140,8 @@ fun FavoriteWorkerCard(worker: FavoriteWorker) {
                         )
                     }
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("${worker.rating} ", fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                    Text("(${worker.reviews})", fontSize = 12.sp, color = Color.Gray)
+                    Text("${worker.reviewSummary.averageRating} ", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Text("(${worker.reviewSummary.totalReviews})", fontSize = 12.sp, color = Color.Gray)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 
@@ -143,8 +151,9 @@ fun FavoriteWorkerCard(worker: FavoriteWorker) {
                         .padding(start = 12.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    val price = worker.layanan.firstOrNull()?.harga ?: worker.baseSalary
                     Text(
-                        text = worker.price,
+                        text = "Rp. %,.0f (Basic)".format(price).replace(",", "."),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 10.sp

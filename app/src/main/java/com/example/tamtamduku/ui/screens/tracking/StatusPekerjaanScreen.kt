@@ -39,7 +39,7 @@ fun StatusPekerjaanScreen(
     val yellowBadge = Color(0xFFFFC107)
 
     val uiState by viewModel.uiState.collectAsState()
-    val item = uiState.trackingItems.find { it.workerName == workerName }
+    val item = uiState.transactions.find { it.workerName == workerName }
     val isSelesai = item?.status == "Selesai"
 
     Scaffold(

@@ -15,8 +15,6 @@ navigationCompose = "2.9.8"
 retrofit = "2.9.0"
 gson = "2.10.1"
 material3 = "1.4.0"
-midtrans = "2.5.0"
-
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,8 +38,6 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-midtrans-uikit = { group = "com.midtrans", name = "uikit", version.ref = "midtrans" }
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

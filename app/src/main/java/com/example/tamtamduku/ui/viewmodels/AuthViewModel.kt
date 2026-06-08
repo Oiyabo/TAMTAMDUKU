@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.data.local.SessionManager
-import com.example.tamtamduku.data.model.UserAccount
+import com.example.tamtamduku.data.model.User
 import com.example.tamtamduku.data.network.ApiClient
 import com.example.tamtamduku.data.network.LoginRequest
 import com.example.tamtamduku.data.repository.WorkerRepository
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 data class AuthUiState(
     val isLoading: Boolean = false,
-    val userAccount: UserAccount? = null,
+    val userAccount: User? = null,
     val loginError: String? = null,
     val registrationSuccess: Boolean = false,
     val isLoggedIn: Boolean = false
@@ -45,7 +45,8 @@ class AuthViewModel @JvmOverloads constructor(
     private fun fetchAccount() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            repository.getUserAccount().collect { account ->
+            repository.getUsers().collect { users ->
+                val account = users.firstOrNull()
                 _uiState.update { it.copy(
                     isLoading = false,
                     userAccount = account
@@ -58,22 +59,38 @@ class AuthViewModel @JvmOverloads constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, loginError = null) }
             try {
-                // DummyJSON API expects 'username' instead of email.
+                // Resolve email to username if input looks like an email (contains '@')
+                val resolvedUsername = if (emailInput.contains("@")) {
+                    try {
+                        val filterResponse = ApiClient.dummyJsonApi.filterUsers(key = "email", value = emailInput)
+                        if (filterResponse.users.isNotEmpty()) {
+                            filterResponse.users.first().username
+                        } else {
+                            emailInput // Fallback to raw input if no user is found
+                        }
+                    } catch (e: Exception) {
+                        emailInput // Fallback to raw input on API failure
+                    }
+                } else {
+                    emailInput
+                }
+
+                // Call login API with resolved username
                 val response = ApiClient.dummyJsonApi.login(
-                    LoginRequest(username = emailInput, password = passwordInput)
+                    LoginRequest(username = resolvedUsername, password = passwordInput)
                 )
                 sessionManager.saveToken(response.accessToken)
                 
                 _uiState.update { it.copy(
                     isLoading = false,
                     isLoggedIn = true,
-                    userAccount = UserAccount(name = "${response.firstName} ${response.lastName}", email = response.email, password = passwordInput)
+                    userAccount = User(id = response.id.toString(), name = "${response.firstName} ${response.lastName}", email = response.email)
                 ) }
                 onSuccess()
             } catch (e: Exception) {
                 _uiState.update { it.copy(
                     isLoading = false,
-                    loginError = "Email atau Password Salah! (Gagal login ke server)"
+                    loginError = "Email/Username atau Password Salah! (Gagal login ke server)"
                 ) }
             }
         }
@@ -93,7 +110,7 @@ class AuthViewModel @JvmOverloads constructor(
             _uiState.update { it.copy(
                 isLoading = false,
                 registrationSuccess = true,
-                userAccount = UserAccount(name = name, email = email, password = password)
+                userAccount = User(id = System.currentTimeMillis().toString(), name = name, email = email, phone = phone)
             ) }
             onSuccess()
         }

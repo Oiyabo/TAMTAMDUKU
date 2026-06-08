@@ -9,10 +9,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,38 +25,22 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-data class NotificationItemData(
-    val title: String,
-    val description: String,
-    val time: String,
-    val icon: ImageVector,
-    val iconColor: Color = Color(0xFF4CAF50) // Premium green
-)
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tamtamduku.data.model.Notification
+import com.example.tamtamduku.ui.viewmodels.NotificationViewModel
+import java.time.format.DateTimeFormatter
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
+import java.time.format.DateTimeParseException
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotificationsScreen(onBack: () -> Unit) {
-    val notifications = listOf(
-        NotificationItemData(
-            title = "Pekerjaan Disetujui",
-            description = "Pekerjaan yang anda ajukan disetuj...",
-            time = "09:30",
-            icon = Icons.Default.ThumbUp
-        ),
-        NotificationItemData(
-            title = "Pekerjaan Selesai",
-            description = "Pekerjaan Data Analis anda telah s...",
-            time = "10:12",
-            icon = Icons.Default.Check
-        ),
-        NotificationItemData(
-            title = "Pembayaran Berhasil",
-            description = "Pembayaran Rp. 120.000 untuk pek...",
-            time = "12:00",
-            icon = Icons.Default.Paid
-        )
-    )
+fun NotificationsScreen(
+    onBack: () -> Unit,
+    viewModel: NotificationViewModel = viewModel()
+) {
+    val notifications by viewModel.notifications.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         contentWindowInsets = WindowInsets(0.dp),
@@ -61,7 +49,7 @@ fun NotificationsScreen(onBack: () -> Unit) {
                 windowInsets = WindowInsets(0.dp),
                 title = {
                     Box(
-                        modifier = Modifier.fillMaxWidth().padding(end = 48.dp), // Balance the back button spacing
+                        modifier = Modifier.fillMaxWidth().padding(end = 48.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -82,47 +70,73 @@ fun NotificationsScreen(onBack: () -> Unit) {
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFFAF6F0), // Matching background tone
+                    containerColor = Color(0xFFFAF6F0),
                     titleContentColor = Color.Black
                 )
             )
         },
-        containerColor = Color(0xFFFAF6F0) // Soft warm off-white background
+        containerColor = Color(0xFFFAF6F0)
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(notifications) { item ->
-                NotificationRow(item = item)
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(color = Color(0xFFF97316))
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(notifications) { item ->
+                    NotificationRow(item = item)
+                }
             }
         }
     }
 }
 
 @Composable
-fun NotificationRow(item: NotificationItemData) {
+fun NotificationRow(item: Notification) {
+    val (icon, color) = when (item.type.lowercase()) {
+        "payment" -> Pair(Icons.Default.Paid, Color(0xFF4CAF50)) // Green
+        "transaction" -> Pair(Icons.Default.Check, Color(0xFF2196F3)) // Green
+        "info" -> Pair(Icons.Default.Info, Color(0xFF2196F3)) // Blue
+        "promo" -> Pair(Icons.Default.Notifications, Color(0xFFFF9800)) // Orange
+        else -> Pair(Icons.Default.Notifications, Color(0xFF9E9E9E)) // Grey
+    }
+
+    // Format time dynamically
+    val formattedTime = try {
+        val dt = ZonedDateTime.parse(item.createdAt)
+        val now = ZonedDateTime.now(dt.zone)
+        if (dt.toLocalDate() == now.toLocalDate()) {
+            dt.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else {
+            dt.format(DateTimeFormatter.ofPattern("dd MMM"))
+        }
+    } catch (e: Exception) {
+        item.createdAt
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
+            .background(if (item.isRead) Color(0xFFF5F5F5) else Color.White)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Icon Badge on Left
         Box(
             modifier = Modifier
                 .size(44.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(item.iconColor),
+                .background(color),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = item.icon,
+                imageVector = icon,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
@@ -131,19 +145,18 @@ fun NotificationRow(item: NotificationItemData) {
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Text Content in Middle
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Text(
                 text = item.title,
-                fontWeight = FontWeight.Bold,
+                fontWeight = if (item.isRead) FontWeight.Normal else FontWeight.Bold,
                 fontSize = 14.sp,
                 color = Color.Black
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = item.description,
+                text = item.body,
                 fontSize = 12.sp,
                 color = Color.Gray
             )
@@ -151,9 +164,8 @@ fun NotificationRow(item: NotificationItemData) {
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        // Time on Right
         Text(
-            text = item.time,
+            text = formattedTime,
             fontSize = 11.sp,
             color = Color.Gray,
             modifier = Modifier.align(Alignment.Top)

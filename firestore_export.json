@@ -1,0 +1,1003 @@
+{
+    "chats": {
+        "chat_001": {
+            "time": "10:30",
+            "lastMessage": "Siap, pak.",
+            "id": "chat_001",
+            "unreadCount": 2.0,
+            "messages": [
+                {
+                    "isFromMe": true,
+                    "time": "10:30",
+                    "text": "Halo, apakah pengerjaan sudah selesai?"
+                },
+                {
+                    "isFromMe": false,
+                    "time": "10:32",
+                    "text": "Sedang dalam proses pak, tinggal finishing."
+                },
+                {
+                    "isFromMe": true,
+                    "time": "10:33",
+                    "text": "Baik, kabari jika sudah ya."
+                },
+                {
+                    "isFromMe": false,
+                    "time": "10:33",
+                    "text": "Siap, pak."
+                }
+            ],
+            "name": "Andi"
+        },
+        "chat_002": {
+            "time": "09:15",
+            "lastMessage": "Baik pak, saya segera meluncur.",
+            "id": "chat_002",
+            "unreadCount": 0.0,
+            "messages": [
+                {
+                    "isFromMe": true,
+                    "time": "09:10",
+                    "text": "Saya sudah di lokasi."
+                },
+                {
+                    "isFromMe": false,
+                    "time": "09:15",
+                    "text": "Baik pak, saya segera meluncur."
+                }
+            ],
+            "name": "Budi"
+        },
+        "chat_003": {
+            "time": "Yesterday",
+            "lastMessage": "Terima kasih infonya.",
+            "id": "chat_003",
+            "unreadCount": 0.0,
+            "messages": [
+                {
+                    "isFromMe": false,
+                    "time": "Yesterday",
+                    "text": "Barang sudah dikirim ya pak."
+                },
+                {
+                    "isFromMe": true,
+                    "time": "Yesterday",
+                    "text": "Terima kasih infonya."
+                }
+            ],
+            "name": "Siti"
+        },
+        "chat_004": {
+            "time": "Yesterday",
+            "lastMessage": "Lokasi saya sudah sesuai map ya.",
+            "id": "chat_004",
+            "unreadCount": 1.0,
+            "messages": [
+                {
+                    "isFromMe": false,
+                    "time": "Yesterday",
+                    "text": "Pak, posisi di mana?"
+                },
+                {
+                    "isFromMe": true,
+                    "time": "Yesterday",
+                    "text": "Lokasi saya sudah sesuai map ya."
+                }
+            ],
+            "name": "Dewi"
+        }
+    },
+    "tracking_pekerjaan": {
+        "cEccnnlQwkEDoF7t37Ql": {
+            "time": "13:00",
+            "worker_name": "Maman",
+            "date": "21 Mei 2024",
+            "icon_type": "School",
+            "status": "Menuju Lokasi"
+        },
+        "v6ZHOji6cXWq7Sq2rjTY": {
+            "time": "10:00",
+            "worker_name": "Putra",
+            "date": "21 Mei 2024",
+            "icon_type": "Construction",
+            "status": "Sedang Berjalan"
+        }
+    },
+    "transactions": {
+        "vLEn9eNhAeDHrYIYufaV": {
+            "items": [
+                {
+                    "time": "10:00",
+                    "workerName": "Udin",
+                    "icon": "Park",
+                    "iconColor": "#4CAF50",
+                    "date": "19 Mei 2024",
+                    "status": "Dibatalkan",
+                    "iconBgColor": "#E8F5E9"
+                },
+                {
+                    "time": "08:00",
+                    "workerName": "Budi Santoso",
+                    "icon": "Code",
+                    "iconColor": "#2196F3",
+                    "date": "19 Mei 2024",
+                    "status": "Selesai",
+                    "iconBgColor": "#E3F2FD"
+                }
+            ],
+            "date": "19 Mei 2024"
+        },
+        "w0Y6UWB9TPl7tpof7yvU": {
+            "items": [
+                {
+                    "time": "09:30",
+                    "workerName": "Abdulilah",
+                    "icon": "Computer",
+                    "iconColor": "#2196F3",
+                    "date": "20 Mei 2024",
+                    "status": "Selesai",
+                    "iconBgColor": "#E3F2FD"
+                },
+                {
+                    "time": "08:00",
+                    "workerName": "Nina",
+                    "icon": "CleaningServices",
+                    "iconColor": "#FFFF9800",
+                    "date": "20 Mei 2024",
+                    "status": "Selesai",
+                    "iconBgColor": "#FFF3E0"
+                },
+                {
+                    "time": "07:00",
+                    "workerName": "Qori",
+                    "icon": "Gamepad",
+                    "iconColor": "#673AB7",
+                    "date": "20 Mei 2024",
+                    "status": "Selesai",
+                    "iconBgColor": "#EDE7F6"
+                }
+            ],
+            "date": "20 Mei 2024"
+        }
+    },
+    "user_account": {
+        "tamtamduku": {
+            "email": "user@tamtam.com",
+            "nama": "tamtamduku",
+            "password": "pas123"
+        }
+    },
+    "workers": {
+        "1A0GZdHNCaWRibiiJbbE": {
+            "jobTitle": "Staf HRD",
+            "skills": [
+                "Recruitment",
+                "Payroll"
+            ],
+            "salary": 9000000.0,
+            "name": "Joko",
+            "city": "Surakarta",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Rekrutmen dan absensi karyawan.",
+            "startDate": "2018-09-01",
+            "rating": 4.6
+        },
+        "1JHtucvTnwJtbA2Vw6fa": {
+            "jobTitle": "Perawat Lansia",
+            "skills": [
+                "Nursing",
+                "Patience"
+            ],
+            "salary": 6000000.0,
+            "name": "Siska",
+            "city": "Surabaya",
+            "workTypes": [
+                "House Chores",
+                "Other Job"
+            ],
+            "description": "Merawat orang tua di rumah.",
+            "startDate": "2022-11-01",
+            "rating": 4.7
+        },
+        "1sIgjkycX38XEKz8bXix": {
+            "jobTitle": "Apoteker",
+            "skills": [
+                "Pharmacy",
+                "Medicine"
+            ],
+            "salary": 7500000.0,
+            "name": "Puji",
+            "city": "Tangerang",
+            "workTypes": [
+                "Other Job"
+            ],
+            "description": "Melayani resep obat.",
+            "startDate": "2020-04-10",
+            "rating": 4.8
+        },
+        "2ttU9XQH9kE9HVkt79WC": {
+            "jobTitle": "Project Manager",
+            "skills": [
+                "Agile",
+                "Scrum",
+                "Trello"
+            ],
+            "salary": 25000000.0,
+            "name": "Jaka Tarub",
+            "city": "Denpasar",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Mengelola tim dan timeline proyek dengan efisien.",
+            "startDate": "2017-08-18",
+            "rating": 4.8
+        },
+        "4UW7quvO7BfPWQAdj3sL": {
+            "jobTitle": "Resepsionis",
+            "skills": [
+                "Communication",
+                "Hospitality"
+            ],
+            "salary": 4500000.0,
+            "name": "Irfan",
+            "city": "Makassar",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Menerima tamu dan telepon.",
+            "startDate": "2022-07-01",
+            "rating": 4.5
+        },
+        "5fNvArouThY8Cvkygvs1": {
+            "jobTitle": "Game Developer",
+            "skills": [
+                "Unity",
+                "C#"
+            ],
+            "salary": 14000000.0,
+            "name": "Qori",
+            "city": "Bandung",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Membangun game Unity.",
+            "startDate": "2020-11-20",
+            "rating": 4.6
+        },
+        "6TMKhYpIvCYWjv8EUVp6": {
+            "jobTitle": "Front End",
+            "skills": [
+                "HTML",
+                "CSS",
+                "Javascript"
+            ],
+            "salary": 15000000.0,
+            "name": "Abdulilah",
+            "city": "Jakarta",
+            "workTypes": [
+                "Computer",
+                "Freelance"
+            ],
+            "description": "Saya sudah melakukan front selama 5 tahun. Project bisa anda lihat di profil.",
+            "startDate": "2019-05-10",
+            "rating": 4.5
+        },
+        "72Gp6lvWSD7fjQ3g9gpF": {
+            "jobTitle": "Sekretaris",
+            "skills": [
+                "Organization",
+                "Typing"
+            ],
+            "salary": 6500000.0,
+            "name": "Bela",
+            "city": "Bandung",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Manajemen administrasi kantor.",
+            "startDate": "2023-02-01",
+            "rating": 4.1
+        },
+        "82Cd8kPIauNTPgaaALj2": {
+            "jobTitle": "Cleaning Service",
+            "skills": [
+                "Cleaning"
+            ],
+            "salary": 3200000.0,
+            "name": "Dedi",
+            "city": "Yogyakarta",
+            "workTypes": [
+                "House Chores"
+            ],
+            "description": "Kebersihan gedung kantor.",
+            "startDate": "2022-03-15",
+            "rating": 4.4
+        },
+        "87Wj6BQkf6iZ9EPsNspa": {
+            "jobTitle": "DevOps Engineer",
+            "skills": [
+                "Docker",
+                "Kubernetes",
+                "AWS"
+            ],
+            "salary": 19000000.0,
+            "name": "Gita Permata",
+            "city": "Makassar",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Spesialis dalam otomasi cloud dan CI/CD.",
+            "startDate": "2020-07-01",
+            "rating": 4.7
+        },
+        "8MLLUBDjc8i96HmYuuHa": {
+            "jobTitle": "Tutor Matematika",
+            "skills": [
+                "Math",
+                "Teaching"
+            ],
+            "salary": 3000000.0,
+            "name": "Maman",
+            "city": "Tangerang",
+            "workTypes": [
+                "Tutor",
+                "Freelance"
+            ],
+            "description": "Mengajar matematika SMA.",
+            "startDate": "2021-08-15",
+            "rating": 4.4
+        },
+        "8go3tQLkA76oQDJElTuQ": {
+            "jobTitle": "Kurir Paket",
+            "skills": [
+                "Driving",
+                "Delivery"
+            ],
+            "salary": 4000000.0,
+            "name": "Tono",
+            "city": "Medan",
+            "workTypes": [
+                "Driver / Delivery"
+            ],
+            "description": "Pengiriman cepat dan aman.",
+            "startDate": "2023-04-15",
+            "rating": 4.5
+        },
+        "9A874wYOk4vEKPFkq8Y3": {
+            "jobTitle": "Telemarketing",
+            "skills": [
+                "Persuasion",
+                "Calling"
+            ],
+            "salary": 3800000.0,
+            "name": "Oki",
+            "city": "Depok",
+            "workTypes": [
+                "administration",
+                "Other Job"
+            ],
+            "description": "Menawarkan produk via telepon.",
+            "startDate": "2023-01-15",
+            "rating": 4.6
+        },
+        "9Ni4VGRR8UZCAmQ0eUMT": {
+            "jobTitle": "Pekerja Kebun",
+            "skills": [
+                "Gardening"
+            ],
+            "salary": 3800000.0,
+            "name": "Udin",
+            "city": "Semarang",
+            "workTypes": [
+                "House Chores",
+                "Heavy Work"
+            ],
+            "description": "Merawat taman dan pohon.",
+            "startDate": "2022-09-10",
+            "rating": 4.3
+        },
+        "9mWfog1x2B7tn8p6tsZG": {
+            "jobTitle": "Cloud Architect",
+            "skills": [
+                "AWS",
+                "Azure"
+            ],
+            "salary": 28000000.0,
+            "name": "Surya",
+            "city": "Yogyakarta",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Infrastruktur cloud.",
+            "startDate": "2018-02-28",
+            "rating": 4.7
+        },
+        "Bdd9we1H4e3pwp20PDrq": {
+            "jobTitle": "Tukang Masak",
+            "skills": [
+                "Cooking",
+                "Catering"
+            ],
+            "salary": 6000000.0,
+            "name": "Xena",
+            "city": "Malang",
+            "workTypes": [
+                "House Chores",
+                "Freelance"
+            ],
+            "description": "Catering harian atau acara.",
+            "startDate": "2020-02-14",
+            "rating": 4.8
+        },
+        "CSxPGxNKr0ClWi3gBHA3": {
+            "jobTitle": "Operator Alat Berat",
+            "skills": [
+                "Excavator",
+                "Bulldozer"
+            ],
+            "salary": 12000000.0,
+            "name": "Yanto",
+            "city": "Denpasar",
+            "workTypes": [
+                "Heavy Work"
+            ],
+            "description": "Lisensi lengkap SIO.",
+            "startDate": "2017-11-11",
+            "rating": 4.4
+        },
+        "DhTdTgTgBoC4vUPdQTzT": {
+            "jobTitle": "Satpam",
+            "skills": [
+                "Security",
+                "First Aid"
+            ],
+            "salary": 4800000.0,
+            "name": "Andi",
+            "city": "Jakarta",
+            "workTypes": [
+                "Other Job"
+            ],
+            "description": "Keamanan ruko atau perumahan.",
+            "startDate": "2021-01-01",
+            "rating": 4.7
+        },
+        "ERNmOTl089Z0e6GTuxTZ": {
+            "jobTitle": "Fotografer",
+            "skills": [
+                "Photography",
+                "Editing"
+            ],
+            "salary": 10000000.0,
+            "name": "Lulu",
+            "city": "Malang",
+            "workTypes": [
+                "Freelance",
+                "Other Job"
+            ],
+            "description": "Foto produk dan wedding.",
+            "startDate": "2021-05-20",
+            "rating": 4.5
+        },
+        "H5Kwv09Sh3gsvbS2Aj7U": {
+            "jobTitle": "Tukang Kayu",
+            "skills": [
+                "Carpentry",
+                "Furniture"
+            ],
+            "salary": 8500000.0,
+            "name": "Wulan",
+            "city": "Denpasar",
+            "workTypes": [
+                "Heavy Work",
+                "Freelance"
+            ],
+            "description": "Custom furniture dan interior.",
+            "startDate": "2019-10-10",
+            "rating": 4.7
+        },
+        "HmrHaXBeF76pjb04K2YJ": {
+            "jobTitle": "Data Scientist",
+            "skills": [
+                "Python",
+                "Machine Learning"
+            ],
+            "salary": 22000000.0,
+            "name": "Rani",
+            "city": "Surabaya",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Model Machine Learning.",
+            "startDate": "2019-07-07",
+            "rating": 4.8
+        },
+        "IuZFKKDccKOD5S6l95Ki": {
+            "jobTitle": "QA Engineer",
+            "skills": [
+                "Selenium",
+                "Appium",
+                "JMeter"
+            ],
+            "salary": 11000000.0,
+            "name": "Hani Nuraini",
+            "city": "Palembang",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Memastikan kualitas software dengan testing manual dan otomatis.",
+            "startDate": "2022-02-14",
+            "rating": 4.3
+        },
+        "JsFisD2T5oTaia1WSwgT": {
+            "jobTitle": "UI/UX Designer",
+            "skills": [
+                "Figma",
+                "Adobe XD",
+                "Prototyping"
+            ],
+            "salary": 12000000.0,
+            "name": "Dewi Lestari",
+            "city": "Yogyakarta",
+            "workTypes": [
+                "Computer",
+                "Freelance"
+            ],
+            "description": "Menciptakan desain yang user-friendly dan estetis.",
+            "startDate": "2022-06-05",
+            "rating": 4.9
+        },
+        "KBPBMEzK1Wq9GDZ0iJKO": {
+            "jobTitle": "MC Acara Pernikahan",
+            "skills": [
+                "Public Speaking",
+                "Hosting"
+            ],
+            "salary": 2000000.0,
+            "name": "Omar",
+            "city": "Surakarta",
+            "workTypes": [
+                "master of ceremony",
+                "Freelance"
+            ],
+            "description": "MC profesional untuk berbagai acara formal.",
+            "startDate": "2018-04-12",
+            "rating": 4.5
+        },
+        "L96Hjh95tcUmCSgW7maS": {
+            "jobTitle": "Accounting",
+            "skills": [
+                "Accounting",
+                "Tax"
+            ],
+            "salary": 12000000.0,
+            "name": "Mulyadi",
+            "city": "Denpasar",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Laporan keuangan dan perpajakan.",
+            "startDate": "2017-06-01",
+            "rating": 4.3
+        },
+        "LZfHIIeOZXzOfLjWVCNo": {
+            "jobTitle": "Guru Privat Bahasa Inggris",
+            "skills": [
+                "English",
+                "IELTS"
+            ],
+            "salary": 4500000.0,
+            "name": "Vera",
+            "city": "Makassar",
+            "workTypes": [
+                "Tutor",
+                "Freelance"
+            ],
+            "description": "Native level English tutor.",
+            "startDate": "2021-12-01",
+            "rating": 4.6
+        },
+        "LtmmlIdUGg5xZKFBQZ1i": {
+            "jobTitle": "Montir Panggilan",
+            "skills": [
+                "Mechanic"
+            ],
+            "salary": 7000000.0,
+            "name": "Wawan",
+            "city": "Palembang",
+            "workTypes": [
+                "Heavy Work",
+                "Other Job"
+            ],
+            "description": "Service mesin kendaraan di tempat.",
+            "startDate": "2019-06-20",
+            "rating": 4.7
+        },
+        "VwSwA0iuutjYNWsFe6DQ": {
+            "jobTitle": "Guru Ngaji",
+            "skills": [
+                "Teaching",
+                "Religion"
+            ],
+            "salary": 2500000.0,
+            "name": "Guntur",
+            "city": "Semarang",
+            "workTypes": [
+                "Tutor"
+            ],
+            "description": "Mengajar iqro dan Al-Quran.",
+            "startDate": "2019-04-01",
+            "rating": 4.2
+        },
+        "WqAvYRZEhWqLXmr8kqra": {
+            "jobTitle": "Sales Lapangan",
+            "skills": [
+                "Communication",
+                "Marketing"
+            ],
+            "salary": 4000000.0,
+            "name": "Euis",
+            "city": "Bandung",
+            "workTypes": [
+                "Other Job"
+            ],
+            "description": "Promosi produk door to door.",
+            "startDate": "2023-05-20",
+            "rating": 4.6
+        },
+        "ZGD368Qt4bnXV62kXvtc": {
+            "jobTitle": "Analis Laboratorium",
+            "skills": [
+                "Chemistry",
+                "Research"
+            ],
+            "salary": 8000000.0,
+            "name": "Robby",
+            "city": "Jakarta",
+            "workTypes": [
+                "Other Job"
+            ],
+            "description": "Pemeriksaan sampel darah.",
+            "startDate": "2021-08-20",
+            "rating": 4.4
+        },
+        "aKyPx7wlUY3kw1BfO8a4": {
+            "jobTitle": "System Architect",
+            "skills": [
+                "Architecture",
+                "Cloud"
+            ],
+            "salary": 35000000.0,
+            "name": "Yayan",
+            "city": "Bandung",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Merancang sistem enterprise.",
+            "startDate": "2016-01-01",
+            "rating": 4.9
+        },
+        "aWqCmauQcNIXeKhXLqWj": {
+            "jobTitle": "Legal Officer",
+            "skills": [
+                "Law",
+                "Licensing"
+            ],
+            "salary": 14000000.0,
+            "name": "Qomaruddin",
+            "city": "Bekasi",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Mengurus perizinan dan hukum.",
+            "startDate": "2019-02-15",
+            "rating": 4.5
+        },
+        "cgEPJB8KEbM33a22xlb9": {
+            "jobTitle": "Mobile Developer",
+            "skills": [
+                "Flutter",
+                "Kotlin",
+                "Dart"
+            ],
+            "salary": 16000000.0,
+            "name": "Cahyo Wijaya",
+            "city": "Bandung",
+            "workTypes": [
+                "Computer",
+                "Freelance"
+            ],
+            "description": "Fokus pada Flutter dan Android Native (Kotlin).",
+            "startDate": "2021-01-20",
+            "rating": 4.7
+        },
+        "eKPhXQkH9RqR8G8e2FuX": {
+            "jobTitle": "Barista",
+            "skills": [
+                "Coffee",
+                "Customer Service"
+            ],
+            "salary": 4000000.0,
+            "name": "Kiki",
+            "city": "Palembang",
+            "workTypes": [
+                "Other Job"
+            ],
+            "description": "Ahli membuat kopi espresso.",
+            "startDate": "2023-08-01",
+            "rating": 4.4
+        },
+        "f5yUthUt7ekCGNsEGcKx": {
+            "jobTitle": "Kuli Bangunan",
+            "skills": [
+                "Construction",
+                "Lifting"
+            ],
+            "salary": 5000000.0,
+            "name": "Putra",
+            "city": "Jakarta",
+            "workTypes": [
+                "Heavy Work"
+            ],
+            "description": "Tenaga kuat untuk renovasi rumah.",
+            "startDate": "2021-03-01",
+            "rating": 4.9
+        },
+        "fxwarercY0GQ5OT8PFlF": {
+            "jobTitle": "Graphic Designer",
+            "skills": [
+                "Photoshop",
+                "Illustrator",
+                "Canva"
+            ],
+            "salary": 9000000.0,
+            "name": "Indra Kusuma",
+            "city": "Malang",
+            "workTypes": [
+                "Computer",
+                "Freelance",
+                "Other Job"
+            ],
+            "description": "Desain kreatif untuk branding.",
+            "startDate": "2019-12-25",
+            "rating": 4.5
+        },
+        "lNxqYbXForIwT07upyZt": {
+            "jobTitle": "Content Creator",
+            "skills": [
+                "Premiere Pro",
+                "TikTok"
+            ],
+            "salary": 8000000.0,
+            "name": "Zaki",
+            "city": "Bogor",
+            "workTypes": [
+                "Computer",
+                "Freelance"
+            ],
+            "description": "Video editing dan social media.",
+            "startDate": "2022-05-05",
+            "rating": 4.9
+        },
+        "lvrcizxvNe05NkEP3Oky": {
+            "jobTitle": "Full Stack",
+            "skills": [
+                "React",
+                "Node.js",
+                "MongoDB"
+            ],
+            "salary": 20000000.0,
+            "name": "Eko Prasetyo",
+            "city": "Semarang",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Bisa mengerjakan sisi client dan server dengan baik.",
+            "startDate": "2018-11-12",
+            "rating": 4.6
+        },
+        "m7fgQbuslM29iAhUDhpQ": {
+            "jobTitle": "Data Analyst",
+            "skills": [
+                "Python",
+                "SQL",
+                "Tableau"
+            ],
+            "salary": 14000000.0,
+            "name": "Fitriani",
+            "city": "Medan",
+            "workTypes": [
+                "Computer",
+                "administration"
+            ],
+            "description": "Menganalisis data untuk insight bisnis yang lebih baik.",
+            "startDate": "2021-09-30",
+            "rating": 4.4
+        },
+        "milhXrZWBqS2vcYAepZf": {
+            "jobTitle": "Staff Gudang",
+            "skills": [
+                "Inventory",
+                "Lifting"
+            ],
+            "salary": 5500000.0,
+            "name": "Fajar",
+            "city": "Jakarta",
+            "workTypes": [
+                "Heavy Work",
+                "administration"
+            ],
+            "description": "Input data dan bongkar muat barang.",
+            "startDate": "2021-10-01",
+            "rating": 4.8
+        },
+        "nedkkPaQ3jHdjIwEe25y": {
+            "jobTitle": "Teknisi Jaringan",
+            "skills": [
+                "Networking",
+                "Cisco"
+            ],
+            "salary": 7500000.0,
+            "name": "Chandra",
+            "city": "Surabaya",
+            "workTypes": [
+                "Computer",
+                "Heavy Work"
+            ],
+            "description": "Instalasi WiFi dan kabel LAN.",
+            "startDate": "2020-09-10",
+            "rating": 4.5
+        },
+        "peM9OUg7VugykeKzWmEH": {
+            "jobTitle": "Desainer Interior",
+            "skills": [
+                "AutoCAD",
+                "Sketchup"
+            ],
+            "salary": 15000000.0,
+            "name": "Hilda",
+            "city": "Medan",
+            "workTypes": [
+                "Freelance",
+                "Computer"
+            ],
+            "description": "Desain ruangan rumah dan kantor.",
+            "startDate": "2020-12-12",
+            "rating": 4.7
+        },
+        "sAVJYnhAHz6oKYMCbyEH": {
+            "jobTitle": "Penerjemah Mandarin",
+            "skills": [
+                "Mandarin",
+                "Translation"
+            ],
+            "salary": 11000000.0,
+            "name": "Uli",
+            "city": "Yogyakarta",
+            "workTypes": [
+                "Freelance",
+                "administration"
+            ],
+            "description": "Translate dokumen dan interpreter.",
+            "startDate": "2021-03-15",
+            "rating": 4.8
+        },
+        "siUAyQ1UlclbF6303aDS": {
+            "jobTitle": "Supir Pribadi",
+            "skills": [
+                "Driving",
+                "Navigation"
+            ],
+            "salary": 4500000.0,
+            "name": "Lukas",
+            "city": "Jakarta",
+            "workTypes": [
+                "Driver / Delivery"
+            ],
+            "description": "Supir berpengalaman, hafal jalan Jakarta.",
+            "startDate": "2020-05-20",
+            "rating": 4.6
+        },
+        "ufbWTqyVYqNbum4OIVKN": {
+            "jobTitle": "Back End",
+            "skills": [
+                "Node.js",
+                "SQL Server",
+                "Express"
+            ],
+            "salary": 18000000.0,
+            "name": "Budi Santoso",
+            "city": "Surabaya",
+            "workTypes": [
+                "Computer"
+            ],
+            "description": "Ahli Node.js dan SQL Server. Berpengalaman dalam membangun API skala besar.",
+            "startDate": "2020-03-15",
+            "rating": 4.8
+        },
+        "v2TtZAZSjSBddiSpI1yJ": {
+            "jobTitle": "Baby Sitter",
+            "skills": [
+                "Child Care"
+            ],
+            "salary": 4500000.0,
+            "name": "Nadia",
+            "city": "Bogor",
+            "workTypes": [
+                "House Chores",
+                "Other Job"
+            ],
+            "description": "Merawat bayi dan balita.",
+            "startDate": "2022-01-01",
+            "rating": 4.2
+        },
+        "w2nWUiFTi8pFRI12Okxr": {
+            "jobTitle": "Asisten Rumah Tangga",
+            "skills": [
+                "Cleaning",
+                "Cooking"
+            ],
+            "salary": 3500000.0,
+            "name": "Nina",
+            "city": "Bekasi",
+            "workTypes": [
+                "House Chores"
+            ],
+            "description": "Jujur dan rajin bersih-bersih rumah.",
+            "startDate": "2022-10-05",
+            "rating": 4.7
+        },
+        "w2u5KJdGnRef6hJFQxIO": {
+            "jobTitle": "Animator 3D",
+            "skills": [
+                "Blender",
+                "Maya"
+            ],
+            "salary": 13000000.0,
+            "name": "Tora",
+            "city": "Bandung",
+            "workTypes": [
+                "Computer",
+                "Freelance"
+            ],
+            "description": "Membuat animasi untuk iklan.",
+            "startDate": "2020-06-01",
+            "rating": 4.6
+        },
+        "xirSeoienGH3piz444Vo": {
+            "jobTitle": "Administrasi",
+            "skills": [
+                "Excel",
+                "Word",
+                "Scheduling"
+            ],
+            "salary": 5000000.0,
+            "name": "Kartika Sari",
+            "city": "Bogor",
+            "workTypes": [
+                "administration"
+            ],
+            "description": "Mengelola dokumen dan jadwal kantor.",
+            "startDate": "2023-01-10",
+            "rating": 4.2
+        },
+        "z5Mc8KPNE7JUFOhK7K9o": {
+            "jobTitle": "Data Entry",
+            "skills": [
+                "Typing",
+                "Accuracy"
+            ],
+            "salary": 4200000.0,
+            "name": "Vicky",
+            "city": "Jakarta",
+            "workTypes": [
+                "administration",
+                "Computer"
+            ],
+            "description": "Input data cepat dan akurat.",
+            "startDate": "2023-06-01",
+            "rating": 4.5
+        }
+    }
+}

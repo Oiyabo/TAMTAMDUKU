@@ -20,8 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tamtamduku.data.model.VocaChat
+import com.example.tamtamduku.ui.viewmodels.ChatUiItem
 import com.example.tamtamduku.ui.viewmodels.ChatViewModel
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +115,7 @@ fun ChatPage(
 
 @Composable
 fun ChatList(
-    chats: List<VocaChat>,
+    chats: List<ChatUiItem>,
     onNavigateToPersonalChat: (String) -> Unit
 ) {
     LazyColumn(
@@ -133,7 +135,20 @@ fun ChatList(
 }
 
 @Composable
-fun ChatItem(chat: VocaChat, onClick: () -> Unit) {
+fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
+    // Format time dynamically
+    val formattedTime = try {
+        val dt = ZonedDateTime.parse(chat.time)
+        val now = ZonedDateTime.now(dt.zone)
+        if (dt.toLocalDate() == now.toLocalDate()) {
+            dt.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else {
+            dt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        }
+    } catch (e: Exception) {
+        chat.time
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -149,7 +164,7 @@ fun ChatItem(chat: VocaChat, onClick: () -> Unit) {
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
-                    text = chat.name.take(1),
+                    text = if (chat.name.isNotEmpty()) chat.name.take(1) else "?",
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.White
                 )
@@ -170,7 +185,7 @@ fun ChatItem(chat: VocaChat, onClick: () -> Unit) {
                     color = Color.Black
                 )
                 Text(
-                    text = chat.time,
+                    text = formattedTime,
                     fontSize = 14.sp,
                     color = Color.DarkGray
                 )

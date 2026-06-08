@@ -3,29 +3,29 @@ package com.example.tamtamduku.ui.screens.tracking
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.tamtamduku.data.model.TrackingPekerjaan
+import coil.compose.AsyncImage
 import com.example.tamtamduku.data.model.Transaction
-import com.example.tamtamduku.data.model.TransactionGroup
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 
 @Composable
@@ -34,260 +34,138 @@ fun TrackingScreen(
     viewModel: TrackingViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    
+    // Tab states
+    val tabs = listOf("Semua", "Selesai", "Dibatalkan", "Dikerjakan")
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Tracking", "History")
 
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFFAFAFA))
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth().background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.primaryContainer,
-                        MaterialTheme.colorScheme.primary
-                    )
-                ),
-                shape = RoundedCornerShape(bottomStart = 32.dp, bottomEnd = 32.dp)
-            ).padding(bottom = 16.dp),
-            contentAlignment = Alignment.Center
+        // Top App Bar
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(60.dp))
-                Text(
-                    text = "Aktivitas Jasa",
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                TabRow(
-                    selectedTabIndex = selectedTab,
-                    containerColor = Color.Transparent,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    divider = {},
-                    indicator = { tabPositions ->
-                        TabRowDefaults.SecondaryIndicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                            color = MaterialTheme.colorScheme.onPrimary
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable { navCon.popBackStack() },
+                tint = Color.Black
+            )
+            Text(
+                text = "Riwayat Transaksi",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.weight(1f),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.width(24.dp)) // To balance the back arrow
+        }
+
+        // Tabs
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            tabs.forEachIndexed { index, title ->
+                val isSelected = selectedTab == index
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 4.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(if (isSelected) Color(0xFFFF8C00) else Color.White)
+                        .border(
+                            width = 1.dp,
+                            color = if (isSelected) Color(0xFFFF8C00) else Color.LightGray,
+                            shape = RoundedCornerShape(8.dp)
                         )
-                    },
-                    modifier = Modifier.padding(horizontal = 32.dp)
+                        .clickable { selectedTab = index }
+                        .padding(vertical = 6.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    tabs.forEachIndexed { index, title ->
-                        Tab(
-                            selected = selectedTab == index,
-                            onClick = { selectedTab = index },
-                            text = { 
-                                Text(
-                                    title, 
-                                    fontSize = 16.sp,
-                                    fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal
-                                )
-                            }
-                        )
-                    }
+                    Text(
+                        text = title,
+                        color = if (isSelected) Color.White else Color.Black,
+                        fontSize = 12.sp,
+                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
+
+        Divider(color = Color.LightGray, thickness = 1.dp)
 
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = Color(0xFFFF8C00))
             }
-        } else if (selectedTab == 0) {
-            TrackingContent(
-                items = uiState.trackingItems,
-                onItemClick = { item ->
-                    navCon.navigate("status_pekerjaan/${Uri.encode(item.workerName)}")
-                }
-            )
         } else {
-            HistoryContent(uiState.transactionGroups, navCon)
-        }
-    }
-}
-
-@Composable
-fun TrackingContent(items: List<TrackingPekerjaan>, onItemClick: (TrackingPekerjaan) -> Unit) {
-    if (items.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = Icons.Default.DirectionsRun,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    "Belum ada pekerjaan yang sedang berjalan",
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(items) { item ->
-                TrackingCard(item = item, onClick = { onItemClick(item) })
-            }
-        }
-    }
-}
-
-@Composable
-fun HistoryContent(groups: List<TransactionGroup>, navCon: NavHostController) {
-    if (groups.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Belum ada riwayat transaksi", color = MaterialTheme.colorScheme.outline)
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            item {
-                Card(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.1f))
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
-                                .padding(4.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.DateRange,
-                                contentDescription = "Calendar",
-                                tint = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text("Filter Periode", fontSize = 12.sp, color = MaterialTheme.colorScheme.outline)
-                            Text("Semua", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
-                        }
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = "Dropdown",
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
+            val transactions = uiState.transactions
+            val filteredTransactions = when (selectedTab) {
+                1 -> transactions.filter { it.status == "Selesai" }
+                2 -> transactions.filter { it.status == "Batal" }
+                3 -> transactions.filter { it.status == "Dikerjakan" }
+                else -> transactions
             }
 
-            groups.forEach { group ->
-                item {
-                    Text(
-                        text = group.date,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-                }
-                items(items = group.items) { item ->
-                    TransactionCard(item) {
-                        navCon.navigate("detail/${Uri.encode(item.workerName)}")
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun TrackingCard(item: TrackingPekerjaan, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val icon = when(item.iconType) {
-                "Construction" -> Icons.Default.Build
-                "School" -> Icons.Default.School
-                else -> Icons.Default.Work
-            }
-            
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.size(48.dp)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(vertical = 8.dp)
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
+                items(filteredTransactions) { transaction ->
+                    TransactionHistoryCard(item = transaction) {
+                        when (transaction.status) {
+                            "Dikerjakan" -> navCon.navigate("status_pekerjaan/${Uri.encode(transaction.workerName)}")
+                            "Selesai" -> navCon.navigate("hasil_kerja/${Uri.encode(transaction.workerName)}")
+                            "Batal" -> navCon.navigate("batal_job/${Uri.encode(transaction.workerName)}")
+                            else -> navCon.navigate("detail/${Uri.encode(transaction.workerName)}")
+                        }
+                    }
                 }
             }
-            
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Column(modifier = Modifier.weight(1f)) {
-                Text(item.workerName, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text("${item.date} • ${item.time}", color = MaterialTheme.colorScheme.outline, fontSize = 14.sp)
-            }
-            
-            Text(
-                item.status,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
         }
     }
 }
 
 @Composable
-fun TransactionCard(item: Transaction, onClick: () -> Unit) {
+fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
             .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.05f))
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        border = BorderStroke(1.dp, Color(0xFFEEEEEE))
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
+            AsyncImage(
+                model = "https://i.pravatar.cc/150?u=${item.workerName}",
+                contentDescription = "Worker Image",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(48.dp)
-                    .background(Color(android.graphics.Color.parseColor(item.iconBgColor)), RoundedCornerShape(8.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = getIconForName(item.icon),
-                    contentDescription = null,
-                    tint = Color(android.graphics.Color.parseColor(item.iconColor)),
-                    modifier = Modifier.size(24.dp)
-                )
-            }
+                    .size(64.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.LightGray)
+            )
 
             Spacer(modifier = Modifier.width(12.dp))
 
@@ -298,75 +176,84 @@ fun TransactionCard(item: Transaction, onClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Jasa Pekerjaan",
-                        fontSize = 14.sp,
+                        text = item.invoiceNumber,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
+                        fontSize = 12.sp,
+                        color = Color.Black
                     )
-                    StatusBadge(status = item.status)
+                    val formattedPrice = String.format("%,d", item.price.toInt()).replace(',', '.')
+                    Text(
+                        text = "Rp$formattedPrice",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Color(0xFFFF8C00)
+                    )
                 }
-                
+
+                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(
-                    text = "Pekerja: ${item.workerName}",
-                    fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Medium
+                    text = item.workerName,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
                 )
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.DateRange,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.size(12.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "${item.date}  •  ${item.time}",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
+                Text(
+                    text = item.workerProfession,
+                    fontSize = 11.sp,
+                    color = Color.Gray
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.CalendarToday,
+                            contentDescription = "Date",
+                            modifier = Modifier.size(12.dp),
+                            tint = Color.Gray
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = item.date,
+                            fontSize = 11.sp,
+                            color = Color.Gray
+                        )
+                    }
+
+                    StatusBadge(status = item.status)
                 }
             }
-
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.padding(start = 8.dp)
-            )
         }
     }
 }
 
 @Composable
 fun StatusBadge(status: String) {
-    val isSelesai = status == "Selesai"
-    val bgColor = if (isSelesai) Color(0xFFE8F5E9) else Color(0xFFFFEBEE)
-    val textColor = if (isSelesai) Color(0xFF4CAF50) else Color(0xFFF44336)
+    val (bgColor, textColor) = when (status) {
+        "Selesai" -> Color(0xFF6FCF97) to Color.White
+        "Batal" -> Color(0xFFFF6B6B) to Color.White
+        "Dikerjakan" -> Color(0xFFFFD54F) to Color.Black
+        else -> Color.LightGray to Color.Black
+    }
 
-    Surface(
-        color = bgColor,
-        shape = RoundedCornerShape(16.dp)
+    Box(
+        modifier = Modifier
+            .background(bgColor, RoundedCornerShape(4.dp))
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        contentAlignment = Alignment.Center
     ) {
         Text(
             text = status,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+            color = textColor,
             fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            color = textColor
+            fontWeight = FontWeight.Bold
         )
-    }
-}
-
-fun getIconForName(name: String): ImageVector {
-    return when (name) {
-        "Computer" -> Icons.Default.Computer
-        "CleaningServices" -> Icons.Default.CleaningServices
-        "Gamepad" -> Icons.Default.Gamepad
-        "Park" -> Icons.Default.Park
-        "Code" -> Icons.Default.Code
-        else -> Icons.Default.Work
     }
 }

@@ -19,14 +19,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
-        val properties = Properties()
-        val localPropertiesFile = rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            properties.load(FileInputStream(localPropertiesFile))
-        }
-        val midtransKey = properties.getProperty("MIDTRANS_CLIENT_KEY") ?: "\"\""
-        buildConfigField("String", "MIDTRANS_CLIENT_KEY", midtransKey)
     }
 
     buildTypes {
@@ -80,6 +72,4 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
-
-    implementation(libs.midtrans.uikit)
 }

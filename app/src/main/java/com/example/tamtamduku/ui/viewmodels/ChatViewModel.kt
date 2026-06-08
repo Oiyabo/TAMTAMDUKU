@@ -1,18 +1,33 @@
 package com.example.tamtamduku.ui.viewmodels
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tamtamduku.data.model.VocaChat
+import com.example.tamtamduku.data.model.ChatList
+import com.example.tamtamduku.data.model.ChatMessage
 import com.example.tamtamduku.data.repository.WorkerRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+data class ChatUiItem(
+    val id: String,
+    val roomId: String,
+    val name: String,
+    val lastMessage: String,
+    val unreadCount: Int,
+    val time: String,
+    val workerId: String
+)
+
+@RequiresApi(Build.VERSION_CODES.O)
 class ChatViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
 
-    private val _chats = MutableStateFlow<List<VocaChat>>(emptyList())
-    val chats: StateFlow<List<VocaChat>> = _chats.asStateFlow()
+    private val _chats = MutableStateFlow<List<ChatUiItem>>(emptyList())
+    val chats: StateFlow<List<ChatUiItem>> = _chats.asStateFlow()
+
+    private val _chatMessages = MutableStateFlow<Map<String, List<ChatMessage>>>(emptyMap())
+    val chatMessages: StateFlow<Map<String, List<ChatMessage>>> = _chatMessages.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -21,57 +36,80 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
         fetchChats()
     }
 
-    fun fetchChats() {
+    private fun fetchChats() {
         viewModelScope.launch {
             _isLoading.value = true
-            repository.getChats().collect { chatList ->
-                _chats.value = chatList
+            combine(
+                repository.getChatLists(),
+                repository.getWorkers(),
+                repository.getChatRooms()
+            ) { chatLists, workers, chatRooms ->
+                _chatMessages.value = chatRooms
+                
+                chatLists.map { chatList ->
+                    val worker = workers.find { it.id == chatList.workerId }
+                    ChatUiItem(
+                        id = chatList.id,
+                        roomId = chatList.roomId,
+                        name = worker?.nama ?: "Unknown Worker",
+                        lastMessage = chatList.lastMessage,
+                        unreadCount = chatList.unreadCount,
+                        time = chatList.lastUpdated,
+                        workerId = chatList.workerId
+                    )
+                }
+            }.collect { mappedChats ->
+                _chats.value = mappedChats
                 _isLoading.value = false
             }
         }
     }
 
-    fun getChatById(chatId: String): VocaChat? {
-        return _chats.value.find { it.id == chatId }
+    fun getMessagesForRoom(roomId: String): List<ChatMessage> {
+        return _chatMessages.value[roomId] ?: emptyList()
     }
 
-    fun getChatByName(name: String): VocaChat? {
+    fun getChatByName(name: String): ChatUiItem? {
         return _chats.value.find { it.name == name }
     }
 
-    fun markAsRead(userName: String) {
+    fun markAsRead(workerName: String) {
         _chats.value = _chats.value.map {
-            if (it.name == userName) it.copy(unreadCount = 0) else it
+            if (it.name == workerName) it.copy(unreadCount = 0) else it
         }
     }
 
-    fun sendMessage(userName: String, text: String, time: String = "Now") {
-        val currentChats = _chats.value
-        val existingChat = currentChats.find { it.name == userName }
-        if (existingChat != null) {
-            _chats.value = currentChats.map { chat ->
-                if (chat.name == userName) {
-                    val newMessage = com.example.tamtamduku.data.model.Messages(text, true, time)
-                    chat.copy(
-                        messages = chat.messages + newMessage,
-                        lastMessage = text,
-                        time = time
-                    )
-                } else {
-                    chat
-                }
+    fun sendMessage(workerName: String, text: String, time: String = "Now") {
+        val chatList = _chats.value.find { it.name == workerName }
+        if (chatList != null) {
+            val roomId = chatList.roomId
+            val currentRooms = _chatMessages.value.toMutableMap()
+            val currentMessages = currentRooms[roomId]?.toMutableList() ?: mutableListOf()
+            currentMessages.add(ChatMessage(id = System.currentTimeMillis().toString(), senderId = "usr_8a7b6c5d", text = text, time = time))
+            currentRooms[roomId] = currentMessages
+            _chatMessages.value = currentRooms
+            
+            _chats.value = _chats.value.map {
+                if (it.roomId == roomId) it.copy(lastMessage = text, time = time) else it
             }
         } else {
-            val newMessage = com.example.tamtamduku.data.model.Messages(text, true, time)
-            val newChat = VocaChat(
+            // New chat
+            val roomId = "room_${System.currentTimeMillis()}"
+            val newMessage = ChatMessage(id = System.currentTimeMillis().toString(), senderId = "usr_8a7b6c5d", text = text, time = time)
+            val currentRooms = _chatMessages.value.toMutableMap()
+            currentRooms[roomId] = listOf(newMessage)
+            _chatMessages.value = currentRooms
+
+            val newChat = ChatUiItem(
                 id = System.currentTimeMillis().toString(),
-                name = userName,
+                roomId = roomId,
+                name = workerName,
                 lastMessage = text,
-                time = time,
                 unreadCount = 0,
-                messages = listOf(newMessage)
+                time = time,
+                workerId = ""
             )
-            _chats.value = currentChats + newChat
+            _chats.value = _chats.value + newChat
         }
     }
 }

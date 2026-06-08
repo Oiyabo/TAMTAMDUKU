@@ -41,7 +41,7 @@ class HomeViewModel(private val repository: WorkerRepository = WorkerRepository(
             _uiState.update { it.copy(isLoading = true) }
             repository.getWorkers().collect { workers ->
                 // Sort by rating and take top 5
-                val best = workers.sortedByDescending { it.rating }.take(5)
+                val best = workers.sortedByDescending { it.reviewSummary.averageRating }.take(5)
                 _uiState.update { it.copy(
                     isLoading = false,
                     bestWorkers = best

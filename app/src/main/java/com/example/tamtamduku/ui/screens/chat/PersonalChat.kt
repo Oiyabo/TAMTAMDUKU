@@ -20,8 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tamtamduku.data.model.Messages
+import com.example.tamtamduku.data.model.ChatMessage
 import com.example.tamtamduku.ui.viewmodels.ChatViewModel
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,7 +54,7 @@ fun PersonalChat(
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text(
-                                    text = userName.take(1),
+                                    text = if (userName.isNotEmpty()) userName.take(1) else "?",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color.White
                                 )
@@ -108,7 +110,7 @@ fun PersonalChat(
                     CircularProgressIndicator()
                 }
             } else {
-                val messages = chat?.messages ?: emptyList()
+                val messages = chat?.roomId?.let { viewModel.getMessagesForRoom(it) } ?: emptyList()
                 val listState = rememberLazyListState()
                 
                 LaunchedEffect(messages.size) {
@@ -136,9 +138,23 @@ fun PersonalChat(
 }
 
 @Composable
-fun MessageBubble(message: Messages, myColor: Color, otherColor: Color) {
-    val alignment = if (message.isFromMe) Alignment.CenterEnd else Alignment.CenterStart
-    val bgColor = if (message.isFromMe) myColor else otherColor
+fun MessageBubble(message: ChatMessage, myColor: Color, otherColor: Color) {
+    val isFromMe = message.senderId.startsWith("usr_")
+    val alignment = if (isFromMe) Alignment.CenterEnd else Alignment.CenterStart
+    val bgColor = if (isFromMe) myColor else otherColor
+
+    // Format time dynamically
+    val formattedTime = try {
+        val dt = ZonedDateTime.parse(message.time)
+        val now = ZonedDateTime.now(dt.zone)
+        if (dt.toLocalDate() == now.toLocalDate()) {
+            dt.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else {
+            dt.format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"))
+        }
+    } catch (e: Exception) {
+        message.time
+    }
 
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -158,7 +174,7 @@ fun MessageBubble(message: Messages, myColor: Color, otherColor: Color) {
                     lineHeight = 20.sp
                 )
                 Text(
-                    text = message.time,
+                    text = formattedTime,
                     fontSize = 10.sp,
                     color = Color.DarkGray,
                     modifier = Modifier.align(Alignment.End).padding(top = 4.dp)

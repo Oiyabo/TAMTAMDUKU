@@ -14,12 +14,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddressListScreen(
     onBack: () -> Unit,
-    onNavigateToEditAddress: () -> Unit
+    onNavigateToEditAddress: () -> Unit,
+    viewModel: ProfileViewModel = viewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -80,8 +87,8 @@ fun AddressListScreen(
         ) {
             item {
                 AddressCard(
-                    name = "Bang Lijen",
-                    address = "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141.",
+                    name = uiState.name.ifEmpty { "Bang Lijen" },
+                    address = uiState.address.ifEmpty { "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." },
                     onClick = onNavigateToEditAddress
                 )
             }
