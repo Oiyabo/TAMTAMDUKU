@@ -24,15 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import androidx.compose.ui.platform.LocalContext
-import com.example.tamtamduku.payment.PaymentRepository
-import com.midtrans.sdk.corekit.core.MidtransSDK
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.UUID
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(
     onBack: () -> Unit,
-    onNavigateToSuccess: () -> Unit,
+    onNavigateToSimulation: (String) -> Unit,
     workerName: String,
     layanan: String,
     workerViewModel: com.example.tamtamduku.ui.viewmodels.WorkerViewModel
@@ -44,21 +42,14 @@ fun PaymentScreen(
     
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-    val repository = remember { PaymentRepository() }
     
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     
-    LaunchedEffect(Unit) {
-        com.example.tamtamduku.payment.PaymentEventBus.paymentResult.collect { success ->
-            if (success) {
-                com.example.tamtamduku.payment.PaymentEventBus.reset()
-                onNavigateToSuccess()
-            }
-        }
-    }
+
     
-    Scaffold(
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -101,35 +92,13 @@ fun PaymentScreen(
                 }
                 Button(
                     onClick = {
-                        isLoading = true
-                        errorMessage = null
-                        coroutineScope.launch {
-                            try {
-                                val orderId = "ORDER-${UUID.randomUUID().toString().take(8)}"
-                                val snapToken = repository.getSnapToken(
-                                    orderId = orderId,
-                                    amount = 255000L,
-                                    name = "User VOCA",
-                                    email = "user@example.com"
-                                )
-                                MidtransSDK.getInstance().startPaymentUiFlow(context, snapToken)
-                            } catch (e: Exception) {
-                                errorMessage = e.message
-                            } finally {
-                                isLoading = false
-                            }
-                        }
+                        onNavigateToSimulation(selectedPaymentMethod)
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00)),
-                    enabled = !isLoading
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00))
                 ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                    } else {
-                        Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
-                    }
+                    Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
                 }
             }
         }
@@ -303,4 +272,5 @@ fun PaymentScreen(
             }
         }
     }
+}
 }
