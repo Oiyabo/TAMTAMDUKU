@@ -87,6 +87,7 @@ fun CreateReportScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
         ) {
@@ -112,7 +113,10 @@ fun CreateReportScreen(
                         focusedContainerColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
                     ),
                     shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.menuAnchor().fillMaxWidth()
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .clickable { expanded = !expanded }
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,
@@ -157,10 +161,10 @@ fun CreateReportScreen(
             Spacer(modifier = Modifier.height(8.dp))
             if (selectedImageUri == null) {
                 Surface(
+                    onClick = { imagePickerLauncher.launch("image/*") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
-                        .clickable { imagePickerLauncher.launch("image/*") },
+                        .height(100.dp),
                     shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.background,
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)

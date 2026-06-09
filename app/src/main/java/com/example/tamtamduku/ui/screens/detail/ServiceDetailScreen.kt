@@ -1,7 +1,4 @@
 package com.example.tamtamduku.ui.screens.detail
-import androidx.compose.ui.res.stringResource
-import com.example.tamtamduku.R
-import androidx.compose.material3.MaterialTheme
 
 import android.content.Intent
 import android.net.Uri
@@ -60,7 +57,7 @@ fun ServiceDetailScreen(
             if (uiState.isLoading) {
                 CircularProgressIndicator()
             } else {
-                Text(stringResource(R.string.pekerja_tidak_ditemukan), color = MaterialTheme.colorScheme.outline)
+                Text("Pekerja tidak ditemukan", color = MaterialTheme.colorScheme.outline)
             }
         }
         return
@@ -76,10 +73,10 @@ fun ServiceDetailScreen(
         topBar = {
             TopAppBar(
                 windowInsets = WindowInsets(0.dp),
-                title = { Text(stringResource(R.string.detail_profil_pekerja), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+                title = { Text("Detail Profil Pekerja", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navCon.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", tint = MaterialTheme.colorScheme.onBackground)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", tint = Color.Black)
                     }
                 },
                 actions = {
@@ -96,20 +93,20 @@ fun ServiceDetailScreen(
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.Bookmark,
                             contentDescription = "Favorite/Bookmark",
-                            tint = if (isFavorite) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground
+                            tint = if (isFavorite) Color.Red else Color.Black
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black
                 )
             )
         },
         bottomBar = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = MaterialTheme.colorScheme.background,
+                color = Color.White,
                 shadowElevation = 8.dp
             ) {
                 Row(
@@ -125,7 +122,7 @@ fun ServiceDetailScreen(
                             .size(50.dp)
                             .background(Color(0xFFFF8C00), RoundedCornerShape(12.dp))
                     ) {
-                        Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Chat", tint = MaterialTheme.colorScheme.background)
+                        Icon(Icons.AutoMirrored.Filled.Chat, contentDescription = "Chat", tint = Color.White)
                     }
                     
                     // Ajukan Permintaan Button
@@ -137,7 +134,7 @@ fun ServiceDetailScreen(
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00))
                     ) {
-                        Text(stringResource(R.string.ajukan_permintaan), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.background)
+                        Text("Ajukan Permintaan", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
                     }
                 }
             }
@@ -147,7 +144,7 @@ fun ServiceDetailScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .background(Color.White)
                 .verticalScroll(rememberScrollState())
         ) {
             // Profile Header
@@ -162,7 +159,7 @@ fun ServiceDetailScreen(
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.outlineVariant)
+                        .background(Color.LightGray)
                 )
                 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -172,7 +169,7 @@ fun ServiceDetailScreen(
                         text = worker.nama,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = Color.Black
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
@@ -186,22 +183,22 @@ fun ServiceDetailScreen(
                 Text(
                     text = worker.pekerjaan,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = Color.DarkGray,
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(Icons.Filled.Star, contentDescription = "Rating", tint = Color(0xFFFFD700), modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(worker.reviewSummary.averageRating.toString(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text(worker.reviewSummary.averageRating.toString(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("(${worker.reviewSummary.totalReviews} ulasan)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text("(${worker.reviewSummary.totalReviews} ulasan)", fontSize = 12.sp, color = Color.Gray)
                 }
                 
                 Text(
                     text = "${worker.lokasi} • 1.2 km",
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = Color.Gray,
                     modifier = Modifier.padding(vertical = 4.dp)
                 )
                 
@@ -212,14 +209,14 @@ fun ServiceDetailScreen(
                 ) {
                     Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF4CAF50), modifier = Modifier.size(12.dp))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(stringResource(R.string.terverifikasi), fontSize = 10.sp, color = Color(0xFF4CAF50), fontWeight = FontWeight.Bold)
+                    Text("Terverifikasi", fontSize = 10.sp, color = Color(0xFF4CAF50), fontWeight = FontWeight.Bold)
                 }
             }
 
             // Tabs
             TabRow(
                 selectedTabIndex = selectedTabIndex,
-                containerColor = MaterialTheme.colorScheme.background,
+                containerColor = Color.White,
                 contentColor = Color(0xFFFF8C00),
                 indicator = { tabPositions ->
                     if (selectedTabIndex < tabPositions.size) {
@@ -240,7 +237,7 @@ fun ServiceDetailScreen(
                             Text(
                                 text = title,
                                 fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal,
-                                color = if (selectedTabIndex == index) Color(0xFFFF8C00) else MaterialTheme.colorScheme.secondaryContainer
+                                color = if (selectedTabIndex == index) Color(0xFFFF8C00) else Color.DarkGray
                             )
                         }
                     )

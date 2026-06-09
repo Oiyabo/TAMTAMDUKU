@@ -361,7 +361,10 @@ fun AppNavigation(
                 ReportListScreen(
                     onBack = { navCon.popBackStack() },
                     onNavigateToCreateReport = { navCon.navigate("create_report") },
-                    onReportClick = { reportId -> navCon.navigate("report_detail/${android.net.Uri.encode(reportId)}") },
+                    onReportClick = { reportId -> 
+                        val safeId = reportId.replace(" ", "_").replace("#", "H")
+                        navCon.navigate("report_detail/$safeId") 
+                    },
                     viewModel = reportViewModel
                 )
             }
