@@ -186,4 +186,7 @@
     <string name="review_120_ulasan">120 Ulasan</string>
     <string name="semua_layanan">Semua Layanan</string>
     <string name="terbaru">Terbaru</string>
+    <string name="semua_status">Semua</string>
+    <string name="dibatalkan">Dibatalkan</string>
+    <string name="status_dikerjakan">Dikerjakan</string>
 </resources>

@@ -1,5 +1,8 @@
 package com.example.tamtamduku.ui.screens.payment
 
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,15 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import androidx.compose.ui.platform.LocalContext
-import com.example.tamtamduku.payment.PaymentRepository
-import com.midtrans.sdk.corekit.core.MidtransSDK
 import kotlinx.coroutines.launch
-import java.util.UUID
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(
     onBack: () -> Unit,
-    onNavigateToSuccess: () -> Unit,
+    onNavigateToSimulation: (String) -> Unit,
     workerName: String,
     layanan: String,
     workerViewModel: com.example.tamtamduku.ui.viewmodels.WorkerViewModel
@@ -43,20 +43,7 @@ fun PaymentScreen(
     var selectedPaymentMethod by remember { mutableStateOf("Qris") }
     
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val repository = remember { PaymentRepository() }
     
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    
-    LaunchedEffect(Unit) {
-        com.example.tamtamduku.payment.PaymentEventBus.paymentResult.collect { success ->
-            if (success) {
-                com.example.tamtamduku.payment.PaymentEventBus.reset()
-                onNavigateToSuccess()
-            }
-        }
-    }
     
     Scaffold(
         topBar = {
@@ -91,45 +78,13 @@ fun PaymentScreen(
                     .navigationBarsPadding()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
-                if (errorMessage != null) {
-                    Text(
-                        text = "Error: $errorMessage", 
-                        color = MaterialTheme.colorScheme.error, 
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
                 Button(
-                    onClick = {
-                        isLoading = true
-                        errorMessage = null
-                        coroutineScope.launch {
-                            try {
-                                val orderId = "ORDER-${UUID.randomUUID().toString().take(8)}"
-                                val snapToken = repository.getSnapToken(
-                                    orderId = orderId,
-                                    amount = 255000L,
-                                    name = "User VOCA",
-                                    email = "user@example.com"
-                                )
-                                MidtransSDK.getInstance().startPaymentUiFlow(context, snapToken)
-                            } catch (e: Exception) {
-                                errorMessage = e.message
-                            } finally {
-                                isLoading = false
-                            }
-                        }
-                    },
+                    onClick = { onNavigateToSimulation(selectedPaymentMethod) },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00)),
-                    enabled = !isLoading
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
-                    } else {
-                        Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
-                    }
+                    Text(stringResource(R.string.bayar_sekarang), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }

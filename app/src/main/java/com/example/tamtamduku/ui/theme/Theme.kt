@@ -79,9 +79,8 @@ fun TAMTAMDUKUTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when (appTheme) {
-        AppTheme.LIGHT -> LightColorScheme
+        AppTheme.LIGHT -> OrangeColorScheme
         AppTheme.DARK -> DarkOrangeColorScheme
-        
     }
 
     MaterialTheme(
