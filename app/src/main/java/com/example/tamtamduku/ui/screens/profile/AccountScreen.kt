@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -37,33 +39,35 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val bgColor = Color(0xFFFFFDF8)
+    val orangeMain = Color(0xFFFF7A00)
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
+                windowInsets = WindowInsets(0.dp),
                 title = {
-                    Text(
-                        "Akun Saya",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onSurface
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Text(
+                            "Akun Saya",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color.Black
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                )
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                    }
+                },
+                actions = {
+                    Box(modifier = Modifier.size(48.dp))
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = bgColor)
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = bgColor
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -72,7 +76,7 @@ fun ProfileScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp)
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Profile Header
             Row(
@@ -82,17 +86,16 @@ fun ProfileScreen(
                 // Profile Image placeholder
                 Box(
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(80.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .background(Color(0xFFFFF0E5)),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(20.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        modifier = Modifier.size(40.dp),
+                        tint = orangeMain
                     )
                 }
 
@@ -100,116 +103,90 @@ fun ProfileScreen(
 
                 Column {
                     Text(
-                        text = uiState.name,
-                        fontSize = 22.sp,
+                        text = uiState.name.ifEmpty { "Emily Johnson" },
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = uiState.email.ifEmpty { "emily.johnson@x.dummyjson.com" },
+                        fontSize = 14.sp,
+                        color = Color.Gray
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            HorizontalDivider(
-                thickness = 0.5.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
-
-            // Menu Items
-            ProfileMenuItem(
-                icon = Icons.Default.Edit,
-                title = "Edit Profil",
-                onClick = onNavigateToEditProfile
-            )
-            ProfileMenuItem(
-                icon = Icons.Default.LocationOn,
-                title = "Alamat Saya",
-                onClick = onNavigateToAddress
-            )
-            ProfileMenuItem(
-                icon = Icons.Default.Report,
-                title = "Lapor Masalah",
-                onClick = onNavigateToReport
-            )
-            ProfileMenuItem(
-                icon = Icons.Default.Engineering,
-                title = "Pekerja Favorit",
-                onClick = onNavigateToFavorite
-            )
-            ProfileMenuItem(
-                icon = Icons.Default.Settings,
-                title = "Pengaturan",
-                onClick = onNavigateToSettings
-            )
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column(modifier = Modifier.padding(vertical = 8.dp)) {
+                    PremiumProfileMenuItem(icon = Icons.Default.Edit, title = "Edit Profil", onClick = onNavigateToEditProfile)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.LocationOn, title = "Alamat Saya", onClick = onNavigateToAddress)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.Report, title = "Lapor Masalah", onClick = onNavigateToReport)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.Engineering, title = "Pekerja Favorit", onClick = onNavigateToFavorite)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.Settings, title = "Pengaturan", onClick = onNavigateToSettings)
+                }
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Logout Button
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { viewModel.logout(onLogout) }
-                    .padding(vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Card(
+                modifier = Modifier.fillMaxWidth().clickable { viewModel.logout(onLogout) },
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF0F0)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.error
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "Keluar",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.error
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = Color(0xFFDC2626))
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Text("Keluar Akun", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFFDC2626))
+                }
             }
             
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
 
 @Composable
-fun ProfileMenuItem(
+fun PremiumProfileMenuItem(
     icon: ImageVector,
     title: String,
     onClick: () -> Unit
 ) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onClick)
-                .padding(vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            Icon(
-                imageVector = Icons.Default.ChevronRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(24.dp), tint = Color(0xFF555555))
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
         }
-        HorizontalDivider(
-            thickness = 0.5.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
-        )
+        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = Color.LightGray)
     }
+}
+
+// keep old ProfileMenuItem for backward compat
+@Composable
+fun ProfileMenuItem(icon: ImageVector, title: String, onClick: () -> Unit) {
+    PremiumProfileMenuItem(icon = icon, title = title, onClick = onClick)
 }

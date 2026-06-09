@@ -17,19 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tamtamduku.ui.viewmodels.ReportViewModel
-import com.example.tamtamduku.data.model.Report
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportListScreen(
     onBack: () -> Unit,
-    onNavigateToCreateReport: () -> Unit,
-    onReportClick: (String) -> Unit,
-    viewModel: ReportViewModel = viewModel()
+    onNavigateToCreateReport: () -> Unit
 ) {
-    val reports by viewModel.reports.collectAsState()
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -88,22 +82,19 @@ fun ReportListScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(reports.size) { index ->
-                ReportCard(
-                    report = reports[index],
-                    onClick = { onReportClick(reports[index].id) }
-                )
+            items(3) {
+                ReportCard()
             }
         }
     }
 }
 
 @Composable
-fun ReportCard(report: Report, onClick: () -> Unit) {
+fun ReportCard() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() },
+            .clickable { /* Handle click */ },
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
@@ -121,7 +112,7 @@ fun ReportCard(report: Report, onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = report.id,
+                    text = "ID RE #0001",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
@@ -131,7 +122,7 @@ fun ReportCard(report: Report, onClick: () -> Unit) {
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = report.status,
+                        text = "Selesai",
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
                         color = Color.Black
@@ -140,13 +131,13 @@ fun ReportCard(report: Report, onClick: () -> Unit) {
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = report.category,
+                text = "Pekerja",
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = report.description,
+                text = "Datang Terlambat",
                 fontSize = 14.sp,
                 color = Color.Gray
             )
@@ -157,7 +148,7 @@ fun ReportCard(report: Report, onClick: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = report.date,
+                    text = "23 April 2026",
                     fontSize = 14.sp,
                     color = Color.Gray
                 )

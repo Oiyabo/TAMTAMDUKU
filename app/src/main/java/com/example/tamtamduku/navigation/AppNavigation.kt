@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.automirrored.filled.List
@@ -63,6 +64,11 @@ import com.example.tamtamduku.ui.viewmodels.ReportViewModel
 import com.example.tamtamduku.ui.viewmodels.FavoriteWorkersViewModel
 import com.example.tamtamduku.ui.screens.profile.ReportDetailScreen
 import com.example.tamtamduku.ui.theme.AppTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
@@ -79,11 +85,13 @@ fun AppNavigation(
     val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
+        contentWindowInsets = WindowInsets(0.dp),
         bottomBar = {
             if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile") {
                 NavigationBar(
-                    modifier = Modifier.height(100.dp),
-                    containerColor = MaterialTheme.colorScheme.background,
+                    modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
+                    windowInsets = WindowInsets(0.dp),
+                    containerColor = Color(0xFFFFFDF8),
                     tonalElevation = 8.dp
                 ) {
                     NavigationBarItem(
@@ -207,6 +215,9 @@ fun AppNavigation(
                     onNavigateToNotifications = { navCon.navigate("notifications") },
                     onNavigateToDetail = { workerName ->
                         navCon.navigate("detail/${Uri.encode(workerName)}")
+                    },
+                    onNavigateToPaymentTest = {
+                        navCon.navigate("payment/TestWorker/TestLayanan")
                     }
                 )
             }

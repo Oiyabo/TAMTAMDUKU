@@ -21,8 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import androidx.compose.ui.platform.LocalContext
-import android.widget.Toast
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 
@@ -33,7 +31,6 @@ fun EditProfileScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val context = LocalContext.current
 
     var name by remember(uiState.name) { mutableStateOf(if(uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
     var email by remember(uiState.email) { mutableStateOf(if(uiState.email.isEmpty()) "banglijen@gmail.com" else uiState.email) }
@@ -140,11 +137,7 @@ fun EditProfileScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { 
-                    viewModel.updateProfile(name = name, email = email, address = address)
-                    Toast.makeText(context, "Profil berhasil disimpan!", Toast.LENGTH_SHORT).show()
-                    onBack()
-                },
+                onClick = { /* Save action */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),

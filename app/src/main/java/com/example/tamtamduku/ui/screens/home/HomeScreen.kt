@@ -32,7 +32,8 @@ fun HomeScreen(
     viewModel: WorkerViewModel = viewModel(),
     onNavigateToSearch: (String) -> Unit = {},
     onNavigateToNotifications: () -> Unit = {},
-    onNavigateToDetail: (String) -> Unit = {}
+    onNavigateToDetail: (String) -> Unit = {},
+    onNavigateToPaymentTest: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val randomWorker = remember(uiState.workers) {
@@ -41,6 +42,7 @@ fun HomeScreen(
 
     Scaffold(
         containerColor = Color(0xFFFFFDF8),
+        contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             Row(
                 modifier = Modifier
@@ -164,6 +166,17 @@ fun HomeScreen(
                             .padding(24.dp)
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Temporary button to test payment
+            Button(
+                onClick = onNavigateToPaymentTest,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+            ) {
+                Text("TEST PEMBAYARAN MIDTRANS")
             }
 
             Spacer(modifier = Modifier.height(32.dp))
