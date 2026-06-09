@@ -65,6 +65,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -175,7 +176,7 @@ fun AppNavigation(
         NavHost(
             navController = navCon,
             startDestination = startDestination,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding).statusBarsPadding()
         ) {
             composable("login") {
                 LoginScreen(
