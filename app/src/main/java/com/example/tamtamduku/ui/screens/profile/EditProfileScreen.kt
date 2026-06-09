@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +37,7 @@ fun EditProfileScreen(
 
     var name by remember(uiState.name) { mutableStateOf(if(uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
     var email by remember(uiState.email) { mutableStateOf(if(uiState.email.isEmpty()) "banglijen@gmail.com" else uiState.email) }
+    var address by remember(uiState.address) { mutableStateOf(if(uiState.address.isEmpty()) "GIK LIC" else uiState.address) }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
@@ -41,8 +45,7 @@ fun EditProfileScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Informasi Profil",
+                    Text(stringResource(R.string.informasi_profil),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -60,7 +63,7 @@ fun EditProfileScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8) // Off-white cream background similar to the image
+        containerColor = MaterialTheme.colorScheme.background // Off-white cream background similar to the image
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -71,7 +74,7 @@ fun EditProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Foto Profil", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.foto_profil), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Spacer(modifier = Modifier.height(12.dp))
             Box(
                 modifier = Modifier
@@ -91,7 +94,7 @@ fun EditProfileScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             ProfileTextField(
-                label = "Nama Lengkap",
+                label = stringResource(R.string.nama_lengkap),
                 value = name,
                 onValueChange = { name = it },
                 placeholder = ""
@@ -100,7 +103,7 @@ fun EditProfileScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             ProfileTextField(
-                label = "Email",
+                label = stringResource(R.string.email),
                 value = email,
                 onValueChange = { email = it },
                 placeholder = ""
@@ -108,10 +111,17 @@ fun EditProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            ProfileTextField(
+                label = stringResource(R.string.alamat),
+                value = address,
+                onValueChange = { address = it },
+                placeholder = ""
+            )
 
+            Spacer(modifier = Modifier.height(16.dp))
 
             ProfileTextField(
-                label = "Ubah Password",
+                label = stringResource(R.string.ubah_password),
                 value = password,
                 onValueChange = { password = it },
                 placeholder = "Masukkan Password Baru..."
@@ -120,7 +130,7 @@ fun EditProfileScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             ProfileTextField(
-                label = "Konfirmasi Password",
+                label = stringResource(R.string.konfirmasi_password),
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
                 placeholder = "Konfirmasi Password Baru..."
@@ -130,7 +140,7 @@ fun EditProfileScreen(
 
             Button(
                 onClick = { 
-                    viewModel.updateProfile(name, email, uiState.address)
+                    viewModel.updateProfile(name, email, address)
                     onBack()
                 },
                 modifier = Modifier
@@ -138,14 +148,14 @@ fun EditProfileScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF7A00)
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
                 Text(
-                    text = "Simpan Perubahan",
+                    text = stringResource(R.string.simpan_perubahan),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.background
                 )
             }
             
@@ -174,16 +184,16 @@ fun ProfileTextField(
             onValueChange = onValueChange,
             placeholder = {
                 if (placeholder.isNotEmpty()) {
-                    Text(text = placeholder, color = Color.Gray)
+                    Text(text = placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color.Black,
-                focusedBorderColor = Color(0xFFFF7A00),
-                unfocusedContainerColor = Color.White,
-                focusedContainerColor = Color.White
+                unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                focusedContainerColor = MaterialTheme.colorScheme.background
             ),
             singleLine = true
         )

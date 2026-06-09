@@ -18,16 +18,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tamtamduku.ui.viewmodels.ReportViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportListScreen(
     onBack: () -> Unit,
-    onNavigateToCreateReport: () -> Unit,
-    onReportClick: (String) -> Unit = {},
-    viewModel: ReportViewModel = viewModel()
+    onNavigateToCreateReport: () -> Unit
 ) {
     Scaffold(
         topBar = {

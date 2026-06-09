@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.tracking
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -34,8 +37,8 @@ fun StatusPekerjaanScreen(
     workerName: String,
     viewModel: TrackingViewModel
 ) {
-    val bgColor = Color(0xFFFFFDFB)
-    val primaryOrange = Color(0xFFF97316)
+    val bgColor = MaterialTheme.colorScheme.background
+    val primaryOrange = MaterialTheme.colorScheme.primary
     val yellowBadge = Color(0xFFFFC107)
 
     val uiState by viewModel.uiState.collectAsState()
@@ -47,7 +50,7 @@ fun StatusPekerjaanScreen(
             TopAppBar(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("Status Pekerjaan", fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
+                        Text(stringResource(R.string.status_pekerjaan), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                     }
                 },
                 navigationIcon = {
@@ -74,7 +77,7 @@ fun StatusPekerjaanScreen(
             Spacer(modifier = Modifier.height(16.dp))
             
             Text(
-                text = "FE-0732-001",
+                text = stringResource(R.string.fe0732001),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -89,7 +92,7 @@ fun StatusPekerjaanScreen(
                     text = if (isSelesai) "Selesai" else "Sedang Dikerjakan",
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                     fontWeight = FontWeight.Bold,
-                    color = if (isSelesai) Color(0xFF4CAF50) else Color.Black
+                    color = if (isSelesai) Color(0xFF4CAF50) else MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -98,25 +101,25 @@ fun StatusPekerjaanScreen(
             // Timeline
             Column(modifier = Modifier.fillMaxWidth()) {
                 TimelineItem(
-                    title = "Permintaan Diterima",
+                    title = stringResource(R.string.permintaan_diterima),
                     time = "20 Mei 2026, 09.15",
                     isCompleted = true,
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Pekerjaan Dimulai",
+                    title = stringResource(R.string.pekerjaan_dimulai),
                     time = "20 Mei 2026, 09.45",
                     isCompleted = true,
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Sedang Dikerjakan",
+                    title = stringResource(R.string.sedang_dikerjakan),
                     time = "20 Mei 2026, 10.00",
                     isCompleted = true,
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Selesai",
+                    title = stringResource(R.string.selesai),
                     time = if (isSelesai) "20 Mei 2026, 11.00" else "-",
                     isCompleted = isSelesai,
                     isLast = true
@@ -128,7 +131,7 @@ fun StatusPekerjaanScreen(
             // Progress bar
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "Progress Pekerjaan",
+                    text = stringResource(R.string.progress_pekerjaan),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
@@ -138,7 +141,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier
                             .weight(1f)
                             .height(12.dp)
-                            .background(Color(0xFFE0E0E0), RoundedCornerShape(50))
+                            .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
                     ) {
                         Box(
                             modifier = Modifier
@@ -162,7 +165,7 @@ fun StatusPekerjaanScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -176,7 +179,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(Color.DarkGray)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
@@ -186,7 +189,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = "Chat",
+                        text = stringResource(R.string.chat),
                         color = primaryOrange,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
@@ -215,8 +218,8 @@ fun StatusPekerjaanScreen(
                 enabled = true
             ) {
                 Text(
-                    text = "Konfirmasi Pekerjaan Selesai",
-                    color = if (isSelesai) Color.White else Color.White,
+                    text = stringResource(R.string.konfirmasi_pekerjaan_selesai),
+                    color = if (isSelesai) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -238,7 +241,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
                 Icon(
                     imageVector = if (isCompleted) Icons.Default.Check else Icons.Default.Remove,
                     contentDescription = null,
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -254,7 +257,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.padding(bottom = if (isLast) 0.dp else 24.dp)) {
             Text(text = title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = time, color = Color.Gray, fontSize = 12.sp)
+            Text(text = time, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
     }
 }

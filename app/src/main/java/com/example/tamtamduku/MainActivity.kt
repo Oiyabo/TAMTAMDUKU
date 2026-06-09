@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         
         enableEdgeToEdge()
         setContent {
-            var currentTheme by remember { mutableStateOf(AppTheme.MAIN) }
+            var currentTheme by remember { mutableStateOf(AppTheme.LIGHT) }
             var currentLanguage by remember { mutableStateOf("id") }
             
             val configuration = LocalConfiguration.current

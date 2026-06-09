@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.ui.components.WorkerCard
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
@@ -41,7 +43,7 @@ fun HomeScreen(
     }
 
     Scaffold(
-        containerColor = Color(0xFFFFFDF8),
+        containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             Row(
@@ -56,21 +58,21 @@ fun HomeScreen(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = "Location",
                         modifier = Modifier.size(28.dp),
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
-                        text = "Alamat Saya",
+                        text = stringResource(R.string.my_address),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 Icon(
                     imageVector = Icons.Outlined.Notifications,
                     contentDescription = "Notifications",
                     modifier = Modifier.size(28.dp).clickable { onNavigateToNotifications() },
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }
@@ -88,8 +90,8 @@ fun HomeScreen(
                 onValueChange = {},
                 placeholder = {
                     Text(
-                        "Cari pekerja...",
-                        color = Color.Gray,
+                        stringResource(R.string.search_worker_placeholder),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 16.sp
                     )
                 },
@@ -97,7 +99,7 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = Color.Gray
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 modifier = Modifier
@@ -107,8 +109,8 @@ fun HomeScreen(
                 enabled = false, // Disable it to just act as a button
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    disabledBorderColor = Color.Gray,
-                    disabledContainerColor = Color.White,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
                 )
             )
 
@@ -122,30 +124,30 @@ fun HomeScreen(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Butuh bantuan?",
+                        text = stringResource(R.string.need_help),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "Temukan pekerja terbaik\ndi sekitar Anda",
+                        text = stringResource(R.string.find_best_worker_around_you),
                         fontSize = 14.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         lineHeight = 20.sp
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = { onNavigateToSearch("") },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00)),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.height(40.dp)
                     ) {
                         Text(
-                            text = "Cari Sekarang",
+                            text = stringResource(R.string.search_now),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -155,12 +157,12 @@ fun HomeScreen(
                     modifier = Modifier
                         .size(120.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color.DarkGray)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Engineering,
                         contentDescription = null,
-                        tint = Color.White,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(24.dp)
@@ -174,19 +176,19 @@ fun HomeScreen(
             Button(
                 onClick = onNavigateToPaymentTest,
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("TEST PEMBAYARAN MIDTRANS")
+                Text(stringResource(R.string.test_midtrans_payment), color = MaterialTheme.colorScheme.onError)
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Categories Section
             Text(
-                text = "Kategori Populer",
+                text = stringResource(R.string.popular_categories),
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -194,11 +196,11 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CategoryItem(icon = Icons.AutoMirrored.Filled.TrendingUp, label = "Data", onClick = { onNavigateToSearch("Analisis Data") })
-                CategoryItem(icon = Icons.Default.Bolt, label = "Listrik", onClick = { onNavigateToSearch("Instalasi Listrik") })
-                CategoryItem(icon = Icons.Default.AcUnit, label = "Perbaikan", onClick = { onNavigateToSearch("Perbaikan") })
-                CategoryItem(icon = Icons.Default.Code, label = "Web Dev", onClick = { onNavigateToSearch("Pembuatan Website") })
-                CategoryItem(icon = Icons.Default.Home, label = "Cleaning", onClick = { onNavigateToSearch("Cleaning Service") })
+                CategoryItem(icon = Icons.AutoMirrored.Filled.TrendingUp, label = stringResource(R.string.category_data), onClick = { onNavigateToSearch("Analisis Data") })
+                CategoryItem(icon = Icons.Default.Bolt, label = stringResource(R.string.category_electricity), onClick = { onNavigateToSearch("Instalasi Listrik") })
+                CategoryItem(icon = Icons.Default.AcUnit, label = stringResource(R.string.category_repair), onClick = { onNavigateToSearch("Perbaikan") })
+                CategoryItem(icon = Icons.Default.Code, label = stringResource(R.string.category_web_dev), onClick = { onNavigateToSearch("Pembuatan Website") })
+                CategoryItem(icon = Icons.Default.Home, label = stringResource(R.string.category_cleaning), onClick = { onNavigateToSearch("Cleaning Service") })
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -210,16 +212,16 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Pekerja Terbaik Kami",
+                    text = stringResource(R.string.our_best_workers),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
-                    text = "Lihat Semua",
+                    text = stringResource(R.string.see_all),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = Color(0xFFFF7A00),
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable { onNavigateToSearch("") }
                 )
             }
@@ -247,15 +249,15 @@ fun CategoryItem(icon: ImageVector, label: String, onClick: () -> Unit) {
             modifier = Modifier
                 .size(60.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, Color.Gray.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
-                .background(Color(0xFFFDECDA).copy(alpha = 0.3f)), // Very faint orange tint
+                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)), // Very faint tint
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
                 modifier = Modifier.size(36.dp),
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onSurface
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -263,7 +265,7 @@ fun CategoryItem(icon: ImageVector, label: String, onClick: () -> Unit) {
             text = label,
             fontWeight = FontWeight.Bold,
             fontSize = 14.sp,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

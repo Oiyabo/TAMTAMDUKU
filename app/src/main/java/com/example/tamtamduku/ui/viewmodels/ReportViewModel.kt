@@ -1,23 +1,32 @@
 package com.example.tamtamduku.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.data.model.Report
+import com.example.tamtamduku.data.repository.WorkerRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ReportViewModel : ViewModel() {
-    private val _reports = MutableStateFlow<List<Report>>(listOf(
-        Report(id = "ID RE #0001", category = "Pekerja", description = "Datang Terlambat", date = "23 April 2026", status = "Selesai")
-    ))
+class ReportViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
+    private val _reports = MutableStateFlow<List<Report>>(emptyList())
     val reports: StateFlow<List<Report>> = _reports.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            repository.getReports().collect {
+                _reports.value = it
+            }
+        }
+    }
 
     fun addReport(category: String, description: String) {
         val currentDate = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID")).format(Date())
-        val newId = "ID RE #${String.format("%04d", _reports.value.size + 1)}"
+        val newId = "ID RE #${System.currentTimeMillis().toString().takeLast(4)}"
         val newReport = Report(
             id = newId,
             category = category,
@@ -25,6 +34,7 @@ class ReportViewModel : ViewModel() {
             date = currentDate,
             status = "Menunggu"
         )
-        _reports.value = _reports.value + listOf(newReport)
+        // Sync to Firebase
+        repository.addReport(newReport)
     }
 }

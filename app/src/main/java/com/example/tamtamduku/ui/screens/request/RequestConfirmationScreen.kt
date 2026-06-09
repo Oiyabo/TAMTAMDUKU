@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.request
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -47,7 +50,7 @@ fun RequestConfirmationScreen(
 
     if (worker == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Pekerja tidak ditemukan")
+            Text(stringResource(R.string.pekerja_tidak_ditemukan))
         }
         return
     }
@@ -55,21 +58,18 @@ fun RequestConfirmationScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detail permintaan", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
+                title = { Text(stringResource(R.string.detail_permintaan), fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navCon.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
         bottomBar = {
             Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .padding(16.dp),
+                modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(16.dp),
                 color = Color.Transparent
             ) {
                 Button(
@@ -80,13 +80,13 @@ fun RequestConfirmationScreen(
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00))
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Lakukan Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                    Text(stringResource(R.string.lakukan_pembayaran), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.background)
                 }
             }
         },
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -107,32 +107,32 @@ fun RequestConfirmationScreen(
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)
-                        .background(Color.LightGray)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text("Pekerja", color = Color.Gray, fontSize = 14.sp)
-                    Text(worker.nama, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                    Text(stringResource(R.string.pekerja), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                    Text(worker.nama, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
                 }
             }
 
-            SummaryItem(icon = Icons.Outlined.WorkOutline, label = "Layanan", value = layanan.ifBlank { "Pembuatan SIAKAD" })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            SummaryItem(icon = Icons.Outlined.WorkOutline, label = stringResource(R.string.layanan), value = layanan.ifBlank { "Pembuatan SIAKAD" })
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
             
-            SummaryItem(icon = Icons.Outlined.LocationOn, label = "Lokasi", value = lokasi.ifBlank { "Jl Bhayangkara No 10, Bandar Lampung" })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            SummaryItem(icon = Icons.Outlined.LocationOn, label = stringResource(R.string.lokasi), value = lokasi.ifBlank { "Jl Bhayangkara No 10, Bandar Lampung" })
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.CalendarMonth, label = "Tanggal", value = tanggal.ifBlank { "20 Mei 2025" })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            SummaryItem(icon = Icons.Outlined.CalendarMonth, label = stringResource(R.string.tanggal), value = tanggal.ifBlank { "20 Mei 2025" })
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.Schedule, label = "Waktu", value = jam.ifBlank { "10.00 -12.00" })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            SummaryItem(icon = Icons.Outlined.Schedule, label = stringResource(R.string.waktu), value = jam.ifBlank { "10.00 -12.00" })
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.NoteAlt, label = "Catatan :", value = catatan.ifBlank { "Analisis dan perancangan (SIAKAD) untuk kebutuhan pengelolaan data mahasiswa, jadwal, nilai, dan administrasi kampus." })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            SummaryItem(icon = Icons.Outlined.NoteAlt, label = stringResource(R.string.catatan), value = catatan.ifBlank { "Analisis dan perancangan (SIAKAD) untuk kebutuhan pengelolaan data mahasiswa, jadwal, nilai, dan administrasi kampus." })
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.LocalOffer, label = "Estimasi Harga", value = "Rp300.000,00")
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            SummaryItem(icon = Icons.Outlined.LocalOffer, label = stringResource(R.string.estimasi_harga), value = "Rp300.000,00")
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
         }
     }
 }
@@ -146,15 +146,15 @@ fun SummaryItem(icon: ImageVector, label: String, value: String) {
         Box(
             modifier = Modifier
                 .size(40.dp)
-                .background(Color(0xFFFFF0E5), RoundedCornerShape(8.dp)),
+                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(icon, contentDescription = label, tint = Color(0xFFFF7A00))
+            Icon(icon, contentDescription = label, tint = MaterialTheme.colorScheme.primary)
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
-            Text(label, color = Color.DarkGray, fontSize = 14.sp)
-            Text(value, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
+            Text(label, color = MaterialTheme.colorScheme.secondaryContainer, fontSize = 14.sp)
+            Text(value, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
         }
     }
 }

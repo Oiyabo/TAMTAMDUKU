@@ -19,9 +19,9 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = OrangePrimary,
+    secondary = OrangeOnPrimary,
+    tertiary = OrangeTertiary
 )
 
 private val OrangeColorScheme = lightColorScheme(
@@ -67,12 +67,12 @@ private val DarkOrangeColorScheme = darkColorScheme(
 )
 
 enum class AppTheme {
-    LIGHT, DARK, MAIN
+    LIGHT, DARK
 }
 
 @Composable
 fun TAMTAMDUKUTheme(
-    appTheme: AppTheme = AppTheme.MAIN,
+    appTheme: AppTheme = AppTheme.LIGHT,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
@@ -81,7 +81,7 @@ fun TAMTAMDUKUTheme(
     val colorScheme = when (appTheme) {
         AppTheme.LIGHT -> LightColorScheme
         AppTheme.DARK -> DarkOrangeColorScheme
-        AppTheme.MAIN -> OrangeColorScheme
+        
     }
 
     MaterialTheme(

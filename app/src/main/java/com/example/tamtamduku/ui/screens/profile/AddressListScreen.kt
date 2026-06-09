@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,8 +34,7 @@ fun AddressListScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Alamat Saya",
+                    Text(stringResource(R.string.alamat_saya),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -50,13 +52,13 @@ fun AddressListScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
+                    .padding(24.dp)
             ) {
                 Button(
                     onClick = onNavigateToEditAddress,
@@ -65,14 +67,14 @@ fun AddressListScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFF7A00)
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(
-                        text = "+ Tambah Alamat",
+                        text = stringResource(R.string.tambah_alamat),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.background
                     )
                 }
             }
@@ -86,26 +88,12 @@ fun AddressListScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            val addresses = uiState.addressList
-            if (addresses.isEmpty()) {
-                item {
-                    Text(
-                        text = "Belum ada alamat yang ditambahkan.",
-                        color = Color.Gray,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            } else {
-                items(addresses.size) { index ->
-                    val addr = addresses[index]
-                    AddressCard(
-                        name = addr.name,
-                        address = addr.fullAddress,
-                        isDefault = addr.isDefault,
-                        onSetDefault = { viewModel.setDefaultAddress(addr.id) },
-                        onDelete = { viewModel.deleteAddress(addr.id) }
-                    )
-                }
+            item {
+                AddressCard(
+                    name = uiState.name.ifEmpty { "Bang Lijen" },
+                    address = uiState.address.ifEmpty { "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." },
+                    onClick = onNavigateToEditAddress
+                )
             }
         }
     }
@@ -115,15 +103,15 @@ fun AddressListScreen(
 fun AddressCard(
     name: String,
     address: String,
-    isDefault: Boolean,
-    onSetDefault: () -> Unit,
-    onDelete: () -> Unit
+    onClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.background
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
@@ -134,46 +122,19 @@ fun AddressCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = name,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-                if (isDefault) {
-                    Text(
-                        text = "Utama",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp,
-                        color = Color(0xFFFF7A00)
-                    )
-                }
-            }
+            Text(
+                text = name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = address,
                 fontSize = 14.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 lineHeight = 20.sp
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                if (!isDefault) {
-                    TextButton(onClick = onSetDefault) {
-                        Text("Jadikan Utama", color = Color(0xFFFF7A00))
-                    }
-                }
-                TextButton(onClick = onDelete) {
-                    Text("Hapus", color = Color.Red)
-                }
-            }
         }
     }
 }

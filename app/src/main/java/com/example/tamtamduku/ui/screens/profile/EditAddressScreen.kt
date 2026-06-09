@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -24,21 +27,19 @@ fun EditAddressScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    // Default to user's name but leave address parts empty for a new address
     var name by remember { mutableStateOf(if (uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
-    var province by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
-    var district by remember { mutableStateOf("") }
-    var postalCode by remember { mutableStateOf("") }
-    var addressDetail by remember { mutableStateOf("") }
-    var additionalDetail by remember { mutableStateOf("") }
+    var province by remember { mutableStateOf("Lampung") }
+    var city by remember { mutableStateOf("Bandar Lampung") }
+    var district by remember { mutableStateOf("Rajabasa") }
+    var postalCode by remember { mutableStateOf("35141") }
+    var addressDetail by remember { mutableStateOf(if (uiState.address.isEmpty()) "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." else uiState.address) }
+    var additionalDetail by remember { mutableStateOf("Depan Parkiran") }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Tambah Alamat Baru",
+                    Text(stringResource(R.string.ubah_alamat),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -56,7 +57,7 @@ fun EditAddressScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8)
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -67,61 +68,77 @@ fun EditAddressScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            AddressSectionHeader("Nama Lengkap Penerima")
-            AddressTextField(value = name, onValueChange = { name = it }, placeholder = "Cth: Budi Santoso")
+            AddressSectionHeader("Nama Lengkap")
+            AddressTextField(value = name, onValueChange = { name = it })
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
             AddressSectionHeader("Provinsi, Kota, Kecamatan, Kode Pos")
-            AddressTextField(value = province, onValueChange = { province = it }, placeholder = "Provinsi (Cth: Lampung)")
+            AddressTextField(value = province, onValueChange = { province = it })
             Spacer(modifier = Modifier.height(8.dp))
-            AddressTextField(value = city, onValueChange = { city = it }, placeholder = "Kota/Kabupaten (Cth: Bandar Lampung)")
+            AddressTextField(value = city, onValueChange = { city = it })
             Spacer(modifier = Modifier.height(8.dp))
-            AddressTextField(value = district, onValueChange = { district = it }, placeholder = "Kecamatan (Cth: Rajabasa)")
+            AddressTextField(value = district, onValueChange = { district = it })
             Spacer(modifier = Modifier.height(8.dp))
-            AddressTextField(value = postalCode, onValueChange = { postalCode = it }, placeholder = "Kode Pos (Cth: 35141)")
+            AddressTextField(value = postalCode, onValueChange = { postalCode = it })
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
             AddressSectionHeader("Nama Jalan, Gedung, No Rumah")
-            AddressTextField(value = addressDetail, onValueChange = { addressDetail = it }, placeholder = "Cth: Jl. Pramuka No.10, Gedung A", singleLine = false, minLines = 4)
+            AddressTextField(value = addressDetail, onValueChange = { addressDetail = it }, singleLine = false, minLines = 4)
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
             AddressSectionHeader("Detail Lainnya (Opsional)")
-            AddressTextField(value = additionalDetail, onValueChange = { additionalDetail = it }, placeholder = "Cth: Blok B, Warna Pagar, dll")
+            AddressTextField(value = additionalDetail, onValueChange = { additionalDetail = it })
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
-                onClick = { 
-                    val fullAddress = buildString {
-                        append(addressDetail)
-                        if (district.isNotBlank()) append(", $district")
-                        if (city.isNotBlank()) append(", $city")
-                        if (province.isNotBlank()) append(", $province")
-                        if (postalCode.isNotBlank()) append(" $postalCode")
-                        if (additionalDetail.isNotBlank()) append(" ($additionalDetail)")
-                    }
-                    if (fullAddress.isNotBlank()) {
-                        viewModel.addAddress(name, fullAddress)
-                    }
-                    onBack()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF7A00)
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(
-                    text = "Simpan Alamat Baru",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                )
+                OutlinedButton(
+                    onClick = { 
+                        viewModel.deleteAddress()
+                        onBack()
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = stringResource(R.string.hapus_alamat),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Button(
+                    onClick = { 
+                        viewModel.updateAddress(addressDetail)
+                        onBack()
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.simpan),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.background
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.height(32.dp))
@@ -133,7 +150,7 @@ fun EditAddressScreen(
 fun AddressSectionHeader(title: String) {
     Text(
         text = title,
-        color = Color.Gray,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 14.sp,
         fontWeight = FontWeight.Medium
     )
@@ -145,25 +162,19 @@ fun AddressSectionHeader(title: String) {
 fun AddressTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String = "",
     singleLine: Boolean = true,
     minLines: Int = 1
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        placeholder = {
-            if (placeholder.isNotEmpty()) {
-                Text(text = placeholder, color = Color.Gray)
-            }
-        },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Color.Transparent,
-            focusedBorderColor = Color(0xFFFF7A00),
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            focusedContainerColor = MaterialTheme.colorScheme.background
         ),
         singleLine = singleLine,
         minLines = minLines
