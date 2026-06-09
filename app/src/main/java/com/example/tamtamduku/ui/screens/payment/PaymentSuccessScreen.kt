@@ -39,6 +39,8 @@ fun PaymentSuccessScreen(
     layanan: String,
     paymentMethod: String,
     harga: String,
+    tanggal: String,
+    jam: String,
     trackingViewModel: TrackingViewModel,
     onNavigateHome: () -> Unit
 ) {
@@ -56,7 +58,10 @@ fun PaymentSuccessScreen(
             workerName = workerName,
             layanan = layanan,
             paymentMethod = paymentMethod,
-            price = total
+            price = total,
+            invoiceNumber = invoiceStr,
+            tanggal = tanggal,
+            jam = jam
         )
     }
     Box(

@@ -203,6 +203,17 @@ class WorkerRepository {
             .addOnFailureListener { onFailure(it) }
     }
 
+    fun updateTransactionStatus(transactionId: String, newStatus: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        if (transactionId.isEmpty()) {
+            onFailure(IllegalArgumentException("Transaction ID is empty"))
+            return
+        }
+        firestore.collection("transactions").document(transactionId)
+            .update("status", newStatus)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
     // Reports
     fun getReports(): Flow<List<Report>> = callbackFlow {
         val listener = firestore.collection("reports")

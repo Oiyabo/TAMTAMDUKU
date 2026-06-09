@@ -79,7 +79,9 @@ fun RequestConfirmationScreen(
                         val encodedWorkerName = Uri.encode(workerName ?: "")
                         val encodedLayanan = Uri.encode(layanan.ifBlank { "Pembuatan SIAKAD" })
                         val encodedHarga = Uri.encode(harga.ifBlank { "300000" })
-                        navCon.navigate("payment/$encodedWorkerName/$encodedLayanan/$encodedHarga")
+                        val encodedTanggal = Uri.encode(tanggal.ifBlank { " " })
+                        val encodedJam = Uri.encode(jam.ifBlank { " " })
+                        navCon.navigate("payment/$encodedWorkerName/$encodedLayanan/$encodedHarga/$encodedTanggal/$encodedJam")
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
