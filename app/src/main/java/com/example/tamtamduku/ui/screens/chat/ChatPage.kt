@@ -33,7 +33,17 @@ fun ChatPage(
 ) {
     val chats by viewModel.chats.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
     val bgColor = Color(0xFFFFFDFB)
+    
+    val filteredChats = if (searchQuery.isBlank()) {
+        chats
+    } else {
+        chats.filter { 
+            it.name.contains(searchQuery, ignoreCase = true) || 
+            it.lastMessage.contains(searchQuery, ignoreCase = true) 
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -66,8 +76,8 @@ fun ChatPage(
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     OutlinedTextField(
-                        value = "",
-                        onValueChange = {},
+                        value = searchQuery,
+                        onValueChange = { searchQuery = it },
                         modifier = Modifier.weight(1f).height(50.dp),
                         placeholder = { 
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -102,7 +112,7 @@ fun ChatPage(
                 }
             } else {
                 ChatList(
-                    chats = chats,
+                    chats = filteredChats,
                     onNavigateToPersonalChat = {
                         viewModel.markAsRead(it)
                         onNavigateToPersonalChat(it)
