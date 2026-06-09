@@ -22,30 +22,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+import com.example.tamtamduku.ui.theme.AppTheme
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onThemeChange: (AppTheme) -> Unit,
+    onLanguageChange: (String) -> Unit,
+    currentLanguage: String,
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val bgColor = Color(0xFFFFFDF8)
+    val bgColor = MaterialTheme.colorScheme.background
     val orangeMain = Color(0xFFFF7A00)
     var notificationsEnabled by remember(uiState.settings.pushNotification) {
         mutableStateOf(uiState.settings.pushNotification)
     }
+
+    var themeExpanded by remember { mutableStateOf(false) }
+    var currentThemeLabel by remember { mutableStateOf(if (currentLanguage == "id") "TamtamDuku" else "TamtamDuku") }
+    var languageExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 windowInsets = WindowInsets(0.dp),
                 title = {
-                    Text("Pengaturan", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black)
+                    Text(stringResource(R.string.settings), fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onBackground)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = bgColor)
@@ -60,7 +70,7 @@ fun SettingsScreen(
                 .padding(horizontal = 20.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Preferensi", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Color.Gray)
+            Text(stringResource(R.string.preferences), fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(4.dp))
 
             Card(
@@ -84,7 +94,7 @@ fun SettingsScreen(
                                 Icon(Icons.Default.NotificationsNone, contentDescription = null, tint = orangeMain, modifier = Modifier.size(20.dp))
                             }
                             Spacer(modifier = Modifier.width(14.dp))
-                            Text("Notifikasi", fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = Color.Black)
+                            Text(stringResource(R.string.notifications), fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = Color.Black)
                         }
                         Switch(
                             checked = notificationsEnabled,
@@ -101,22 +111,74 @@ fun SettingsScreen(
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
 
                     // Bahasa row
-                    PremiumSettingRow(
-                        icon = Icons.Default.Language,
-                        title = "Bahasa",
-                        subtitle = "Bahasa Indonesia",
-                        onClick = {}
-                    )
+                    Box {
+                        PremiumSettingRow(
+                            icon = Icons.Default.Language,
+                            title = stringResource(R.string.language),
+                            subtitle = if (currentLanguage == "id") stringResource(R.string.indonesian) else stringResource(R.string.english),
+                            onClick = { languageExpanded = true }
+                        )
+                        DropdownMenu(
+                            expanded = languageExpanded,
+                            onDismissRequest = { languageExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.indonesian)) },
+                                onClick = {
+                                    onLanguageChange("id")
+                                    languageExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.english)) },
+                                onClick = {
+                                    onLanguageChange("en")
+                                    languageExpanded = false
+                                }
+                            )
+                        }
+                    }
 
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
 
                     // Tema row
-                    PremiumSettingRow(
-                        icon = Icons.Default.DarkMode,
-                        title = "Tema",
-                        subtitle = "Mode Terang",
-                        onClick = {}
-                    )
+                    Box {
+                        PremiumSettingRow(
+                            icon = Icons.Default.DarkMode,
+                            title = stringResource(R.string.theme),
+                            subtitle = currentThemeLabel,
+                            onClick = { themeExpanded = true }
+                        )
+                        DropdownMenu(
+                            expanded = themeExpanded,
+                            onDismissRequest = { themeExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("TamtamDuku") },
+                                onClick = {
+                                    currentThemeLabel = "TamtamDuku"
+                                    onThemeChange(AppTheme.MAIN)
+                                    themeExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.light_mode)) },
+                                onClick = {
+                                    currentThemeLabel = "Mode Terang"
+                                    onThemeChange(AppTheme.LIGHT)
+                                    themeExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.dark_mode)) },
+                                onClick = {
+                                    currentThemeLabel = "Mode Gelap"
+                                    onThemeChange(AppTheme.DARK)
+                                    themeExpanded = false
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
