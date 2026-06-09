@@ -55,6 +55,7 @@ fun AddressListScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .navigationBarsPadding()
                     .padding(24.dp)
             ) {
                 Button(

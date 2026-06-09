@@ -24,7 +24,8 @@ fun ReportDetailScreen(
     viewModel: ReportViewModel = viewModel()
 ) {
     val reports by viewModel.reports.collectAsState()
-    val report = reports.find { it.id == reportId }
+    val decodedId = reportId.replace("_", " ").replace("H", "#")
+    val report = reports.find { it.id == decodedId }
 
     Scaffold(
         topBar = {

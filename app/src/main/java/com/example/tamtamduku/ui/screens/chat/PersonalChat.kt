@@ -192,7 +192,7 @@ fun ChatInput(
 ) {
     Surface(
         color = Color(0xFFFFE4C4), // pastel orange/peach
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().navigationBarsPadding()
     ) {
         Row(
             modifier = Modifier

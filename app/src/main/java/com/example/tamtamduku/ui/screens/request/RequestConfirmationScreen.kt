@@ -66,7 +66,7 @@ fun RequestConfirmationScreen(
         },
         bottomBar = {
             Surface(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(16.dp),
                 color = Color.Transparent
             ) {
                 Button(
