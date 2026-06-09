@@ -75,6 +75,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 @Composable
 fun AppNavigation(
     onThemeChange: (AppTheme) -> Unit,
+    onLanguageChange: (String) -> Unit,
+    currentLanguage: String,
     navCon: NavHostController = rememberNavController(),
     authViewModel: AuthViewModel = viewModel(),
     workerViewModel: WorkerViewModel = viewModel(),
@@ -382,7 +384,10 @@ fun AppNavigation(
             }
             composable("settings") {
                 SettingsScreen(
-                    onBack = { navCon.popBackStack() }
+                    onBack = { navCon.popBackStack() },
+                    onThemeChange = onThemeChange,
+                    onLanguageChange = onLanguageChange,
+                    currentLanguage = currentLanguage
                 )
             }
             composable(

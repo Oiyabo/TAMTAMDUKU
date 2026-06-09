@@ -123,4 +123,29 @@ class WorkerRepository {
             }
         awaitClose { listener.remove() }
     }
+
+    fun sendMessage(roomId: String, chatListId: String, text: String, time: String) {
+        val newMessage = mapOf(
+            "id" to System.currentTimeMillis().toString(),
+            "senderId" to "usr_8a7b6c5d",
+            "text" to text,
+            "time" to time
+        )
+        
+        firestore.collection("chatRooms").document(roomId)
+            .update("messages", com.google.firebase.firestore.FieldValue.arrayUnion(newMessage))
+            .addOnFailureListener {
+                // If it fails (e.g. document doesn't exist), create it
+                val initialData = mapOf("messages" to listOf(newMessage))
+                firestore.collection("chatRooms").document(roomId).set(initialData)
+            }
+
+        if (chatListId.isNotEmpty()) {
+            val updateData = mapOf(
+                "lastMessage" to text,
+                "lastUpdated" to time
+            )
+            firestore.collection("chatLists").document(chatListId).update(updateData)
+        }
+    }
 }

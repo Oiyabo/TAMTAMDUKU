@@ -92,6 +92,9 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
             _chats.value = _chats.value.map {
                 if (it.roomId == roomId) it.copy(lastMessage = text, time = time) else it
             }
+            
+            // Persist to Firebase
+            repository.sendMessage(roomId, chatList.id, text, time)
         } else {
             // New chat
             val roomId = "room_${System.currentTimeMillis()}"
@@ -100,8 +103,9 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
             currentRooms[roomId] = listOf(newMessage)
             _chatMessages.value = currentRooms
 
+            val newChatId = System.currentTimeMillis().toString()
             val newChat = ChatUiItem(
-                id = System.currentTimeMillis().toString(),
+                id = newChatId,
                 roomId = roomId,
                 name = workerName,
                 lastMessage = text,
@@ -110,6 +114,9 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
                 workerId = ""
             )
             _chats.value = _chats.value + newChat
+            
+            // Persist to Firebase
+            repository.sendMessage(roomId, newChatId, text, time)
         }
     }
 }
