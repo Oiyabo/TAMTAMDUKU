@@ -34,6 +34,7 @@ fun EditAddressScreen(
     var postalCode by remember { mutableStateOf("35141") }
     var addressDetail by remember { mutableStateOf(if (uiState.address.isEmpty()) "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." else uiState.address) }
     var additionalDetail by remember { mutableStateOf("Depan Parkiran") }
+    var isDefault by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -92,6 +93,29 @@ fun EditAddressScreen(
             AddressSectionHeader("Detail Lainnya (Opsional)")
             AddressTextField(value = additionalDetail, onValueChange = { additionalDetail = it })
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Jadikan sebagai Alamat Utama",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Switch(
+                    checked = isDefault,
+                    onCheckedChange = { isDefault = it },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                        checkedTrackColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                )
+            }
+
             Spacer(modifier = Modifier.height(32.dp))
 
             Row(
@@ -121,7 +145,7 @@ fun EditAddressScreen(
 
                 Button(
                     onClick = { 
-                        viewModel.addAddress(name, "$addressDetail, $district, $city, $province $postalCode")
+                        viewModel.addAddress(name, "$addressDetail, $district, $city, $province $postalCode", isDefault)
                         onBack()
                     },
                     modifier = Modifier
