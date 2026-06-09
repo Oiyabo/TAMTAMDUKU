@@ -91,7 +91,7 @@ fun ServiceDetailScreen(
                     }) {
                         Icon(Icons.Default.Share, contentDescription = "Share", tint = Color(0xFFFF8C00))
                     }
-                    IconButton(onClick = { isFavorite = !isFavorite }) {
+                    IconButton(onClick = { viewModel.toggleFavorite(worker.id) }) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.Bookmark,
                             contentDescription = "Favorite/Bookmark",

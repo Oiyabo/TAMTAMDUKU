@@ -193,4 +193,19 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                 s.minRate.isNotEmpty() ||
                 s.maxRate.isNotEmpty()
     }
+
+    fun toggleFavorite(workerId: String) {
+        viewModelScope.launch {
+            val users = repository.getUsers().firstOrNull()
+            val user = users?.firstOrNull()
+            if (user != null) {
+                val isFav = user.favoriteWorkers.contains(workerId)
+                if (isFav) {
+                    repository.removeFavoriteWorker(user.id, workerId)
+                } else {
+                    repository.addFavoriteWorker(user.id, workerId)
+                }
+            }
+        }
+    }
 }

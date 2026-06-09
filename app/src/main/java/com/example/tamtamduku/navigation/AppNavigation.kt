@@ -360,7 +360,11 @@ fun AppNavigation(
             composable("report_list") {
                 ReportListScreen(
                     onBack = { navCon.popBackStack() },
-                    onNavigateToCreateReport = { navCon.navigate("create_report") }
+                    onNavigateToCreateReport = { navCon.navigate("create_report") },
+                    onReportClick = { reportId ->
+                        val encodedId = reportId.replace(" ", "_").replace("#", "H")
+                        navCon.navigate("report_detail/$encodedId")
+                    }
                 )
             }
             composable("create_report") {

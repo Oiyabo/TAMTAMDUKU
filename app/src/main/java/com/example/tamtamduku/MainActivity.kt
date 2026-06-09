@@ -45,7 +45,9 @@ class MainActivity : ComponentActivity() {
 
             CompositionLocalProvider(
                 LocalContext provides newContext,
-                LocalConfiguration provides newConfiguration
+                LocalConfiguration provides newConfiguration,
+                androidx.activity.compose.LocalActivityResultRegistryOwner provides this@MainActivity,
+                androidx.activity.compose.LocalOnBackPressedDispatcherOwner provides this@MainActivity
             ) {
                 TAMTAMDUKUTheme(appTheme = currentTheme) {
                     Surface(
