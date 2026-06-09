@@ -85,7 +85,11 @@ fun SearchScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(uiState.filteredWorkers) { worker ->
-                        WorkerCard(worker = worker, onClick = { onNavigateToDetail(worker.nama) })
+                        WorkerCard(
+                            worker = worker, 
+                            onClick = { onNavigateToDetail(worker.nama) },
+                            isFavorite = uiState.favoriteWorkerIds.contains(worker.id)
+                        )
                     }
                     if (uiState.filteredWorkers.isEmpty() && !uiState.isLoading) {
                         item {

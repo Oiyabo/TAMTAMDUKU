@@ -29,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.tamtamduku.ui.screens.auth.LoginScreen
 import com.example.tamtamduku.ui.screens.auth.RegisterScreen
 import com.example.tamtamduku.ui.screens.home.HomeScreen
@@ -188,8 +189,20 @@ fun AppNavigation(
             }
             composable("home") {
                 HomeScreen(
-                    onNavigateToSearch = { navCon.navigate("search") },
-                    onNavigateToNotifications = { navCon.navigate("notifications") }
+                    viewModel = workerViewModel,
+                    onNavigateToSearch = { category ->
+                        if (category.isNotEmpty()) {
+                            workerViewModel.onKategoriChange(category)
+                        } else {
+                            // Reset kategori if just opening search normally
+                            workerViewModel.onKategoriChange("")
+                        }
+                        navCon.navigate("search")
+                    },
+                    onNavigateToNotifications = { navCon.navigate("notifications") },
+                    onNavigateToDetail = { workerName ->
+                        navCon.navigate("detail/${Uri.encode(workerName)}")
+                    }
                 )
             }
             composable("notifications") {
@@ -245,7 +258,11 @@ fun AppNavigation(
             }
             composable(
                 "detail/{workerName}",
-                arguments = listOf(navArgument("workerName") { type = NavType.StringType })
+                arguments = listOf(navArgument("workerName") { type = NavType.StringType }),
+                deepLinks = listOf(
+                    navDeepLink { uriPattern = "https://tamtamduku-9647d.web.app/worker/{workerName}" },
+                    navDeepLink { uriPattern = "tamtamduku://worker/{workerName}" }
+                )
             ) { backStackEntry ->
                 ServiceDetailScreen(
                     navCon = navCon,

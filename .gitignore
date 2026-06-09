@@ -13,6 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-env
 .env
-tamtamduku-9647d-firebase-adminsdk-fbsvc-fae236b56d.json
+serviceAccountKey.json
+node_modules/
+.firebase/

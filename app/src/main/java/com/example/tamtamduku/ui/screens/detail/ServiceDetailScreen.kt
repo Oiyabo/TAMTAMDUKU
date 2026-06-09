@@ -1,5 +1,6 @@
 package com.example.tamtamduku.ui.screens.detail
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -14,7 +15,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Star
@@ -23,6 +26,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -61,6 +65,8 @@ fun ServiceDetailScreen(
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("Profil", "Ulasan", "Portofolio")
+    val context = LocalContext.current
+    var isFavorite by remember(uiState.favoriteWorkerIds, worker.id) { mutableStateOf(uiState.favoriteWorkerIds.contains(worker.id)) }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0.dp),
@@ -74,11 +80,21 @@ fun ServiceDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* Share */ }) {
+                    IconButton(onClick = {
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, "Lihat profil pekerja ini di TamtamDuku: https://tamtamduku-9647d.web.app/worker/${Uri.encode(worker.nama)}")
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Bagikan Profil Pekerja"))
+                    }) {
                         Icon(Icons.Default.Share, contentDescription = "Share", tint = Color(0xFFFF8C00))
                     }
-                    IconButton(onClick = { /* Favorite */ }) {
-                        Icon(Icons.Default.FavoriteBorder, contentDescription = "Favorite", tint = Color(0xFFFF8C00))
+                    IconButton(onClick = { isFavorite = !isFavorite }) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.Bookmark,
+                            contentDescription = "Favorite/Bookmark",
+                            tint = if (isFavorite) Color.Red else Color.Black
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

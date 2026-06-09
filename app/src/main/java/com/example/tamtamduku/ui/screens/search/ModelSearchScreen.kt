@@ -9,6 +9,7 @@ data class SearchUiState(
     val searchQuery: String = "",
     val selectedWorkType: String = "Semua Pekerjaan",
     val selectedLocation: String = "Semua Lokasi",
+    val selectedKategori: String = "",
     val selectedDate: Long? = null,
     val skills: List<String> = emptyList(),
     val skillInput: String = "",
@@ -17,5 +18,6 @@ data class SearchUiState(
     val minRate: String = "",
     val maxRate: String = "",
     val workTypes: List<String> = listOf("Semua Pekerjaan"),
-    val locations: List<String> = listOf("Semua Lokasi")
+    val locations: List<String> = listOf("Semua Lokasi"),
+    val favoriteWorkerIds: List<String> = emptyList()
 )

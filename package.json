@@ -1,0 +1,23 @@
+{
+  "name": "voca",
+  "version": "1.0.0",
+  "main": "pushToFirestore.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oiyabo/TAMTAMDUKU.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Oiyabo/TAMTAMDUKU/issues"
+  },
+  "homepage": "https://github.com/Oiyabo/TAMTAMDUKU#readme",
+  "description": "",
+  "dependencies": {
+    "firebase-admin": "^13.10.0"
+  }
+}

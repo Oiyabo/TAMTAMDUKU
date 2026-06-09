@@ -35,7 +35,8 @@ import com.example.tamtamduku.data.model.VocaWorker
 fun WorkerCard(
     worker: VocaWorker,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFavorite: Boolean = false
 ) {
     Card(
         modifier = modifier
@@ -80,14 +81,14 @@ fun WorkerCard(
                         color = Color.Black,
                         modifier = Modifier.weight(1f)
                     )
-                    var isFavorite by remember { mutableStateOf(false) }
+                    var isFavoriteState by remember(isFavorite) { mutableStateOf(isFavorite) }
                     Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.Bookmark,
+                        imageVector = if (isFavoriteState) Icons.Filled.Favorite else Icons.Filled.Bookmark,
                         contentDescription = "Favorite/Bookmark",
-                        tint = if (isFavorite) Color.Red else Color.Black,
+                        tint = if (isFavoriteState) Color.Red else Color.Black,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { isFavorite = !isFavorite }
+                            .clickable { isFavoriteState = !isFavoriteState }
                     )
                 }
 

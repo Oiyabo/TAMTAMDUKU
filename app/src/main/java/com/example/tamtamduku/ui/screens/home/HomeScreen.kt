@@ -13,7 +13,7 @@ import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,13 +22,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tamtamduku.ui.components.WorkerCard
+import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNavigateToSearch: () -> Unit,
-    onNavigateToNotifications: () -> Unit = {}
+    viewModel: WorkerViewModel = viewModel(),
+    onNavigateToSearch: (String) -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToDetail: (String) -> Unit = {}
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val randomWorker = remember(uiState.workers) {
+        if (uiState.workers.isNotEmpty()) uiState.workers.random() else null
+    }
+
     Scaffold(
         containerColor = Color(0xFFFFFDF8),
         topBar = {
@@ -91,7 +101,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp)
-                    .clickable { onNavigateToSearch() },
+                    .clickable { onNavigateToSearch("") },
                 enabled = false, // Disable it to just act as a button
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
@@ -124,7 +134,7 @@ fun HomeScreen(
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = onNavigateToSearch,
+                        onClick = { onNavigateToSearch("") },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00)),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.height(40.dp)
@@ -171,11 +181,11 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CategoryItem(icon = Icons.AutoMirrored.Filled.TrendingUp, label = "DA")
-                CategoryItem(icon = Icons.Default.Bolt, label = "Listrik")
-                CategoryItem(icon = Icons.Default.AcUnit, label = "AC")
-                CategoryItem(icon = Icons.Default.Code, label = "Dev")
-                CategoryItem(icon = Icons.Default.Engineering, label = "Engr")
+                CategoryItem(icon = Icons.AutoMirrored.Filled.TrendingUp, label = "Data", onClick = { onNavigateToSearch("Analisis Data") })
+                CategoryItem(icon = Icons.Default.Bolt, label = "Listrik", onClick = { onNavigateToSearch("Instalasi Listrik") })
+                CategoryItem(icon = Icons.Default.AcUnit, label = "Perbaikan", onClick = { onNavigateToSearch("Perbaikan") })
+                CategoryItem(icon = Icons.Default.Code, label = "Web Dev", onClick = { onNavigateToSearch("Pembuatan Website") })
+                CategoryItem(icon = Icons.Default.Home, label = "Cleaning", onClick = { onNavigateToSearch("Cleaning Service") })
             }
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -187,7 +197,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Pekerja Terbaik",
+                    text = "Pekerja Terbaik Kami",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = Color.Black
@@ -197,120 +207,17 @@ fun HomeScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = Color(0xFFFF7A00),
-                    modifier = Modifier.clickable { onNavigateToSearch() }
+                    modifier = Modifier.clickable { onNavigateToSearch("") }
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Worker Card
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color.Black)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Profile Image Placeholder
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color.DarkGray)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    
-                    Column(modifier = Modifier.weight(1f)) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.Top
-                        ) {
-                            Column {
-                                Text(
-                                    text = "Jeno Lee",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 16.sp,
-                                    color = Color.Black
-                                )
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Text(
-                                    text = "Data Analys",
-                                    fontSize = 12.sp,
-                                    color = Color.Black
-                                )
-                            }
-                            Icon(
-                                imageVector = Icons.Default.Bookmark,
-                                contentDescription = "Bookmark",
-                                tint = Color.Black
-                            )
-                        }
-                        
-                        Spacer(modifier = Modifier.height(8.dp))
-                        
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            repeat(5) {
-                                Icon(
-                                    imageVector = Icons.Default.Star,
-                                    contentDescription = "Star",
-                                    tint = Color(0xFFFFC107),
-                                    modifier = Modifier.size(14.dp)
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = "5.0",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 12.sp,
-                                color = Color.Black
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = "(328)",
-                                fontSize = 12.sp,
-                                color = Color.Gray
-                            )
-                        }
-                        
-                        Spacer(modifier = Modifier.height(12.dp))
-                        
-                        Box(
-                            modifier = Modifier
-                                .background(Color(0xFFFF7A00), RoundedCornerShape(12.dp))
-                                .padding(horizontal = 12.dp, vertical = 6.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = "Rp. 800.000 (Basic)",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 12.sp,
-                                    color = Color.Black
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Icon(
-                                    imageVector = Icons.Default.KeyboardArrowDown,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(16.dp),
-                                    tint = Color.Black
-                                )
-                            }
-                        }
-                    }
-                }
+            if (randomWorker != null) {
+                WorkerCard(
+                    worker = randomWorker,
+                    onClick = { onNavigateToDetail(randomWorker.nama) },
+                    isFavorite = uiState.favoriteWorkerIds.contains(randomWorker.id)
+                )
             }
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -319,8 +226,11 @@ fun HomeScreen(
 }
 
 @Composable
-fun CategoryItem(icon: ImageVector, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+fun CategoryItem(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.clickable { onClick() }
+    ) {
         Box(
             modifier = Modifier
                 .size(60.dp)

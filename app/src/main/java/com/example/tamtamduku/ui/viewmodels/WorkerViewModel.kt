@@ -25,7 +25,9 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
     private fun loadWorkers() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            repository.getWorkers().collect { allWorkers ->
+            combine(repository.getWorkers(), repository.getUsers()) { allWorkers, users ->
+                val user = users.firstOrNull()
+                val favoriteIds = user?.favoriteWorkers ?: emptyList()
                 val workers = allWorkers.take(5)
                 val workTypes = listOf("Semua Pekerjaan") + workers.map { it.pekerjaan }.distinct().sorted()
                 val locations = listOf("Semua Lokasi") + workers.map { it.lokasi }.distinct().sorted()
@@ -34,9 +36,10 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                     workers = workers,
                     filteredWorkers = workers,
                     workTypes = workTypes,
-                    locations = locations
+                    locations = locations,
+                    favoriteWorkerIds = favoriteIds
                 ) }
-            }
+            }.collect()
         }
     }
 
@@ -57,6 +60,11 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
 
     fun onDateChange(date: Long?) {
         _uiState.update { it.copy(selectedDate = date) }
+        applyFilters()
+    }
+
+    fun onKategoriChange(kategori: String) {
+        _uiState.update { it.copy(selectedKategori = kategori) }
         applyFilters()
     }
 
@@ -136,8 +144,11 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                 worker.skills.any { ws -> ws.contains(s, ignoreCase = true) }
             }
 
+            val matchesKategori = state.selectedKategori.isEmpty() || 
+                worker.kategori.any { k -> k.contains(state.selectedKategori, ignoreCase = true) }
+
             matchesQuery && matchesType && matchesLocation && matchesDate &&
-                    matchesMinGaji && matchesMaxGaji && matchesMinRate && matchesMaxRate && matchesSkills
+                    matchesMinGaji && matchesMaxGaji && matchesMinRate && matchesMaxRate && matchesSkills && matchesKategori
         }
         _uiState.update { it.copy(filteredWorkers = filtered) }
     }
@@ -148,6 +159,7 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                 searchQuery = "",
                 selectedWorkType = "Semua Pekerjaan",
                 selectedLocation = "Semua Lokasi",
+                selectedKategori = "",
                 selectedDate = null,
                 skills = emptyList(),
                 skillInput = "",
@@ -165,6 +177,7 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
         return s.searchQuery.isNotEmpty() ||
                 s.selectedWorkType != "Semua Pekerjaan" ||
                 s.selectedLocation != "Semua Lokasi" ||
+                s.selectedKategori.isNotEmpty() ||
                 s.selectedDate != null ||
                 s.skills.isNotEmpty() ||
                 s.minGaji.isNotEmpty() ||

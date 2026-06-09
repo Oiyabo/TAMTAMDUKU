@@ -25,9 +25,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.net.Uri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.tamtamduku.data.model.VocaWorker
+import com.example.tamtamduku.ui.components.WorkerCard
 import com.example.tamtamduku.ui.viewmodels.FavoriteWorkersViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -80,95 +82,15 @@ fun FavoriteWorkersScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(workers) { worker ->
-                    FavoriteWorkerCard(worker)
+                    WorkerCard(
+                        worker = worker,
+                        onClick = { navCon.navigate("detail/${Uri.encode(worker.nama)}") },
+                        isFavorite = true
+                    )
                 }
             }
         }
     }
 }
 
-@Composable
-fun FavoriteWorkerCard(worker: VocaWorker) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(2.dp, Color.Black, RoundedCornerShape(12.dp))
-            .background(Color(0xFFF3F4F6), RoundedCornerShape(12.dp))
-    ) {
-        Box(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 16.dp, end = 16.dp)
-                .background(Color(0xFFEF4444), RoundedCornerShape(4.dp))
-                .padding(4.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Favorite,
-                contentDescription = "Favorite",
-                tint = Color.White,
-                modifier = Modifier.size(14.dp)
-            )
-        }
-        
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.DarkGray)
-            )
-            
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Column {
-                Text(text = worker.nama, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(text = worker.pekerjaan, fontSize = 12.sp, color = Color.DarkGray)
-                Spacer(modifier = Modifier.height(4.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    repeat(5) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = Color(0xFFFFD700),
-                            modifier = Modifier.size(12.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("${worker.reviewSummary.averageRating} ", fontWeight = FontWeight.Bold, fontSize = 12.sp)
-                    Text("(${worker.reviewSummary.totalReviews})", fontSize = 12.sp, color = Color.Gray)
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                Row(
-                    modifier = Modifier
-                        .background(Color(0xFFF97316), RoundedCornerShape(50))
-                        .padding(start = 12.dp, end = 4.dp, top = 4.dp, bottom = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    val price = worker.layanan.firstOrNull()?.harga ?: worker.baseSalary
-                    Text(
-                        text = "Rp. %,.0f (Basic)".format(price).replace(",", "."),
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 10.sp
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier
-                            .size(16.dp)
-                            .background(Color(0xFFC2410C), CircleShape)
-                    )
-                }
-            }
-        }
-    }
-}
+
