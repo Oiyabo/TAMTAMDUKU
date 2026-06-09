@@ -57,7 +57,8 @@ fun ReportListScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
                     onClick = onNavigateToCreateReport,

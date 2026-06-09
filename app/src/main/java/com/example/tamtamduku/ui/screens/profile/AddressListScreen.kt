@@ -55,7 +55,8 @@ fun AddressListScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
                     onClick = onNavigateToEditAddress,
@@ -85,12 +86,26 @@ fun AddressListScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                AddressCard(
-                    name = uiState.name.ifEmpty { "Bang Lijen" },
-                    address = uiState.address.ifEmpty { "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." },
-                    onClick = onNavigateToEditAddress
-                )
+            val addresses = uiState.addressList
+            if (addresses.isEmpty()) {
+                item {
+                    Text(
+                        text = "Belum ada alamat yang ditambahkan.",
+                        color = Color.Gray,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            } else {
+                items(addresses.size) { index ->
+                    val addr = addresses[index]
+                    AddressCard(
+                        name = addr.name,
+                        address = addr.fullAddress,
+                        isDefault = addr.isDefault,
+                        onSetDefault = { viewModel.setDefaultAddress(addr.id) },
+                        onDelete = { viewModel.deleteAddress(addr.id) }
+                    )
+                }
             }
         }
     }
@@ -100,12 +115,12 @@ fun AddressListScreen(
 fun AddressCard(
     name: String,
     address: String,
-    onClick: () -> Unit
+    isDefault: Boolean,
+    onSetDefault: () -> Unit,
+    onDelete: () -> Unit
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
@@ -119,12 +134,25 @@ fun AddressCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = Color.Black
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+                if (isDefault) {
+                    Text(
+                        text = "Utama",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Color(0xFFFF7A00)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = address,
@@ -132,6 +160,20 @@ fun AddressCard(
                 color = Color.Black,
                 lineHeight = 20.sp
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                if (!isDefault) {
+                    TextButton(onClick = onSetDefault) {
+                        Text("Jadikan Utama", color = Color(0xFFFF7A00))
+                    }
+                }
+                TextButton(onClick = onDelete) {
+                    Text("Hapus", color = Color.Red)
+                }
+            }
         }
     }
 }

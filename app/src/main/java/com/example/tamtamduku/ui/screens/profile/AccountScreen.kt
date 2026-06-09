@@ -156,8 +156,6 @@ fun ProfileScreen(
                     Text("Keluar Akun", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFFDC2626))
                 }
             }
-            
-            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

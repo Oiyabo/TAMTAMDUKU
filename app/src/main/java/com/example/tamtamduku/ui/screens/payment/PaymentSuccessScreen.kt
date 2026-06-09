@@ -154,7 +154,8 @@ fun PaymentSuccessScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(24.dp)
+                .navigationBarsPadding()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Button(
                 onClick = onNavigateHome,

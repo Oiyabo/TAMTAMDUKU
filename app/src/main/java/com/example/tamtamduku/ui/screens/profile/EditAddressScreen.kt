@@ -24,20 +24,21 @@ fun EditAddressScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    // Default to user's name but leave address parts empty for a new address
     var name by remember { mutableStateOf(if (uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
-    var province by remember { mutableStateOf("Lampung") }
-    var city by remember { mutableStateOf("Bandar Lampung") }
-    var district by remember { mutableStateOf("Rajabasa") }
-    var postalCode by remember { mutableStateOf("35141") }
-    var addressDetail by remember { mutableStateOf(if (uiState.address.isEmpty()) "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." else uiState.address) }
-    var additionalDetail by remember { mutableStateOf("Depan Parkiran") }
+    var province by remember { mutableStateOf("") }
+    var city by remember { mutableStateOf("") }
+    var district by remember { mutableStateOf("") }
+    var postalCode by remember { mutableStateOf("") }
+    var addressDetail by remember { mutableStateOf("") }
+    var additionalDetail by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Ubah Alamat",
+                        "Tambah Alamat Baru",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -66,77 +67,61 @@ fun EditAddressScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            AddressSectionHeader("Nama Lengkap")
-            AddressTextField(value = name, onValueChange = { name = it })
+            AddressSectionHeader("Nama Lengkap Penerima")
+            AddressTextField(value = name, onValueChange = { name = it }, placeholder = "Cth: Budi Santoso")
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
 
             AddressSectionHeader("Provinsi, Kota, Kecamatan, Kode Pos")
-            AddressTextField(value = province, onValueChange = { province = it })
+            AddressTextField(value = province, onValueChange = { province = it }, placeholder = "Provinsi (Cth: Lampung)")
             Spacer(modifier = Modifier.height(8.dp))
-            AddressTextField(value = city, onValueChange = { city = it })
+            AddressTextField(value = city, onValueChange = { city = it }, placeholder = "Kota/Kabupaten (Cth: Bandar Lampung)")
             Spacer(modifier = Modifier.height(8.dp))
-            AddressTextField(value = district, onValueChange = { district = it })
+            AddressTextField(value = district, onValueChange = { district = it }, placeholder = "Kecamatan (Cth: Rajabasa)")
             Spacer(modifier = Modifier.height(8.dp))
-            AddressTextField(value = postalCode, onValueChange = { postalCode = it })
+            AddressTextField(value = postalCode, onValueChange = { postalCode = it }, placeholder = "Kode Pos (Cth: 35141)")
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
 
             AddressSectionHeader("Nama Jalan, Gedung, No Rumah")
-            AddressTextField(value = addressDetail, onValueChange = { addressDetail = it }, singleLine = false, minLines = 4)
+            AddressTextField(value = addressDetail, onValueChange = { addressDetail = it }, placeholder = "Cth: Jl. Pramuka No.10, Gedung A", singleLine = false, minLines = 4)
 
             HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
 
             AddressSectionHeader("Detail Lainnya (Opsional)")
-            AddressTextField(value = additionalDetail, onValueChange = { additionalDetail = it })
+            AddressTextField(value = additionalDetail, onValueChange = { additionalDetail = it }, placeholder = "Cth: Blok B, Warna Pagar, dll")
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            Button(
+                onClick = { 
+                    val fullAddress = buildString {
+                        append(addressDetail)
+                        if (district.isNotBlank()) append(", $district")
+                        if (city.isNotBlank()) append(", $city")
+                        if (province.isNotBlank()) append(", $province")
+                        if (postalCode.isNotBlank()) append(" $postalCode")
+                        if (additionalDetail.isNotBlank()) append(" ($additionalDetail)")
+                    }
+                    if (fullAddress.isNotBlank()) {
+                        viewModel.addAddress(name, fullAddress)
+                    }
+                    onBack()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFFF7A00)
+                )
             ) {
-                OutlinedButton(
-                    onClick = { 
-                        viewModel.deleteAddress()
-                        onBack()
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFFFF7A00)
-                    ),
-                    border = BorderStroke(1.dp, Color(0xFFFF7A00))
-                ) {
-                    Text(
-                        text = "Hapus Alamat",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Button(
-                    onClick = { 
-                        viewModel.updateAddress(addressDetail)
-                        onBack()
-                    },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFF7A00)
-                    )
-                ) {
-                    Text(
-                        text = "Simpan",
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
+                Text(
+                    text = "Simpan Alamat Baru",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             }
             
             Spacer(modifier = Modifier.height(32.dp))
@@ -160,12 +145,18 @@ fun AddressSectionHeader(title: String) {
 fun AddressTextField(
     value: String,
     onValueChange: (String) -> Unit,
+    placeholder: String = "",
     singleLine: Boolean = true,
     minLines: Int = 1
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        placeholder = {
+            if (placeholder.isNotEmpty()) {
+                Text(text = placeholder, color = Color.Gray)
+            }
+        },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(

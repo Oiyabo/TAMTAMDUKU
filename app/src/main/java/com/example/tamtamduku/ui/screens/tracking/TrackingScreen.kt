@@ -124,7 +124,7 @@ fun TrackingScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 8.dp)
+                contentPadding = PaddingValues(top = 8.dp, bottom = 0.dp)
             ) {
                 items(filteredTransactions) { transaction ->
                     TransactionHistoryCard(item = transaction) {

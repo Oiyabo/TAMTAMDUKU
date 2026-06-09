@@ -104,7 +104,10 @@ fun SearchScreen(
             if (viewModel.isAnyFilterActive()) {
                 ExtendedFloatingActionButton(
                     onClick = viewModel::onResetFilter,
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .navigationBarsPadding()
+                        .padding(16.dp),
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     icon = { Icon(Icons.Default.Close, null) },

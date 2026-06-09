@@ -80,7 +80,7 @@ fun PaymentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(24.dp)
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 if (errorMessage != null) {
                     Text(

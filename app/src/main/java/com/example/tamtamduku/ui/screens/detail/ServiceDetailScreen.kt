@@ -111,7 +111,8 @@ fun ServiceDetailScreen(
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
+                        .navigationBarsPadding()
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

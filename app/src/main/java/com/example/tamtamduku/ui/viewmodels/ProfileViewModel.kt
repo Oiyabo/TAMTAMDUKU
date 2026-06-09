@@ -15,11 +15,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.example.tamtamduku.data.local.SessionManager
 
+import com.example.tamtamduku.data.model.UserAddress
+
 data class ProfileUiState(
     val name: String = "",
     val role: String = "Pelanggan",
     val email: String = "",
     val address: String = "",
+    val addressList: List<UserAddress> = emptyList(),
     val phone: String = "",
     val favoriteWorkers: List<String> = emptyList(),
     val settings: UserSettings = UserSettings()
@@ -50,6 +53,7 @@ class ProfileViewModel @JvmOverloads constructor(
                             name = account.name,
                             email = account.email,
                             address = account.address,
+                            addressList = account.addressList,
                             phone = account.phone,
                             favoriteWorkers = account.favoriteWorkers,
                             settings = account.settings
@@ -65,13 +69,34 @@ class ProfileViewModel @JvmOverloads constructor(
         onLogoutSuccess()
     }
 
-    fun updateAddress(newAddress: String) {
-        _uiState.update { it.copy(address = newAddress) }
+    fun addAddress(name: String, fullAddress: String) {
+        val newList = _uiState.value.addressList.toMutableList()
+        val isFirst = newList.isEmpty()
+        val newAddress = UserAddress(
+            name = name,
+            fullAddress = fullAddress,
+            isDefault = isFirst
+        )
+        newList.add(newAddress)
+        _uiState.update { it.copy(addressList = newList) }
         saveChangesToFirebase()
     }
 
-    fun deleteAddress() {
-        _uiState.update { it.copy(address = "") }
+    fun setDefaultAddress(id: String) {
+        val newList = _uiState.value.addressList.map { 
+            it.copy(isDefault = it.id == id)
+        }
+        _uiState.update { it.copy(addressList = newList) }
+        saveChangesToFirebase()
+    }
+
+    fun deleteAddress(id: String) {
+        val newList = _uiState.value.addressList.filter { it.id != id }.toMutableList()
+        // If we deleted the default, make the first one default
+        if (newList.isNotEmpty() && newList.none { it.isDefault }) {
+            newList[0] = newList[0].copy(isDefault = true)
+        }
+        _uiState.update { it.copy(addressList = newList) }
         saveChangesToFirebase()
     }
 
@@ -87,6 +112,7 @@ class ProfileViewModel @JvmOverloads constructor(
             name = currentState.name,
             email = currentState.email,
             address = currentState.address,
+            addressList = currentState.addressList,
             phone = currentState.phone,
             favoriteWorkers = currentState.favoriteWorkers,
             settings = currentState.settings
@@ -95,6 +121,7 @@ class ProfileViewModel @JvmOverloads constructor(
             name = currentState.name,
             email = currentState.email,
             address = currentState.address,
+            addressList = currentState.addressList,
             phone = currentState.phone,
             favoriteWorkers = currentState.favoriteWorkers,
             settings = currentState.settings

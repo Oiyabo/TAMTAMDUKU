@@ -34,7 +34,6 @@ fun EditProfileScreen(
 
     var name by remember(uiState.name) { mutableStateOf(if(uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
     var email by remember(uiState.email) { mutableStateOf(if(uiState.email.isEmpty()) "banglijen@gmail.com" else uiState.email) }
-    var address by remember(uiState.address) { mutableStateOf(if(uiState.address.isEmpty()) "GIK LIC" else uiState.address) }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
@@ -109,14 +108,7 @@ fun EditProfileScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            ProfileTextField(
-                label = "Alamat",
-                value = address,
-                onValueChange = { address = it },
-                placeholder = ""
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
 
             ProfileTextField(
                 label = "Ubah Password",
@@ -138,7 +130,7 @@ fun EditProfileScreen(
 
             Button(
                 onClick = { 
-                    viewModel.updateProfile(name, email, address)
+                    viewModel.updateProfile(name, email, uiState.address)
                     onBack()
                 },
                 modifier = Modifier
