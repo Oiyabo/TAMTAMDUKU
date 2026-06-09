@@ -220,7 +220,8 @@ fun HomeScreen(
                 WorkerCard(
                     worker = randomWorker,
                     onClick = { onNavigateToDetail(randomWorker.nama) },
-                    isFavorite = uiState.favoriteWorkerIds.contains(randomWorker.id)
+                    isFavorite = uiState.favoriteWorkerIds.contains(randomWorker.id),
+                    onFavoriteToggle = { viewModel.toggleFavorite(randomWorker.id) }
                 )
             }
             

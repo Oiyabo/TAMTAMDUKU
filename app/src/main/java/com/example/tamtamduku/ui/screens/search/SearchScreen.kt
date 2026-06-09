@@ -91,7 +91,8 @@ fun SearchScreen(
                         WorkerCard(
                             worker = worker, 
                             onClick = { onNavigateToDetail(worker.nama) },
-                            isFavorite = uiState.favoriteWorkerIds.contains(worker.id)
+                            isFavorite = uiState.favoriteWorkerIds.contains(worker.id),
+                            onFavoriteToggle = { viewModel.toggleFavorite(worker.id) }
                         )
                     }
                     if (uiState.filteredWorkers.isEmpty() && !uiState.isLoading) {

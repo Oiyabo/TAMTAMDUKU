@@ -258,6 +258,12 @@ class WorkerRepository {
     }
 
     // Favorites
+    fun addFavoriteWorker(userId: String, workerId: String) {
+        if (userId.isEmpty() || workerId.isEmpty()) return
+        firestore.collection("users").document(userId)
+            .update("favoriteWorkers", com.google.firebase.firestore.FieldValue.arrayUnion(workerId))
+    }
+
     fun removeFavoriteWorker(userId: String, workerId: String) {
         if (userId.isEmpty() || workerId.isEmpty()) return
         firestore.collection("users").document(userId)
