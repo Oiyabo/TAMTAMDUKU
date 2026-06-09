@@ -17,7 +17,8 @@ data class VocaWorker(
     val layanan: List<WorkerLayanan> = emptyList(),
     val portofolio: List<WorkerPortofolio> = emptyList(),
     val reviewSummary: ReviewSummary = ReviewSummary(),
-    val ulasan: List<WorkerReview> = emptyList()
+    val ulasan: List<WorkerReview> = emptyList(),
+    val pengalaman: List<WorkerPengalaman> = emptyList()
 )
 
 data class WorkerLayanan(
@@ -45,4 +46,11 @@ data class WorkerReview(
     val rating: Int = 0,
     val comment: String = "",
     val date: String = ""
+)
+
+data class WorkerPengalaman(
+    val id: String = "",
+    val judul: String = "",
+    val tempat: String = "",
+    val tahun: String = ""
 )

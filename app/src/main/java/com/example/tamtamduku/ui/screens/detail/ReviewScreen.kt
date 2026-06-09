@@ -14,6 +14,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,6 +46,15 @@ fun ReviewScreen(
     
     val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = MaterialTheme.colorScheme.primary
+
+    val ratingDescription = when (rating) {
+        1 -> "Sangat Buruk"
+        2 -> "Buruk"
+        3 -> "Cukup Baik"
+        4 -> "Baik"
+        5 -> "Sangat Baik"
+        else -> stringResource(R.string.beri_opini_anda)
+    }
 
     Scaffold(
         topBar = {
@@ -134,9 +144,9 @@ fun ReviewScreen(
                 repeat(5) { index ->
                     IconButton(onClick = { rating = index + 1 }) {
                         Icon(
-                            imageVector = Icons.Default.Star,
+                            imageVector = if (index < rating) Icons.Default.Star else Icons.Outlined.Star,
                             contentDescription = null,
-                            tint = if (index < rating) Color(0xFFFFD700) else MaterialTheme.colorScheme.background,
+                            tint = if (index < rating) Color(0xFFFFD700) else Color.Gray,
                             modifier = Modifier.size(48.dp)
                         )
                     }
@@ -146,11 +156,12 @@ fun ReviewScreen(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = stringResource(R.string.beri_opini_anda),
+                text = ratingDescription,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.secondaryContainer,
-                fontSize = 12.sp
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -185,7 +196,22 @@ fun ReviewScreen(
 
             // Tombol Kirim
             Button(
-                onClick = { onBack() },
+                onClick = { 
+                    if (rating > 0 && worker != null && reviewText.isNotBlank()) {
+                        viewModel.submitReview(worker.id, rating, reviewText) { success ->
+                            if (success) {
+                                onBack()
+                            }
+                        }
+                    } else if (rating > 0 && worker != null) {
+                        // Option to submit without text
+                        viewModel.submitReview(worker.id, rating, reviewText) { success ->
+                            if (success) {
+                                onBack()
+                            }
+                        }
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),

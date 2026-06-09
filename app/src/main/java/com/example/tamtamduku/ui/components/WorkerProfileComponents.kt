@@ -29,73 +29,31 @@ import coil.compose.AsyncImage
 import com.example.tamtamduku.data.model.VocaWorker
 import java.util.Locale
 
-// --- MOCK DATA LOGIC ---
-data class MockExperience(val duration: String, val role: String, val period: String)
-data class MockReview(val name: String, val timeAgo: String, val rating: Int, val text: String, val service: String)
-data class MockPortfolio(val title: String, val description: String, val tags: List<String>, val imageUrl: String)
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
-fun generateMockExperiences(worker: VocaWorker): List<MockExperience> {
-    return listOf(
-        MockExperience("5 Tahun", "Senior ${worker.pekerjaan}", "Jan 2020 - Sekarang"),
-        MockExperience("2 Tahun", "Junior ${worker.pekerjaan}", "Jan 2018 - Des 2019")
-    )
-}
-
-fun generateMockPortfolios(worker: VocaWorker): List<MockPortfolio> {
-    val job = worker.pekerjaan.lowercase()
-    val keyword = when {
-        job.contains("apoteker") || job.contains("medis") || job.contains("dokter") -> "medicine,doctor"
-        job.contains("teknisi") || job.contains("listrik") || job.contains("ac") -> "technician,repair"
-        job.contains("ledeng") || job.contains("bangunan") || job.contains("tukang") -> "construction,plumbing"
-        job.contains("developer") || job.contains("programmer") -> "coding,computer"
-        job.contains("desain") || job.contains("graphic") -> "design,art"
-        job.contains("bersih") || job.contains("cleaning") -> "cleaning,house"
-        else -> "work,professional"
+fun getRatingDistribution(reviews: List<com.example.tamtamduku.data.model.WorkerReview>): List<Float> {
+    if (reviews.isEmpty()) return listOf(0f, 0f, 0f, 0f, 0f)
+    
+    val totalReviews = reviews.size.toFloat()
+    val counts = IntArray(5)
+    
+    for (review in reviews) {
+        if (review.rating in 1..5) {
+            counts[5 - review.rating]++ // Index 0 is 5 stars, index 4 is 1 star
+        }
     }
-
-    return listOf(
-        MockPortfolio(
-            title = "Proyek ${worker.pekerjaan} 1",
-            description = "Penyelesaian tugas dan tanggung jawab terkait ${worker.pekerjaan} dengan standar kualitas tinggi.",
-            tags = worker.skills.take(2),
-            imageUrl = "https://loremflickr.com/200/150/$keyword?random=1"
-        ),
-        MockPortfolio(
-            title = "Proyek ${worker.pekerjaan} 2",
-            description = "Kolaborasi dan implementasi solusi inovatif dalam bidang ${worker.pekerjaan}.",
-            tags = worker.skills.takeLast(2),
-            imageUrl = "https://loremflickr.com/200/150/$keyword?random=2"
-        ),
-        MockPortfolio(
-            title = "Proyek ${worker.pekerjaan} 3",
-            description = "Penanganan kasus khusus dan pemeliharaan sistem di sektor ${worker.pekerjaan}.",
-            tags = worker.skills.take(1),
-            imageUrl = "https://loremflickr.com/200/150/$keyword?random=3"
-        )
-    )
-}
-
-val mockReviews = listOf(
-    MockReview("Maulana Ramadhan", "2 hari lalu", 5, "Sangat profesional dan cepat", "Pelayanan Reguler"),
-    MockReview("Keisha Aurel Ratu", "2 hari lalu", 5, "Puas sekali dengan hasil kerjanya", "Konsultasi"),
-    MockReview("Annisa Syifa Hakim", "2 hari lalu", 4, "Bagus dan sesuai ekspektasi", "Pengerjaan Proyek")
-)
-
-fun getRatingDistribution(rating: Double): List<Float> {
-    return when {
-        rating >= 4.8 -> listOf(0.85f, 0.10f, 0.05f, 0f, 0f)
-        rating >= 4.5 -> listOf(0.60f, 0.30f, 0.10f, 0f, 0f)
-        rating >= 4.0 -> listOf(0.40f, 0.40f, 0.15f, 0.05f, 0f)
-        rating >= 3.5 -> listOf(0.20f, 0.40f, 0.30f, 0.10f, 0f)
-        rating >= 3.0 -> listOf(0.10f, 0.20f, 0.40f, 0.20f, 0.10f)
-        else -> listOf(0.05f, 0.10f, 0.20f, 0.30f, 0.35f)
-    }
+    
+    return counts.map { it / totalReviews }
 }
 // -----------------
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfilTabContent(worker: VocaWorker) {
-    val experiences = generateMockExperiences(worker)
+    val experiences = worker.pengalaman
     
     Column(
         modifier = Modifier
@@ -114,8 +72,8 @@ fun ProfilTabContent(worker: VocaWorker) {
             )
         }
 
-        // Keahlian
-        if (worker.skills.isNotEmpty()) {
+        // Keahlian (menggunakan kategori)
+        if (worker.kategori.isNotEmpty()) {
             Column {
                 Text(stringResource(R.string.keahlian), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
                 @OptIn(ExperimentalLayoutApi::class)
@@ -123,14 +81,14 @@ fun ProfilTabContent(worker: VocaWorker) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    worker.skills.forEach { skill ->
+                    worker.kategori.forEach { kategori ->
                         Box(
                             modifier = Modifier
                                 .background(Color(0xFFFFF0E6), RoundedCornerShape(8.dp))
                                 .border(1.dp, Color(0xFFFFE0CC), RoundedCornerShape(8.dp))
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
-                            Text(text = skill, color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                            Text(text = kategori, color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -138,24 +96,26 @@ fun ProfilTabContent(worker: VocaWorker) {
         }
 
         // Pengalaman
-        Column {
-            Text(stringResource(R.string.pengalaman), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 12.dp))
-            experiences.forEach { exp ->
-                Row(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.BusinessCenter,
-                        contentDescription = null,
-                        tint = Color(0xFFFF8C00),
-                        modifier = Modifier.size(24.dp).padding(top = 2.dp)
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Column {
-                        Text(exp.duration, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                        Text(exp.role, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
-                        Text(exp.period, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (experiences.isNotEmpty()) {
+            Column {
+                Text(stringResource(R.string.pengalaman), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 12.dp))
+                experiences.forEach { exp ->
+                    Row(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.BusinessCenter,
+                            contentDescription = null,
+                            tint = Color(0xFFFF8C00),
+                            modifier = Modifier.size(24.dp).padding(top = 2.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text(exp.tahun, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                            Text(exp.judul, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                            Text(exp.tempat, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                     }
                 }
             }
@@ -163,11 +123,49 @@ fun ProfilTabContent(worker: VocaWorker) {
 
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
-        // Tarif
+        // Tarif (Layanan)
+        var expanded by remember { mutableStateOf(false) }
+        var selectedLayanan by remember(worker.layanan) { mutableStateOf(worker.layanan.firstOrNull()) }
+
         Column {
             Text(stringResource(R.string.tarif), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
-            val formattedSalary = String.format(Locale("id", "ID"), "%,d", worker.baseSalary.toInt()).replace(',', '.')
-            Text("RP $formattedSalary / jam", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            
+            if (worker.layanan.isNotEmpty() && selectedLayanan != null) {
+                val formattedSalary = String.format(Locale("id", "ID"), "%,d", selectedLayanan!!.harga.toInt()).replace(',', '.')
+                
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = !expanded }
+                ) {
+                    OutlinedTextField(
+                        value = "Rp $formattedSalary / ${selectedLayanan!!.namaLayanan}",
+                        onValueChange = {},
+                        readOnly = true,
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+                        modifier = Modifier.fillMaxWidth().menuAnchor()
+                    )
+                    
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        worker.layanan.forEach { layanan ->
+                            val formattedHarga = String.format(Locale("id", "ID"), "%,d", layanan.harga.toInt()).replace(',', '.')
+                            DropdownMenuItem(
+                                text = { Text("Rp $formattedHarga / ${layanan.namaLayanan}") },
+                                onClick = { 
+                                    selectedLayanan = layanan
+                                    expanded = false 
+                                }
+                            )
+                        }
+                    }
+                }
+            } else {
+                val formattedSalary = String.format(Locale("id", "ID"), "%,d", worker.baseSalary.toInt()).replace(',', '.')
+                Text("RP $formattedSalary / jam", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            }
             Text(stringResource(R.string.minimal_pemesanan_2_jam), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
         }
         
@@ -177,7 +175,7 @@ fun ProfilTabContent(worker: VocaWorker) {
 
 @Composable
 fun UlasanTabContent(worker: VocaWorker) {
-    val distribution = getRatingDistribution(worker.reviewSummary.averageRating)
+    val distribution = getRatingDistribution(worker.ulasan)
     
     Column(
         modifier = Modifier
@@ -211,7 +209,7 @@ fun UlasanTabContent(worker: VocaWorker) {
                             )
                         }
                     }
-                    Text(stringResource(R.string.review_120_ulasan), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
+                    Text("${worker.reviewSummary.totalReviews} ulasan", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
                 }
                 
                 // Progress Bars
@@ -260,7 +258,7 @@ fun UlasanTabContent(worker: VocaWorker) {
         }
 
         // Reviews List
-        mockReviews.forEach { review ->
+        worker.ulasan.forEach { review ->
             Card(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                 shape = RoundedCornerShape(12.dp),
@@ -277,26 +275,16 @@ fun UlasanTabContent(worker: VocaWorker) {
                             Icon(Icons.Default.Person, null, tint = Color(0xFFFF8C00), modifier = Modifier.size(36.dp).background(Color(0xFFFFF0E6), CircleShape).padding(6.dp))
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
-                                Text(review.name, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text(review.username, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                                 Row {
                                     repeat(review.rating) { Icon(Icons.Default.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(12.dp)) }
                                 }
                             }
                         }
-                        Text(review.timeAgo, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(review.date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(review.text, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(stringResource(R.string.layanan), fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Box(
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .background(Color(0xFFFFF0E6), RoundedCornerShape(4.dp))
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                    ) {
-                        Text(review.service, color = Color(0xFFFF8C00), fontSize = 10.sp, fontWeight = FontWeight.SemiBold)
-                    }
+                    Text(review.comment, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
                 }
             }
         }
@@ -307,7 +295,7 @@ fun UlasanTabContent(worker: VocaWorker) {
 
 @Composable
 fun PortofolioTabContent(worker: VocaWorker) {
-    val portfolios = generateMockPortfolios(worker)
+    val portfolios = worker.portofolio
     
     Column(
         modifier = Modifier
@@ -326,7 +314,7 @@ fun PortofolioTabContent(worker: VocaWorker) {
             ) {
                 // Image Thumbnail
                 AsyncImage(
-                    model = portfolio.imageUrl,
+                    model = portfolio.imageUrl.ifEmpty { "https://loremflickr.com/200/150/work?random=${portfolio.id}" },
                     contentDescription = "Portfolio Image",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -346,21 +334,6 @@ fun PortofolioTabContent(worker: VocaWorker) {
                         lineHeight = 16.sp,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
-                    @OptIn(ExperimentalLayoutApi::class)
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        portfolio.tags.forEach { tag ->
-                            Box(
-                                modifier = Modifier
-                                    .background(Color(0xFFFFF0E6), RoundedCornerShape(4.dp))
-                                    .padding(horizontal = 6.dp, vertical = 2.dp)
-                            ) {
-                                Text(text = tag, color = Color(0xFFFF8C00), fontSize = 10.sp, fontWeight = FontWeight.Medium)
-                            }
-                        }
-                    }
                 }
             }
         }

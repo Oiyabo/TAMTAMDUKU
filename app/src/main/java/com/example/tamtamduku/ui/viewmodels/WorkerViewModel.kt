@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.tamtamduku.data.model.WorkerReview
 
 @RequiresApi(Build.VERSION_CODES.O)
 class WorkerViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
@@ -205,6 +206,39 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                 } else {
                     repository.addFavoriteWorker(user.id, workerId)
                 }
+            }
+        }
+    }
+
+    fun submitReview(workerId: String, rating: Int, comment: String, onComplete: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val users = repository.getUsers().firstOrNull()
+            val user = users?.firstOrNull()
+            val worker = _uiState.value.workers.find { it.id == workerId }
+            
+            if (user != null && worker != null) {
+                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val currentDate = sdf.format(Date())
+                
+                val review = WorkerReview(
+                    id = "rev_${System.currentTimeMillis()}",
+                    userId = user.id,
+                    username = user.name.ifEmpty { "User" },
+                    rating = rating,
+                    comment = comment,
+                    date = currentDate
+                )
+                
+                val currentSummary = worker.reviewSummary
+                val newTotalReviews = currentSummary.totalReviews + 1
+                val newAverageRating = ((currentSummary.averageRating * currentSummary.totalReviews) + rating) / newTotalReviews
+                
+                // Format average rating to 1 decimal place max (e.g., 4.5)
+                val roundedAverageRating = Math.round(newAverageRating * 10.0) / 10.0
+                
+                repository.submitWorkerReview(workerId, review, roundedAverageRating, newTotalReviews, onComplete)
+            } else {
+                onComplete(false)
             }
         }
     }

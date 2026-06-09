@@ -269,4 +269,15 @@ class WorkerRepository {
         firestore.collection("users").document(userId)
             .update("favoriteWorkers", com.google.firebase.firestore.FieldValue.arrayRemove(workerId))
     }
+
+    fun submitWorkerReview(workerId: String, review: WorkerReview, newAverageRating: Double, newTotalReviews: Int, onComplete: (Boolean) -> Unit) {
+        val updates = mapOf(
+            "ulasan" to com.google.firebase.firestore.FieldValue.arrayUnion(review),
+            "reviewSummary.averageRating" to newAverageRating,
+            "reviewSummary.totalReviews" to newTotalReviews
+        )
+        firestore.collection("workers").document(workerId).update(updates)
+            .addOnSuccessListener { onComplete(true) }
+            .addOnFailureListener { onComplete(false) }
+    }
 }
