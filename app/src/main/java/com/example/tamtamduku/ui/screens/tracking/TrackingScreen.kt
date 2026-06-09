@@ -39,7 +39,12 @@ fun TrackingScreen(
     val uiState by viewModel.uiState.collectAsState()
     
     // Tab states
-    val tabs = listOf("Semua", "Selesai", "Dibatalkan", "Dikerjakan")
+    val tabs = listOf(
+        stringResource(R.string.semua_status),
+        stringResource(R.string.selesai),
+        stringResource(R.string.dibatalkan),
+        stringResource(R.string.status_dikerjakan)
+    )
     var selectedTab by remember { mutableIntStateOf(0) }
 
     Column(
@@ -239,6 +244,13 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
 
 @Composable
 fun StatusBadge(status: String) {
+    val displayStatus = when (status) {
+        "Selesai" -> stringResource(R.string.selesai)
+        "Batal" -> stringResource(R.string.batal)
+        "Dikerjakan" -> stringResource(R.string.status_dikerjakan)
+        else -> status
+    }
+
     val (bgColor, textColor) = when (status) {
         "Selesai" -> Color(0xFF6FCF97) to MaterialTheme.colorScheme.background
         "Batal" -> Color(0xFFFF6B6B) to MaterialTheme.colorScheme.background
@@ -253,7 +265,7 @@ fun StatusBadge(status: String) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = status,
+            text = displayStatus,
             color = textColor,
             fontSize = 10.sp,
             fontWeight = FontWeight.Bold
