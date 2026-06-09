@@ -202,6 +202,9 @@ fun AppNavigation(
                     onNavigateToNotifications = { navCon.navigate("notifications") },
                     onNavigateToDetail = { workerName ->
                         navCon.navigate("detail/${Uri.encode(workerName)}")
+                    },
+                    onNavigateToPaymentTest = {
+                        navCon.navigate("payment/TestWorker/TestLayanan")
                     }
                 )
             }

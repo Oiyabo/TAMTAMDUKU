@@ -23,7 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-
+import androidx.compose.ui.platform.LocalContext
+import com.example.tamtamduku.payment.PaymentRepository
+import com.midtrans.sdk.corekit.core.MidtransSDK
+import kotlinx.coroutines.launch
+import java.util.UUID
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentScreen(
@@ -37,7 +41,22 @@ fun PaymentScreen(
     val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
     val profileUrl = worker?.profileUrl ?: ""
     var selectedPaymentMethod by remember { mutableStateOf("Qris") }
-
+    
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val repository = remember { PaymentRepository() }
+    
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    
+    LaunchedEffect(Unit) {
+        com.example.tamtamduku.payment.PaymentEventBus.paymentResult.collect { success ->
+            if (success) {
+                onNavigateToSuccess()
+            }
+        }
+    }
+    
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -65,14 +84,51 @@ fun PaymentScreen(
         },
         containerColor = Color(0xFFFFFDF8),
         bottomBar = {
-            Box(modifier = Modifier.fillMaxWidth().padding(24.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(24.dp)
+            ) {
+                if (errorMessage != null) {
+                    Text(
+                        text = "Error: $errorMessage", 
+                        color = MaterialTheme.colorScheme.error, 
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                }
                 Button(
-                    onClick = onNavigateToSuccess,
+                    onClick = {
+                        isLoading = true
+                        errorMessage = null
+                        coroutineScope.launch {
+                            try {
+                                val orderId = "ORDER-${UUID.randomUUID().toString().take(8)}"
+                                val snapToken = repository.getSnapToken(
+                                    orderId = orderId,
+                                    amount = 255000L,
+                                    name = "User VOCA",
+                                    email = "user@example.com"
+                                )
+                                MidtransSDK.getInstance().startPaymentUiFlow(context, snapToken)
+                            } catch (e: Exception) {
+                                errorMessage = e.message
+                            } finally {
+                                isLoading = false
+                            }
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00))
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00)),
+                    enabled = !isLoading
                 ) {
-                    Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                    if (isLoading) {
+                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                    } else {
+                        Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                    }
                 }
             }
         }
