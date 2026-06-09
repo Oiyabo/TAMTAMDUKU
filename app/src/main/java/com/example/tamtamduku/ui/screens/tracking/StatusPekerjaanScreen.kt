@@ -77,7 +77,7 @@ fun StatusPekerjaanScreen(
             Spacer(modifier = Modifier.height(16.dp))
             
             Text(
-                text = stringResource(R.string.fe0732001),
+                text = item?.invoiceNumber ?: "-",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )

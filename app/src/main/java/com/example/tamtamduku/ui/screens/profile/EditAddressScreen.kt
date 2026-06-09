@@ -100,7 +100,7 @@ fun EditAddressScreen(
             ) {
                 OutlinedButton(
                     onClick = { 
-                        viewModel.deleteAddress()
+                        viewModel.updateProfile(name, uiState.email, "")
                         onBack()
                     },
                     modifier = Modifier
@@ -121,7 +121,7 @@ fun EditAddressScreen(
 
                 Button(
                     onClick = { 
-                        viewModel.updateAddress(addressDetail)
+                        viewModel.updateProfile(name, uiState.email, addressDetail)
                         onBack()
                     },
                     modifier = Modifier
