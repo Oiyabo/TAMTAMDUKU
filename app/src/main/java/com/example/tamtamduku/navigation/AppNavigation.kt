@@ -222,7 +222,8 @@ fun AppNavigation(
                     },
                     onNavigateToPaymentTest = {
                         navCon.navigate("payment/TestWorker/TestLayanan")
-                    }
+                    },
+                    onNavigateToAddress = { navCon.navigate("address_list") }
                 )
             }
             composable("notifications") {

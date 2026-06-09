@@ -35,7 +35,8 @@ fun HomeScreen(
     onNavigateToSearch: (String) -> Unit = {},
     onNavigateToNotifications: () -> Unit = {},
     onNavigateToDetail: (String) -> Unit = {},
-    onNavigateToPaymentTest: () -> Unit = {}
+    onNavigateToPaymentTest: () -> Unit = {},
+    onNavigateToAddress: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val randomWorker = remember(uiState.workers) {
@@ -53,7 +54,10 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable { onNavigateToAddress() }
+                ) {
                     Icon(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = "Location",
