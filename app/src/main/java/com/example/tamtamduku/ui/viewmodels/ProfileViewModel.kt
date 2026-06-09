@@ -69,13 +69,21 @@ class ProfileViewModel @JvmOverloads constructor(
         onLogoutSuccess()
     }
 
-    fun addAddress(name: String, fullAddress: String) {
-        val newList = _uiState.value.addressList.toMutableList()
+    fun addAddress(name: String, fullAddress: String, isDefault: Boolean) {
+        var newList = _uiState.value.addressList.toMutableList()
         val isFirst = newList.isEmpty()
+        val finalIsDefault = isDefault || isFirst
+        
+        if (finalIsDefault) {
+            // Unset others
+            newList = newList.map { it.copy(isDefault = false) }.toMutableList()
+            _uiState.update { it.copy(address = fullAddress) }
+        }
+        
         val newAddress = UserAddress(
             name = name,
             fullAddress = fullAddress,
-            isDefault = isFirst
+            isDefault = finalIsDefault
         )
         newList.add(newAddress)
         _uiState.update { it.copy(addressList = newList) }
@@ -83,10 +91,12 @@ class ProfileViewModel @JvmOverloads constructor(
     }
 
     fun setDefaultAddress(id: String) {
+        var selectedAddress = ""
         val newList = _uiState.value.addressList.map { 
+            if (it.id == id) selectedAddress = it.fullAddress
             it.copy(isDefault = it.id == id)
         }
-        _uiState.update { it.copy(addressList = newList) }
+        _uiState.update { it.copy(addressList = newList, address = selectedAddress) }
         saveChangesToFirebase()
     }
 
@@ -95,6 +105,9 @@ class ProfileViewModel @JvmOverloads constructor(
         // If we deleted the default, make the first one default
         if (newList.isNotEmpty() && newList.none { it.isDefault }) {
             newList[0] = newList[0].copy(isDefault = true)
+            _uiState.update { it.copy(address = newList[0].fullAddress) }
+        } else if (newList.isEmpty()) {
+            _uiState.update { it.copy(address = "") }
         }
         _uiState.update { it.copy(addressList = newList) }
         saveChangesToFirebase()
