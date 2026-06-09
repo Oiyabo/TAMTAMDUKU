@@ -93,10 +93,10 @@ fun AppNavigation(
         bottomBar = {
             if (currentRoute == "home" || currentRoute == "chat" || currentRoute == "tracking" || currentRoute == "profile") {
                 NavigationBar(
-                    modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
-                    windowInsets = WindowInsets(0.dp),
-                    containerColor = Color(0xFFFFFDF8),
-                    tonalElevation = 8.dp
+                    modifier = Modifier.fillMaxWidth(),
+                    windowInsets = WindowInsets.navigationBars,
+                    containerColor = Color.White,
+                    tonalElevation = 0.dp
                 ) {
                     NavigationBarItem(
                         icon = { Icon(Icons.Outlined.Home, contentDescription = "Home") },

@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.chat
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +37,7 @@ fun ChatPage(
     val chats by viewModel.chats.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-    val bgColor = Color(0xFFFFFDFB)
+    val bgColor = MaterialTheme.colorScheme.background
     
     val filteredChats = if (searchQuery.isBlank()) {
         chats
@@ -54,10 +57,10 @@ fun ChatPage(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Chat",
+                        text = stringResource(R.string.chat),
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 
@@ -71,7 +74,7 @@ fun ChatPage(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Undo,
                         contentDescription = "Back",
-                        tint = Color.Black,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(28.dp).clickable { /* undo */ }
                     )
                     Spacer(modifier = Modifier.width(16.dp))
@@ -81,23 +84,23 @@ fun ChatPage(
                         modifier = Modifier.weight(1f).height(50.dp),
                         placeholder = { 
                             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text("Nama / Chat", color = Color.Gray, fontSize = 14.sp)
-                                Text("(Faris, Adit)", color = Color.LightGray, fontSize = 14.sp)
+                                Text(stringResource(R.string.nama_chat), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                                Text(stringResource(R.string.faris_adit), color = MaterialTheme.colorScheme.outlineVariant, fontSize = 14.sp)
                             }
                         },
                         shape = RoundedCornerShape(8.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.Gray,
-                            unfocusedBorderColor = Color.Gray,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            focusedContainerColor = MaterialTheme.colorScheme.background,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.background
                         )
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = Color.Black,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(28.dp).clickable { /* search */ }
                     )
                 }
@@ -130,7 +133,7 @@ fun ChatList(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 0.dp)
     ) {
         items(chats) { chat ->
             ChatItem(chat) {
@@ -138,7 +141,7 @@ fun ChatList(
             }
             HorizontalDivider(
                 thickness = 1.dp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
     }
@@ -170,13 +173,13 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape),
-            color = Color.DarkGray
+            color = MaterialTheme.colorScheme.secondaryContainer
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = if (chat.name.isNotEmpty()) chat.name.take(1) else "?",
                     style = MaterialTheme.typography.titleMedium,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.background
                 )
             }
         }
@@ -192,12 +195,12 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
                     text = chat.name,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
                 Text(
                     text = formattedTime,
                     fontSize = 14.sp,
-                    color = Color.DarkGray
+                    color = MaterialTheme.colorScheme.secondaryContainer
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -208,14 +211,14 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
                 Text(
                     text = chat.lastMessage,
                     fontSize = 14.sp,
-                    color = Color.DarkGray,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     maxLines = 1
                 )
                 if (chat.unreadCount > 0) {
                     Badge(
-                        containerColor = Color(0xFFF97316)
+                        containerColor = MaterialTheme.colorScheme.primary
                     ) {
-                        Text(chat.unreadCount.toString(), color = Color.White)
+                        Text(chat.unreadCount.toString(), color = MaterialTheme.colorScheme.background)
                     }
                 }
             }

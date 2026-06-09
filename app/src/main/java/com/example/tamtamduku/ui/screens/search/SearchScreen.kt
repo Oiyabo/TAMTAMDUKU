@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.search
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -43,7 +46,7 @@ fun SearchScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.Undo, "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.Undo, "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                     OutlinedTextField(
                         value = uiState.searchQuery,
@@ -51,30 +54,30 @@ fun SearchScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp),
-                        placeholder = { Text("Search", color = Color.Gray) },
+                        placeholder = { Text(stringResource(R.string.search), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
-                            cursorColor = Color.Black
+                            focusedContainerColor = MaterialTheme.colorScheme.background,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                            focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                            cursorColor = MaterialTheme.colorScheme.onBackground
                         ),
                         shape = RoundedCornerShape(24.dp)
                     )
                     IconButton(
                         onClick = { showFilterSheet = true },
                         modifier = Modifier
-                            .background(Color.White, RoundedCornerShape(8.dp))
-                            .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
+                            .border(2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
                             .padding(4.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Tune,
                             contentDescription = "Filter",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
@@ -94,7 +97,7 @@ fun SearchScreen(
                     if (uiState.filteredWorkers.isEmpty() && !uiState.isLoading) {
                         item {
                             Box(Modifier.fillMaxWidth().padding(32.dp), contentAlignment = Alignment.Center) {
-                                Text("Tidak ada hasil yang cocok", color = MaterialTheme.colorScheme.outline)
+                                Text(stringResource(R.string.tidak_ada_hasil_yang_cocok), color = MaterialTheme.colorScheme.outline)
                             }
                         }
                     }
@@ -104,11 +107,14 @@ fun SearchScreen(
             if (viewModel.isAnyFilterActive()) {
                 ExtendedFloatingActionButton(
                     onClick = viewModel::onResetFilter,
-                    modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .navigationBarsPadding()
+                        .padding(16.dp),
                     containerColor = MaterialTheme.colorScheme.errorContainer,
                     contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     icon = { Icon(Icons.Default.Close, null) },
-                    text = { Text("Reset Filter") }
+                    text = { Text(stringResource(R.string.reset_filter)) }
                 )
             }
         }

@@ -6,9 +6,10 @@ import android.content.SharedPreferences
 class SessionManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("voca_session", Context.MODE_PRIVATE)
 
-    fun saveToken(token: String) {
+    fun saveToken(token: String, userId: String) {
         prefs.edit()
             .putString("auth_token", token)
+            .putString("user_id", userId)
             .putLong("login_timestamp", System.currentTimeMillis())
             .apply()
     }
@@ -21,6 +22,10 @@ class SessionManager(context: Context) {
             return null
         }
         return token
+    }
+
+    fun getUserId(): String? {
+        return prefs.getString("user_id", null)
     }
 
     fun clearSession() {

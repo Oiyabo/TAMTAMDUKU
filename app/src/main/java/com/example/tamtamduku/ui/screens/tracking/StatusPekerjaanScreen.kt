@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.tracking
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -34,8 +37,8 @@ fun StatusPekerjaanScreen(
     workerName: String,
     viewModel: TrackingViewModel
 ) {
-    val bgColor = Color(0xFFFFFDFB)
-    val primaryOrange = Color(0xFFF97316)
+    val bgColor = MaterialTheme.colorScheme.background
+    val primaryOrange = MaterialTheme.colorScheme.primary
     val yellowBadge = Color(0xFFFFC107)
 
     val uiState by viewModel.uiState.collectAsState()
@@ -47,7 +50,7 @@ fun StatusPekerjaanScreen(
             TopAppBar(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("Status Pekerjaan", fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
+                        Text(stringResource(R.string.status_pekerjaan), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                     }
                 },
                 navigationIcon = {
@@ -74,7 +77,7 @@ fun StatusPekerjaanScreen(
             Spacer(modifier = Modifier.height(16.dp))
             
             Text(
-                text = "FE-0732-001",
+                text = stringResource(R.string.fe0732001),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -89,7 +92,7 @@ fun StatusPekerjaanScreen(
                     text = if (isSelesai) "Selesai" else if (item?.status == "Batal") "Dibatalkan" else item?.tracking?.posisiSaatIni ?: "Sedang Dikerjakan",
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                     fontWeight = FontWeight.Bold,
-                    color = if (isSelesai) Color(0xFF4CAF50) else if (item?.status == "Batal") Color(0xFFF44336) else Color.Black
+                    color = if (isSelesai) Color(0xFF4CAF50) else if (item?.status == "Batal") Color(0xFFF44336) else MaterialTheme.colorScheme.onBackground
                 )
             }
 
@@ -116,7 +119,7 @@ fun StatusPekerjaanScreen(
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Permintaan Diterima",
+                    title = stringResource(R.string.permintaan_diterima),
                     time = if (statusLevel >= 2) item?.date ?: "-" else "-",
                     isCompleted = statusLevel >= 2,
                     isLast = false
@@ -128,19 +131,19 @@ fun StatusPekerjaanScreen(
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Pekerjaan Dimulai",
+                    title = stringResource(R.string.pekerjaan_dimulai),
                     time = if (statusLevel >= 4) item?.date ?: "-" else "-",
                     isCompleted = statusLevel >= 4,
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Sedang Dikerjakan",
+                    title = stringResource(R.string.sedang_dikerjakan),
                     time = if (statusLevel >= 5) item?.date ?: "-" else "-",
                     isCompleted = statusLevel >= 5,
                     isLast = false
                 )
                 TimelineItem(
-                    title = if (isBatal) "Dibatalkan" else "Selesai",
+                    title = if (isBatal) "Dibatalkan" else stringResource(R.string.selesai),
                     time = if (statusLevel >= 6) item?.date ?: "-" else "-",
                     isCompleted = statusLevel >= 6,
                     isLast = true
@@ -151,7 +154,7 @@ fun StatusPekerjaanScreen(
             // Progress bar
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "Progress Pekerjaan",
+                    text = stringResource(R.string.progress_pekerjaan),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
@@ -161,7 +164,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier
                             .weight(1f)
                             .height(12.dp)
-                            .background(Color(0xFFE0E0E0), RoundedCornerShape(50))
+                            .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
                     ) {
                         Box(
                             modifier = Modifier
@@ -185,7 +188,7 @@ fun StatusPekerjaanScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -199,7 +202,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(Color.DarkGray)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
@@ -209,7 +212,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier.weight(1f)
                     )
                     Text(
-                        text = "Chat",
+                        text = stringResource(R.string.chat),
                         color = primaryOrange,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
@@ -238,8 +241,8 @@ fun StatusPekerjaanScreen(
                 enabled = true
             ) {
                 Text(
-                    text = if (isBatal) "Tutup" else "Konfirmasi Pekerjaan Selesai",
-                    color = Color.White,
+                    text = if (isBatal) "Tutup" else stringResource(R.string.konfirmasi_pekerjaan_selesai),
+                    color = if (isSelesai || isBatal) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -261,7 +264,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
                 Icon(
                     imageVector = if (isCompleted) Icons.Default.Check else Icons.Default.Remove,
                     contentDescription = null,
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -277,7 +280,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.padding(bottom = if (isLast) 0.dp else 24.dp)) {
             Text(text = title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = time, color = Color.Gray, fontSize = 12.sp)
+            Text(text = time, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
     }
 }

@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,8 +42,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val bgColor = Color(0xFFFFFDF8)
-    val orangeMain = Color(0xFFFF7A00)
+    val bgColor = MaterialTheme.colorScheme.background
+    val orangeMain = MaterialTheme.colorScheme.primary
 
     Scaffold(
         topBar = {
@@ -48,17 +51,16 @@ fun ProfileScreen(
                 windowInsets = WindowInsets(0.dp),
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(
-                            "Akun Saya",
+                        Text(stringResource(R.string.akun_saya),
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                 },
                 actions = {
@@ -88,7 +90,7 @@ fun ProfileScreen(
                     modifier = Modifier
                         .size(80.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFFFFF0E5)),
+                        .background(MaterialTheme.colorScheme.primaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -106,13 +108,13 @@ fun ProfileScreen(
                         text = uiState.name.ifEmpty { "Emily Johnson" },
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = uiState.email.ifEmpty { "emily.johnson@x.dummyjson.com" },
                         fontSize = 14.sp,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -122,19 +124,19 @@ fun ProfileScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
-                    PremiumProfileMenuItem(icon = Icons.Default.Edit, title = "Edit Profil", onClick = onNavigateToEditProfile)
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
-                    PremiumProfileMenuItem(icon = Icons.Default.LocationOn, title = "Alamat Saya", onClick = onNavigateToAddress)
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
-                    PremiumProfileMenuItem(icon = Icons.Default.Report, title = "Lapor Masalah", onClick = onNavigateToReport)
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
-                    PremiumProfileMenuItem(icon = Icons.Default.Engineering, title = "Pekerja Favorit", onClick = onNavigateToFavorite)
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
-                    PremiumProfileMenuItem(icon = Icons.Default.Settings, title = "Pengaturan", onClick = onNavigateToSettings)
+                    PremiumProfileMenuItem(icon = Icons.Default.Edit, title = stringResource(R.string.edit_profil), onClick = onNavigateToEditProfile)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.LocationOn, title = stringResource(R.string.alamat_saya), onClick = onNavigateToAddress)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.Report, title = stringResource(R.string.lapor_masalah), onClick = onNavigateToReport)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.Engineering, title = stringResource(R.string.pekerja_favorit), onClick = onNavigateToFavorite)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
+                    PremiumProfileMenuItem(icon = Icons.Default.Settings, title = stringResource(R.string.pengaturan), onClick = onNavigateToSettings)
                 }
             }
 
@@ -153,11 +155,9 @@ fun ProfileScreen(
                 ) {
                     Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = Color(0xFFDC2626))
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text("Keluar Akun", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFFDC2626))
+                    Text(stringResource(R.string.keluar_akun), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFFDC2626))
                 }
             }
-            
-            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -179,9 +179,9 @@ fun PremiumProfileMenuItem(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(24.dp), tint = Color(0xFF555555))
             Spacer(modifier = Modifier.width(16.dp))
-            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
+            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onBackground)
         }
-        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = Color.LightGray)
+        Icon(imageVector = Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outlineVariant)
     }
 }
 

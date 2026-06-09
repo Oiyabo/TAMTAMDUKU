@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -39,7 +42,7 @@ fun FavoriteWorkersScreen(
     navCon: NavHostController,
     viewModel: FavoriteWorkersViewModel = viewModel()
 ) {
-    val bgColor = Color(0xFFFFFDFB)
+    val bgColor = MaterialTheme.colorScheme.background
     val workers by viewModel.favoriteWorkers.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
@@ -49,12 +52,12 @@ fun FavoriteWorkersScreen(
                 windowInsets = WindowInsets(0.dp),
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text("Pekerja Favorit", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Text(stringResource(R.string.pekerja_favorit), fontWeight = FontWeight.Bold, fontSize = 18.sp)
                     }
                 },
                 navigationIcon = {
                     IconButton(onClick = { navCon.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = androidx.compose.ui.graphics.Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = androidx.compose.material3.MaterialTheme.colorScheme.onBackground)
                     }
                 },
                 actions = {
@@ -67,11 +70,11 @@ fun FavoriteWorkersScreen(
     ) { paddingValues ->
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Color(0xFFF97316))
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else if (workers.isEmpty()) {
             Box(modifier = Modifier.fillMaxSize().padding(paddingValues), contentAlignment = Alignment.Center) {
-                Text("Tidak ada pekerja favorit", color = Color.Gray, fontSize = 16.sp)
+                Text(stringResource(R.string.tidak_ada_pekerja_favorit), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 16.sp)
             }
         } else {
             LazyColumn(

@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.detail
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -45,7 +48,7 @@ fun OtpVerificationScreen(
 
     if (workerName.isNotEmpty() && worker == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Pekerja tidak ditemukan", color = MaterialTheme.colorScheme.outline)
+            Text(stringResource(R.string.pekerja_tidak_ditemukan), color = MaterialTheme.colorScheme.outline)
         }
         return
     }
@@ -74,13 +77,13 @@ fun OtpVerificationScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    titleContentColor = Color.Black
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
         },
@@ -93,7 +96,7 @@ fun OtpVerificationScreen(
         ) {
             // Watermark "VERIF" in background (faint premium font)
             Text(
-                text = "VERIF",
+                text = stringResource(R.string.verif),
                 color = Color(0xFFECE6DD),
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 32.sp,
@@ -112,10 +115,10 @@ fun OtpVerificationScreen(
 
                 // Title
                 Text(
-                    text = "Verifikasi OTP",
+                    text = stringResource(R.string.verifikasi_otp),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
 
@@ -123,9 +126,9 @@ fun OtpVerificationScreen(
 
                 // Subtitle
                 Text(
-                    text = "Kode OTP telah dikirim ke",
+                    text = stringResource(R.string.kode_otp_telah_dikirim_ke),
                     fontSize = 13.sp,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
 
@@ -133,10 +136,10 @@ fun OtpVerificationScreen(
 
                 // Phone number
                 Text(
-                    text = "0812-xxxx-xxxx",
+                    text = stringResource(R.string.phone_0812xxxxxxxx),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center
                 )
 
@@ -165,7 +168,7 @@ fun OtpVerificationScreen(
                 if (otpCode.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
-                        text = "Hapus Angka",
+                        text = stringResource(R.string.hapus_angka),
                         color = Color(0xFFFF6D00),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -185,7 +188,7 @@ fun OtpVerificationScreen(
                         "Kirim ulang OTP"
                     },
                     fontSize = 13.sp,
-                    color = if (timeLeft > 0) Color.Gray else Color(0xFFFF6D00),
+                    color = if (timeLeft > 0) MaterialTheme.colorScheme.onSurfaceVariant else Color(0xFFFF6D00),
                     modifier = Modifier.clickable(enabled = timeLeft == 0) {
                         timeLeft = 45
                     }
@@ -235,10 +238,10 @@ fun OtpVerificationScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00))
                     ) {
                         Text(
-                            text = "Verifikasi",
+                            text = stringResource(R.string.verifikasi),
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.background
                         )
                     }
 
@@ -253,7 +256,7 @@ fun OtpVerificationScreen(
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFFF6D00))
                     ) {
                         Text(
-                            text = "Ubah Nomor Telepon",
+                            text = stringResource(R.string.ubah_nomor_telepon),
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
                             color = Color(0xFFFF6D00)
@@ -279,7 +282,7 @@ fun OtpBox(
                 color = if (isSelected) Color(0xFFFF6D00) else Color(0xFFFFB070),
                 shape = RoundedCornerShape(10.dp)
             )
-            .background(Color.White, RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(10.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -287,7 +290,7 @@ fun OtpBox(
             text = value,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

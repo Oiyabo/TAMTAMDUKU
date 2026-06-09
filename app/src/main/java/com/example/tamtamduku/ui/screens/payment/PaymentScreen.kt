@@ -1,5 +1,8 @@
 package com.example.tamtamduku.ui.screens.payment
 
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,15 +44,9 @@ fun PaymentScreen(
     var selectedPaymentMethod by remember { mutableStateOf("Qris") }
     
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
     
-
-    
-    Box(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
+    Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -81,25 +77,15 @@ fun PaymentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(24.dp)
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
-                if (errorMessage != null) {
-                    Text(
-                        text = "Error: $errorMessage", 
-                        color = MaterialTheme.colorScheme.error, 
-                        fontSize = 12.sp,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
                 Button(
-                    onClick = {
-                        onNavigateToSimulation(selectedPaymentMethod)
-                    },
+                    onClick = { onNavigateToSimulation(selectedPaymentMethod) },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00))
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 ) {
-                    Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                    Text(stringResource(R.string.bayar_sekarang), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }
@@ -277,5 +263,4 @@ fun PaymentScreen(
             }
         }
     }
-}
 }

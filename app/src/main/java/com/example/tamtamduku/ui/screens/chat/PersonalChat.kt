@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.chat
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -37,7 +40,7 @@ fun PersonalChat(
         chats.find { it.name == userName }
     }
     
-    val bgColor = Color(0xFFFFFDFB)
+    val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = Color(0xFFFF7B00)
     val yellowBubble = Color(0xFFFFD600)
 
@@ -50,13 +53,13 @@ fun PersonalChat(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Surface(
                             modifier = Modifier.size(40.dp).clip(CircleShape),
-                            color = Color.DarkGray
+                            color = MaterialTheme.colorScheme.secondaryContainer
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Text(
                                     text = if (userName.isNotEmpty()) userName.take(1) else "?",
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = Color.White
+                                    color = MaterialTheme.colorScheme.background
                                 )
                             }
                         }
@@ -66,10 +69,10 @@ fun PersonalChat(
                                 text = userName,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Text(
-                                text = "Online",
+                                text = stringResource(R.string.online),
                                 color = Color(0xFF4CAF50),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
@@ -82,7 +85,7 @@ fun PersonalChat(
                         Icon(
                             Icons.AutoMirrored.Filled.Undo, 
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -169,14 +172,14 @@ fun MessageBubble(message: ChatMessage, myColor: Color, otherColor: Color) {
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
                 Text(
                     text = message.text,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontSize = 15.sp,
                     lineHeight = 20.sp
                 )
                 Text(
                     text = formattedTime,
                     fontSize = 10.sp,
-                    color = Color.DarkGray,
+                    color = MaterialTheme.colorScheme.secondaryContainer,
                     modifier = Modifier.align(Alignment.End).padding(top = 4.dp)
                 )
             }
@@ -192,11 +195,12 @@ fun ChatInput(
 ) {
     Surface(
         color = Color(0xFFFFE4C4), // pastel orange/peach
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().navigationBarsPadding()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .navigationBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -206,13 +210,13 @@ fun ChatInput(
                 modifier = Modifier
                     .weight(1f)
                     .heightIn(min = 50.dp, max = 100.dp),
-                placeholder = { Text("Ketik pesan...", color = Color.Gray) },
+                placeholder = { Text(stringResource(R.string.ketik_pesan), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 colors = TextFieldDefaults.colors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background
                 ),
                 shape = RoundedCornerShape(24.dp)
             )
@@ -226,7 +230,7 @@ fun ChatInput(
                 Icon(
                     Icons.AutoMirrored.Filled.Send, 
                     contentDescription = "Send",
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.background,
                     modifier = Modifier.size(24.dp)
                 )
             }

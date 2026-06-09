@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.payment
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -59,7 +62,7 @@ fun PaymentSuccessScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFF7A00)) // Base orange color
+            .background(MaterialTheme.colorScheme.primary) // Base orange color
     ) {
         Column(
             modifier = Modifier
@@ -70,17 +73,15 @@ fun PaymentSuccessScreen(
         ) {
             Spacer(modifier = Modifier.height(60.dp))
             
-            Text(
-                "Pembayaran Berhasil!",
+            Text(stringResource(R.string.pembayaran_berhasil),
                 fontWeight = FontWeight.Bold,
                 fontSize = 28.sp,
-                color = Color.White
+                color = MaterialTheme.colorScheme.background
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                "Terima kasih, pembayaran Anda telah berhasil diproses.",
+            Text(stringResource(R.string.terima_kasih_pembayaran_anda_telah),
                 fontSize = 14.sp,
-                color = Color.White.copy(alpha = 0.9f),
+                color = MaterialTheme.colorScheme.background.copy(alpha = 0.9f),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 32.dp)
             )
@@ -91,13 +92,13 @@ fun PaymentSuccessScreen(
             Box(
                 modifier = Modifier
                     .size(120.dp)
-                    .background(Color.White, CircleShape),
+                    .background(MaterialTheme.colorScheme.background, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Success",
-                    tint = Color(0xFFFF7A00),
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(80.dp)
                 )
             }
@@ -110,23 +111,21 @@ fun PaymentSuccessScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
                 shape = RoundedCornerShape(24.dp),
-                color = Color.White
+                color = MaterialTheme.colorScheme.background
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        "Pembayaran Berhasil",
+                    Text(stringResource(R.string.pembayaran_berhasil),
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp,
-                        color = Color(0xFFFF7A00)
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        "Transaksi Anda telah berhasil\ndan pesanan sedang diproses.",
+                    Text(stringResource(R.string.transaksi_anda_telah_berhasilndan_pesanan),
                         fontSize = 14.sp,
-                        color = Color.DarkGray,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         textAlign = TextAlign.Center
                     )
                     
@@ -135,37 +134,37 @@ fun PaymentSuccessScreen(
                     // Details Table
                     Surface(
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, Color(0xFFFF7A00)),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
                         color = Color.Transparent,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            DetailRow("ID Transaksi", invoiceStr, Color(0xFFFF7A00))
+                            DetailRow("ID Transaksi", invoiceStr, MaterialTheme.colorScheme.primary)
                             Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
                             
-                            DetailRow("Pekerja", workerName, Color.Black)
+                            DetailRow("Pekerja", workerName, MaterialTheme.colorScheme.onBackground)
                             Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            DetailRow("Layanan", layanan, Color.Black)
+                            DetailRow("Layanan", layanan, MaterialTheme.colorScheme.onBackground)
                             Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            
-                            DetailRow("Tanggal & Waktu", dateStr, Color(0xFFFF7A00))
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
                             
-                            DetailRow("Metode Pembayaran", paymentMethod, Color(0xFFFF7A00))
+                            DetailRow("Tanggal & Waktu", dateStr, MaterialTheme.colorScheme.primary)
                             Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = Color.LightGray)
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
                             
-                            DetailRow("Total Pembayaran", "Rp${total.toLong()}", Color(0xFFFF7A00), isBold = true)
+                            DetailRow("Metode Pembayaran", paymentMethod, MaterialTheme.colorScheme.primary)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            
+                            DetailRow("Total Pembayaran", "Rp${total.toLong()}", MaterialTheme.colorScheme.primary, isBold = true)
                         }
                     }
                     
@@ -173,8 +172,8 @@ fun PaymentSuccessScreen(
                     
                     // Langkah Selanjutnya Info Box
                     InfoBox(
-                        icon = { Icon(Icons.Outlined.Assignment, contentDescription = null, tint = Color(0xFFFF7A00), modifier = Modifier.size(32.dp)) },
-                        title = "Langkah Selanjutnya",
+                        icon = { Icon(Icons.Outlined.Assignment, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp)) },
+                        title = stringResource(R.string.langkah_selanjutnya),
                         description = "Penyedia jasa akan segera menerima pesanan Anda dan menghubungi Anda melalui chat."
                     )
                     
@@ -182,8 +181,8 @@ fun PaymentSuccessScreen(
                     
                     // Transaksi Aman Info Box
                     InfoBox(
-                        icon = { Icon(Icons.Outlined.Security, contentDescription = null, tint = Color(0xFFFF7A00), modifier = Modifier.size(32.dp)) },
-                        title = "Transaksi Aman",
+                        icon = { Icon(Icons.Outlined.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp)) },
+                        title = stringResource(R.string.transaksi_aman),
                         description = "Pembayaran Anda terlindungi dengan sistem keamanan VOCA."
                     )
                 }
@@ -195,19 +194,19 @@ fun PaymentSuccessScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(24.dp)
+                .navigationBarsPadding()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Button(
                 onClick = onNavigateHome,
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background)
             ) {
-                Text(
-                    "Selesai",
+                Text(stringResource(R.string.selesai),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = Color(0xFFFF7A00)
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -221,7 +220,7 @@ fun DetailRow(label: String, value: String, valueColor: Color, isBold: Boolean =
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(label, color = Color.Gray, fontSize = 14.sp)
+        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
         Text(
             value,
             color = valueColor,
@@ -235,7 +234,7 @@ fun DetailRow(label: String, value: String, valueColor: Color, isBold: Boolean =
 fun InfoBox(icon: @Composable () -> Unit, title: String, description: String) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, Color(0xFFFF7A00)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
         color = Color.Transparent,
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -246,9 +245,9 @@ fun InfoBox(icon: @Composable () -> Unit, title: String, description: String) {
             icon()
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color(0xFFFF7A00))
+                Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(description, fontSize = 12.sp, color = Color(0xFFFF7A00))
+                Text(description, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
             }
         }
     }

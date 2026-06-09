@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.components
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -46,7 +49,7 @@ fun WorkerCard(
             .padding(vertical = 4.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        border = BorderStroke(2.dp, Color.Black),
+        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFFFE0C2))
     ) {
         Row(
@@ -62,7 +65,7 @@ fun WorkerCard(
                 modifier = Modifier
                     .size(width = 90.dp, height = 110.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .border(2.dp, Color.Black, RoundedCornerShape(8.dp))
+                    .border(2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -79,14 +82,14 @@ fun WorkerCard(
                         text = worker.nama,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.weight(1f)
                     )
                     var isFavoriteState by remember(isFavorite) { mutableStateOf(isFavorite) }
                     Icon(
                         imageVector = if (isFavoriteState) Icons.Filled.Favorite else Icons.Filled.Bookmark,
                         contentDescription = "Favorite/Bookmark",
-                        tint = if (isFavoriteState) Color.Red else Color.Black,
+                        tint = if (isFavoriteState) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier
                             .size(24.dp)
                             .clickable { 
@@ -99,7 +102,7 @@ fun WorkerCard(
                 Text(
                     text = worker.pekerjaan,
                     fontSize = 12.sp,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onBackground,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
@@ -122,20 +125,20 @@ fun WorkerCard(
                     Text(
                         text = "${worker.reviewSummary.averageRating} (${worker.reviewSummary.totalReviews})",
                         fontSize = 10.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "•",
+                        text = stringResource(R.string.str_empty),
                         fontSize = 10.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "3.2 KM",
+                        text = stringResource(R.string.distance_32_km),
                         fontSize = 10.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -144,13 +147,13 @@ fun WorkerCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color(0xFFE2E8F0), RoundedCornerShape(percent = 50))
-                        .border(1.dp, Color.Black, RoundedCornerShape(percent = 50))
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(percent = 50))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
                     Text(
                         text = worker.deskripsi,
                         fontSize = 10.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 12.sp
@@ -167,7 +170,7 @@ fun WorkerCard(
                     Box(
                         modifier = Modifier
                             .background(Color(0xFFFF8C00), RoundedCornerShape(percent = 50))
-                            .border(1.dp, Color.Black, RoundedCornerShape(percent = 50))
+                            .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(percent = 50))
                             .clickable { expanded = true }
                             .padding(horizontal = 12.dp, vertical = 6.dp)
                     ) {
@@ -181,16 +184,16 @@ fun WorkerCard(
                                 text = "$formattedPrice (Basic)",
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onBackground
                             )
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = "Expand",
-                                tint = Color.Black,
+                                tint = MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier
                                     .size(16.dp)
                                     .background(Color.Transparent, CircleShape)
-                                    .border(1.dp, Color.Black, CircleShape)
+                                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
                             )
                         }
                     }
@@ -198,17 +201,17 @@ fun WorkerCard(
                     DropdownMenu(
                         expanded = expanded,
                         onDismissRequest = { expanded = false },
-                        modifier = Modifier.background(Color.White)
+                        modifier = Modifier.background(MaterialTheme.colorScheme.background)
                     ) {
                         val premiumPrice = String.format("Rp. %,d", (worker.baseSalary * 1.5).toInt()).replace(',', '.')
                         val vipPrice = String.format("Rp. %,d", (worker.baseSalary * 2.0).toInt()).replace(',', '.')
                         
                         DropdownMenuItem(
-                            text = { Text("Layanan Premium - $premiumPrice", color = Color.Black, fontSize = 12.sp) },
+                            text = { Text("Layanan Premium - $premiumPrice", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp) },
                             onClick = { expanded = false }
                         )
                         DropdownMenuItem(
-                            text = { Text("Layanan VIP - $vipPrice", color = Color.Black, fontSize = 12.sp) },
+                            text = { Text("Layanan VIP - $vipPrice", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp) },
                             onClick = { expanded = false }
                         )
                     }
