@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.detail
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -40,23 +43,22 @@ fun ReviewScreen(
         uiState.workers.find { it.nama == workerName }
     }
     
-    val bgColor = Color(0xFFFFFDFB)
-    val primaryOrange = Color(0xFFF97316)
+    val bgColor = MaterialTheme.colorScheme.background
+    val primaryOrange = MaterialTheme.colorScheme.primary
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        "Beri Rating & Ulasan",
+                    Text(stringResource(R.string.beri_rating_ulasan),
                         fontWeight = FontWeight.Bold,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.background,
                         fontSize = 18.sp
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.White)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.background)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryOrange)
@@ -82,7 +84,7 @@ fun ReviewScreen(
                     modifier = Modifier
                         .size(64.dp)
                         .clip(CircleShape)
-                        .background(Color.DarkGray)
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
@@ -93,7 +95,7 @@ fun ReviewScreen(
                     )
                     Text(
                         text = worker?.pekerjaan ?: "Design Analyst",
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp
                     )
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -106,7 +108,7 @@ fun ReviewScreen(
                             )
                         }
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("5.0 (328)", fontSize = 12.sp, color = Color.Gray)
+                        Text(stringResource(R.string.rating_50_328), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -114,12 +116,12 @@ fun ReviewScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Rating
-            Text("Berikan Rating", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.berikan_rating), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 "Seberapa puas Anda dengan layanan dari ${worker?.nama?.split(" ")?.get(0) ?: "Jeno"}?",
                 fontSize = 14.sp,
-                color = Color.DarkGray
+                color = MaterialTheme.colorScheme.secondaryContainer
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -134,7 +136,7 @@ fun ReviewScreen(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = if (index < rating) Color(0xFFFFD700) else Color.White,
+                            tint = if (index < rating) Color(0xFFFFD700) else MaterialTheme.colorScheme.background,
                             modifier = Modifier.size(48.dp)
                         )
                     }
@@ -144,22 +146,21 @@ fun ReviewScreen(
             Spacer(modifier = Modifier.height(8.dp))
             
             Text(
-                text = "Beri Opini Anda",
+                text = stringResource(R.string.beri_opini_anda),
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.secondaryContainer,
                 fontSize = 12.sp
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Tulis Review
-            Text("Tulis Ulasan", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.tulis_ulasan), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                "Ceritakan pengalaman Anda dengan layanan yang diberikan.",
+            Text(stringResource(R.string.ceritakan_pengalaman_anda_dengan_layanan),
                 fontSize = 14.sp,
-                color = Color.DarkGray
+                color = MaterialTheme.colorScheme.secondaryContainer
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -167,15 +168,15 @@ fun ReviewScreen(
             OutlinedTextField(
                 value = reviewText,
                 onValueChange = { if (it.length <= 500) reviewText = it },
-                placeholder = { Text("Pekerja sangat profesinal\nSangat recommended!!", color = Color.Gray) },
+                placeholder = { Text(stringResource(R.string.pekerja_sangat_profesinalnsangat_recommended), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                    focusedContainerColor = MaterialTheme.colorScheme.background,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                     focusedBorderColor = primaryOrange
                 )
             )
@@ -191,7 +192,7 @@ fun ReviewScreen(
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = primaryOrange)
             ) {
-                Text("Kirim Ulasan", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(stringResource(R.string.kirim_ulasan), color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
 
             Spacer(modifier = Modifier.height(40.dp))

@@ -29,6 +29,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 
 @Composable
@@ -46,9 +48,12 @@ fun RegisterScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
-    val primaryOrange = Color(0xFFF97316)
-    val bgColor = Color(0xFFFFFDFB)
-    val borderColor = Color(0xFFE0E0E0)
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val bgColor = MaterialTheme.colorScheme.background
+    val onBgColor = MaterialTheme.colorScheme.onBackground
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
+    val outlineColor = MaterialTheme.colorScheme.outline
 
     Box(
         modifier = Modifier
@@ -59,7 +64,7 @@ fun RegisterScreen(
     ) {
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = primaryOrange)
+                CircularProgressIndicator(color = primaryColor)
             }
         } else {
             Column(
@@ -73,13 +78,13 @@ fun RegisterScreen(
                 Icon(
                     imageVector = Icons.Default.Handshake,
                     contentDescription = "Logo",
-                    tint = primaryOrange,
+                    tint = primaryColor,
                     modifier = Modifier.size(64.dp)
                 )
                 
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Black, fontWeight = FontWeight.Normal)) { append("V O C A") }
+                        withStyle(style = SpanStyle(color = onBgColor, fontWeight = FontWeight.Normal)) { append(stringResource(R.string.voca)) }
                     },
                     fontSize = 20.sp,
                     letterSpacing = 2.sp
@@ -88,17 +93,17 @@ fun RegisterScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Buat Akun Baru",
+                    text = stringResource(R.string.create_new_account),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 24.sp,
-                    color = Color.Black
+                    color = onBgColor
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Daftar untuk mulai menggunakan VOCA",
-                    style = TextStyle(color = Color.Black, fontSize = 14.sp)
+                    text = stringResource(R.string.register_to_start),
+                    style = TextStyle(color = onBgColor, fontSize = 14.sp)
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -106,23 +111,25 @@ fun RegisterScreen(
                 // Nama Lengkap Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Nama Lengkap",
+                        text = stringResource(R.string.full_name),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color.Black,
+                        color = onBgColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     OutlinedTextField(
                         value = nama,
                         onValueChange = { nama = it },
-                        placeholder = { Text("Masukkan Nama Lengkap", color = Color.Gray, fontSize = 14.sp) },
+                        placeholder = { Text(stringResource(R.string.enter_full_name), color = onSurfaceColor.copy(alpha = 0.5f), fontSize = 14.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = borderColor,
-                            unfocusedBorderColor = borderColor,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = outlineColor,
+                            unfocusedBorderColor = outlineColor,
+                            focusedContainerColor = surfaceColor,
+                            unfocusedContainerColor = surfaceColor,
+                            focusedTextColor = onSurfaceColor,
+                            unfocusedTextColor = onSurfaceColor
                         ),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -135,23 +142,25 @@ fun RegisterScreen(
                 // Email Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Email atau Nomor telepon",
+                        text = stringResource(R.string.email_or_phone),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color.Black,
+                        color = onBgColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     OutlinedTextField(
                         value = emailOrPhone,
                         onValueChange = { emailOrPhone = it },
-                        placeholder = { Text("contoh : example @gmail.com", color = Color.Gray, fontSize = 14.sp) },
+                        placeholder = { Text(stringResource(R.string.email_example), color = onSurfaceColor.copy(alpha = 0.5f), fontSize = 14.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = borderColor,
-                            unfocusedBorderColor = borderColor,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = outlineColor,
+                            unfocusedBorderColor = outlineColor,
+                            focusedContainerColor = surfaceColor,
+                            unfocusedContainerColor = surfaceColor,
+                            focusedTextColor = onSurfaceColor,
+                            unfocusedTextColor = onSurfaceColor
                         ),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -164,26 +173,28 @@ fun RegisterScreen(
                 // Password Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Kata Sandi",
+                        text = stringResource(R.string.password),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color.Black,
+                        color = onBgColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        placeholder = { Text("Masukkan Kata Sandi", color = Color.Gray, fontSize = 14.sp) },
+                        placeholder = { Text(stringResource(R.string.enter_password_placeholder), color = onSurfaceColor.copy(alpha = 0.5f), fontSize = 14.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Next),
                         keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Down) }),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = borderColor,
-                            unfocusedBorderColor = borderColor,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = outlineColor,
+                            unfocusedBorderColor = outlineColor,
+                            focusedContainerColor = surfaceColor,
+                            unfocusedContainerColor = surfaceColor,
+                            focusedTextColor = onSurfaceColor,
+                            unfocusedTextColor = onSurfaceColor
                         ),
                         singleLine = true
                     )
@@ -194,26 +205,28 @@ fun RegisterScreen(
                 // Confirm Password Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Konfirmasi Kata Sandi",
+                        text = stringResource(R.string.confirm_password),
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color.Black,
+                        color = onBgColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     OutlinedTextField(
                         value = konfirmasiPassword,
                         onValueChange = { konfirmasiPassword = it },
-                        placeholder = { Text("Masukkan Kata Sandi", color = Color.Gray, fontSize = 14.sp) },
+                        placeholder = { Text(stringResource(R.string.enter_password_placeholder), color = onSurfaceColor.copy(alpha = 0.5f), fontSize = 14.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = borderColor,
-                            unfocusedBorderColor = borderColor,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = outlineColor,
+                            unfocusedBorderColor = outlineColor,
+                            focusedContainerColor = surfaceColor,
+                            unfocusedContainerColor = surfaceColor,
+                            focusedTextColor = onSurfaceColor,
+                            unfocusedTextColor = onSurfaceColor
                         ),
                         singleLine = true
                     )
@@ -228,20 +241,20 @@ fun RegisterScreen(
                             val phone = if (!emailOrPhone.contains("@")) emailOrPhone else ""
                             viewModel.register(nama, email, phone, password, onRegisterSuccess)
                         } else {
-                            Toast.makeText(context, "Mohon lengkapi data dengan benar", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, context.getString(R.string.please_complete_data), Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(52.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = primaryOrange)
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor)
                 ) {
                     Text(
-                        text = "Bergabung",
+                        text = stringResource(R.string.join),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
 
@@ -251,13 +264,13 @@ fun RegisterScreen(
                     modifier = Modifier.padding(bottom = 32.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Sudah punya akun ? ", fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.already_have_account), fontSize = 14.sp, color = onBgColor, fontWeight = FontWeight.Bold)
                     Text(
-                        text = "Masuk",
+                        text = stringResource(R.string.login),
                         modifier = Modifier.clickable { onToLogin() },
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = primaryOrange
+                        color = primaryColor
                     )
                 }
             }

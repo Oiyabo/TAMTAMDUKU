@@ -19,8 +19,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        
-        buildConfigField("String", "MIDTRANS_CLIENT_KEY", "\"Mid-client-QEB7l3tFjqjumyka\"")
     }
 
     buildTypes {
@@ -73,9 +71,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.firebase:firebase-functions-ktx")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
-
-    // Midtrans SDK
-    implementation("com.midtrans:uikit:2.0.0-SANDBOX")
 }

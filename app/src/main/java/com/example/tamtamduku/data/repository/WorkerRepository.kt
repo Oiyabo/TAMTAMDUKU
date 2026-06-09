@@ -38,6 +38,32 @@ class WorkerRepository {
         awaitClose { listener.remove() }
     }
 
+    fun getUserProfile(uid: String): Flow<User?> = callbackFlow {
+        val listener = firestore.collection("users").document(uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val user = snapshot?.let { doc ->
+                    if (doc.exists()) mapDocument<User>(doc)?.copy(id = doc.id) else null
+                }
+                trySend(user)
+            }
+        awaitClose { listener.remove() }
+    }
+
+    fun updateUserProfile(user: User, onComplete: (Boolean) -> Unit) {
+        if (user.id.isNotEmpty()) {
+            firestore.collection("users").document(user.id)
+                .set(user)
+                .addOnSuccessListener { onComplete(true) }
+                .addOnFailureListener { onComplete(false) }
+        } else {
+            onComplete(false)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWorkers(): Flow<List<VocaWorker>> = callbackFlow {
         val listener = firestore.collection("workers")
@@ -122,5 +148,80 @@ class WorkerRepository {
                 trySend(items)
             }
         awaitClose { listener.remove() }
+    }
+
+    fun sendMessage(roomId: String, chatListId: String, text: String, time: String) {
+        val newMessage = mapOf(
+            "id" to System.currentTimeMillis().toString(),
+            "senderId" to "usr_8a7b6c5d",
+            "text" to text,
+            "time" to time
+        )
+        
+        firestore.collection("chatRooms").document(roomId)
+            .update("messages", com.google.firebase.firestore.FieldValue.arrayUnion(newMessage))
+            .addOnFailureListener {
+                // If it fails (e.g. document doesn't exist), create it
+                val initialData = mapOf("messages" to listOf(newMessage))
+                firestore.collection("chatRooms").document(roomId).set(initialData)
+            }
+
+        if (chatListId.isNotEmpty()) {
+            val updateData = mapOf(
+                "lastMessage" to text,
+                "lastUpdated" to time
+            )
+            firestore.collection("chatLists").document(chatListId).update(updateData)
+        }
+    }
+
+    // Reports
+    fun getReports(): Flow<List<Report>> = callbackFlow {
+        val listener = firestore.collection("reports")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val items = snapshot?.documents?.mapNotNull { doc ->
+                    mapDocument<Report>(doc)
+                } ?: emptyList()
+                trySend(items)
+            }
+        awaitClose { listener.remove() }
+    }
+
+    fun addReport(report: Report) {
+        val data = mapOf(
+            "id" to report.id,
+            "category" to report.category,
+            "description" to report.description,
+            "date" to report.date,
+            "status" to report.status
+        )
+        firestore.collection("reports").document(report.id).set(data)
+    }
+
+    // Profile & Address
+    fun updateUserProfile(userId: String, name: String, email: String, address: String) {
+        if (userId.isEmpty()) return
+        val updateData = mapOf(
+            "name" to name,
+            "email" to email,
+            "address" to address
+        )
+        firestore.collection("users").document(userId).update(updateData)
+    }
+
+    fun updateAddress(userId: String, address: String) {
+        if (userId.isEmpty()) return
+        firestore.collection("users").document(userId).update("address", address)
+    }
+
+    // Favorites
+    fun removeFavoriteWorker(userId: String, workerId: String) {
+        if (userId.isEmpty() || workerId.isEmpty()) return
+        firestore.collection("users").document(userId)
+            .update("favoriteWorkers", com.google.firebase.firestore.FieldValue.arrayRemove(workerId))
     }
 }

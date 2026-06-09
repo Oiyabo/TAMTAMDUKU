@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.tracking
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -34,7 +37,7 @@ fun BatalJobScreen(
 ) {
     if (transaction == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Transaksi tidak ditemukan")
+            Text(stringResource(R.string.transaksi_tidak_ditemukan))
         }
         return
     }
@@ -44,15 +47,15 @@ fun BatalJobScreen(
         topBar = {
             TopAppBar(
                 windowInsets = WindowInsets(0.dp),
-                title = { Text("Detail Pembatalan", fontWeight = FontWeight.Bold, fontSize = 18.sp) },
+                title = { Text(stringResource(R.string.detail_pembatalan), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White,
-                    titleContentColor = Color.Black
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
         },
@@ -70,7 +73,7 @@ fun BatalJobScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 border = BorderStroke(1.dp, Color(0xFFEEEEEE))
             ) {
@@ -85,7 +88,7 @@ fun BatalJobScreen(
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(Color.LightGray)
+                            .background(MaterialTheme.colorScheme.outlineVariant)
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
@@ -95,19 +98,19 @@ fun BatalJobScreen(
                             text = transaction.workerName,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Text(
                             text = transaction.workerProfession,
                             fontSize = 12.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = transaction.invoiceNumber,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -124,7 +127,7 @@ fun BatalJobScreen(
                             shape = RoundedCornerShape(4.dp)
                         ) {
                             Text(
-                                text = "Batal",
+                                text = stringResource(R.string.batal),
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
@@ -135,7 +138,7 @@ fun BatalJobScreen(
                         Text(
                             text = "Dibatalkan pada\n${transaction.date}",
                             fontSize = 10.sp,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.End
                         )
                     }
@@ -163,16 +166,16 @@ fun BatalJobScreen(
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Pekerjaan Dibatalkan",
+                            text = stringResource(R.string.pekerjaan_dibatalkan),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Pekerjaan ini telah dibatalkan. Lihat detail di bawah untuk informasi lebih lanjut.",
+                            text = stringResource(R.string.pekerjaan_ini_telah_dibatalkan_lihat),
                             fontSize = 12.sp,
-                            color = Color.DarkGray
+                            color = MaterialTheme.colorScheme.secondaryContainer
                         )
                     }
                 }
@@ -181,10 +184,10 @@ fun BatalJobScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = "Alasan Pembatalan",
+                text = stringResource(R.string.alasan_pembatalan),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -192,15 +195,15 @@ fun BatalJobScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 border = BorderStroke(1.dp, Color(0xFFEEEEEE))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Kesepakatan jadwal tidak dapat dipenuhi oleh pekerja. Pekerja sedang berada di luar kota dan tidak dapat mengerjakan tugas sesuai waktu yang diminta. Dana telah dikembalikan ke saldo Anda.",
+                        text = stringResource(R.string.kesepakatan_jadwal_tidak_dapat_dipenuhi),
                         fontSize = 12.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         lineHeight = 18.sp
                     )
                 }
@@ -212,7 +215,7 @@ fun BatalJobScreen(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 color = Color(0xFFF5F5F5),
-                border = BorderStroke(1.dp, Color(0xFFE0E0E0))
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -221,22 +224,22 @@ fun BatalJobScreen(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = "Info",
-                        tint = Color.Black,
+                        tint = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(
-                            text = "Informasi Tambahan",
+                            text = stringResource(R.string.informasi_tambahan),
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "Jika Anda memiliki pertanyaan lebih lanjut terkait pengembalian dana, Anda dapat menghubungi pusat bantuan kami.",
+                            text = stringResource(R.string.jika_anda_memiliki_pertanyaan_lebih),
                             fontSize = 12.sp,
-                            color = Color.DarkGray,
+                            color = MaterialTheme.colorScheme.secondaryContainer,
                             lineHeight = 18.sp
                         )
                     }

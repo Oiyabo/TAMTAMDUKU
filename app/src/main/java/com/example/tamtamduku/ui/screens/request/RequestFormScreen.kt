@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.request
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -47,7 +50,7 @@ fun RequestFormScreen(
 
     if (worker == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Pekerja tidak ditemukan")
+            Text(stringResource(R.string.pekerja_tidak_ditemukan))
         }
         return
     }
@@ -55,13 +58,13 @@ fun RequestFormScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detail permintaan", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
+                title = { Text(stringResource(R.string.detail_permintaan), fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = { navCon.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
         bottomBar = {
@@ -81,13 +84,13 @@ fun RequestFormScreen(
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00))
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Kirim Permintaan", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                    Text(stringResource(R.string.kirim_permintaan), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.background)
                 }
             }
         },
-        containerColor = Color.White
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -108,30 +111,30 @@ fun RequestFormScreen(
                     modifier = Modifier
                         .size(50.dp)
                         .clip(CircleShape)
-                        .background(Color.LightGray)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
-                    Text("Pekerja", color = Color.Gray, fontSize = 14.sp)
-                    Text(worker.nama, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                    Text(stringResource(R.string.pekerja), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                    Text(worker.nama, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
                 }
             }
 
             // Input Fields
             FormInputField(icon = Icons.Outlined.WorkOutline, placeholder = "Layanan", value = layanan, onValueChange = { layanan = it })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
             
             FormInputField(icon = Icons.Outlined.LocationOn, placeholder = "Lokasi", value = lokasi, onValueChange = { lokasi = it })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
             FormInputField(icon = Icons.Outlined.CalendarMonth, placeholder = "Tanggal", value = tanggal, onValueChange = { tanggal = it })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
             FormInputField(icon = Icons.Outlined.Schedule, placeholder = "Jam", value = jam, onValueChange = { jam = it })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
             FormInputField(icon = Icons.Outlined.NoteAlt, placeholder = "Catatan", value = catatan, onValueChange = { catatan = it })
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = Color(0xFFE0E0E0))
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
         }
     }
 }
@@ -145,24 +148,24 @@ fun FormInputField(icon: ImageVector, placeholder: String, value: String, onValu
         Box(
             modifier = Modifier
                 .size(40.dp)
-                .background(Color(0xFFFFF0E5), RoundedCornerShape(8.dp)),
+                .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Icon(icon, contentDescription = placeholder, tint = Color(0xFFFF7A00))
+            Icon(icon, contentDescription = placeholder, tint = MaterialTheme.colorScheme.primary)
         }
         Spacer(modifier = Modifier.width(16.dp))
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
-            placeholder = { Text(placeholder, color = Color.LightGray) },
+            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.outlineVariant) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.LightGray,
-                unfocusedBorderColor = Color.LightGray,
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
+                focusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                focusedContainerColor = MaterialTheme.colorScheme.background,
+                unfocusedContainerColor = MaterialTheme.colorScheme.background
             ),
             shape = RoundedCornerShape(8.dp)
         )

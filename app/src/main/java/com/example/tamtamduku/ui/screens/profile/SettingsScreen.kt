@@ -1,4 +1,5 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,30 +23,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+import com.example.tamtamduku.ui.theme.AppTheme
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
+    onThemeChange: (AppTheme) -> Unit,
+    onLanguageChange: (String) -> Unit,
+    currentLanguage: String,
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val bgColor = Color(0xFFFFFDF8)
-    val orangeMain = Color(0xFFFF7A00)
+    val bgColor = MaterialTheme.colorScheme.background
+    val orangeMain = MaterialTheme.colorScheme.primary
     var notificationsEnabled by remember(uiState.settings.pushNotification) {
         mutableStateOf(uiState.settings.pushNotification)
     }
+
+    var themeExpanded by remember { mutableStateOf(false) }
+    var currentThemeLabel by remember { mutableStateOf(if (currentLanguage == "id") "Mode Terang" else "Light Mode") }
+    var languageExpanded by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 windowInsets = WindowInsets(0.dp),
                 title = {
-                    Text("Pengaturan", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black)
+                    Text(stringResource(R.string.settings), fontWeight = FontWeight.Bold, fontSize = 18.sp, color = MaterialTheme.colorScheme.onBackground)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = bgColor)
@@ -60,13 +71,13 @@ fun SettingsScreen(
                 .padding(horizontal = 20.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("Preferensi", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Color.Gray)
+            Text(stringResource(R.string.preferences), fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(modifier = Modifier.height(4.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(vertical = 4.dp)) {
@@ -78,45 +89,89 @@ fun SettingsScreen(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
-                                modifier = Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(Color(0xFFFFF0E5)),
+                                modifier = Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.primaryContainer),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Icon(Icons.Default.NotificationsNone, contentDescription = null, tint = orangeMain, modifier = Modifier.size(20.dp))
                             }
                             Spacer(modifier = Modifier.width(14.dp))
-                            Text("Notifikasi", fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = Color.Black)
+                            Text(stringResource(R.string.notifications), fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onBackground)
                         }
                         Switch(
                             checked = notificationsEnabled,
                             onCheckedChange = { notificationsEnabled = it },
                             colors = SwitchDefaults.colors(
-                                checkedThumbColor = Color.White,
+                                checkedThumbColor = MaterialTheme.colorScheme.background,
                                 checkedTrackColor = orangeMain,
-                                uncheckedThumbColor = Color.White,
-                                uncheckedTrackColor = Color(0xFFE0DDD8)
+                                uncheckedThumbColor = MaterialTheme.colorScheme.background,
+                                uncheckedTrackColor = MaterialTheme.colorScheme.outlineVariant
                             )
                         )
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
 
                     // Bahasa row
-                    PremiumSettingRow(
-                        icon = Icons.Default.Language,
-                        title = "Bahasa",
-                        subtitle = "Bahasa Indonesia",
-                        onClick = {}
-                    )
+                    Box {
+                        PremiumSettingRow(
+                            icon = Icons.Default.Language,
+                            title = stringResource(R.string.language),
+                            subtitle = if (currentLanguage == "id") stringResource(R.string.indonesian) else stringResource(R.string.english),
+                            onClick = { languageExpanded = true }
+                        )
+                        DropdownMenu(
+                            expanded = languageExpanded,
+                            onDismissRequest = { languageExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.indonesian)) },
+                                onClick = {
+                                    onLanguageChange("id")
+                                    languageExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.english)) },
+                                onClick = {
+                                    onLanguageChange("en")
+                                    languageExpanded = false
+                                }
+                            )
+                        }
+                    }
 
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = Color(0xFFF5F0EA), thickness = 1.dp)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
 
                     // Tema row
-                    PremiumSettingRow(
-                        icon = Icons.Default.DarkMode,
-                        title = "Tema",
-                        subtitle = "Mode Terang",
-                        onClick = {}
-                    )
+                    Box {
+                        PremiumSettingRow(
+                            icon = Icons.Default.DarkMode,
+                            title = stringResource(R.string.theme),
+                            subtitle = currentThemeLabel,
+                            onClick = { themeExpanded = true }
+                        )
+                        DropdownMenu(
+                            expanded = themeExpanded,
+                            onDismissRequest = { themeExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.light_mode)) },
+                                onClick = {
+                                    currentThemeLabel = "Mode Terang"
+                                    onThemeChange(AppTheme.LIGHT)
+                                    themeExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.dark_mode)) },
+                                onClick = {
+                                    currentThemeLabel = "Mode Gelap"
+                                    onThemeChange(AppTheme.DARK)
+                                    themeExpanded = false
+                                }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -137,18 +192,18 @@ fun PremiumSettingRow(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
-                modifier = Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(Color(0xFFFFF0E5)),
+                modifier = Modifier.size(36.dp).clip(RoundedCornerShape(10.dp)).background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(icon, contentDescription = null, tint = Color(0xFFFF7A00), modifier = Modifier.size(20.dp))
+                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
             }
             Spacer(modifier = Modifier.width(14.dp))
             Column {
-                Text(title, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = Color.Black)
-                Text(subtitle, fontSize = 12.sp, color = Color.Gray)
+                Text(title, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onBackground)
+                Text(subtitle, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
-        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = Color.LightGray)
+        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outlineVariant)
     }
 }
 
@@ -162,13 +217,13 @@ fun SettingItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF9F6F0), RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
             .let { if (onClick != null) it.clickable { onClick() } else it }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+        Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onBackground)
         trailingContent()
     }
 }

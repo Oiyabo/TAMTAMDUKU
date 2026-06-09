@@ -11,6 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import android.content.res.Configuration
+import java.util.Locale
 import com.example.tamtamduku.navigation.AppNavigation
 import com.example.tamtamduku.ui.theme.AppTheme
 import com.example.tamtamduku.ui.theme.TAMTAMDUKUTheme
@@ -22,17 +26,36 @@ class MainActivity : ComponentActivity() {
         
         enableEdgeToEdge()
         setContent {
-            var currentTheme by remember { mutableStateOf(AppTheme.MAIN) }
+            var currentTheme by remember { mutableStateOf(AppTheme.LIGHT) }
+            var currentLanguage by remember { mutableStateOf("id") }
             
-            TAMTAMDUKUTheme(appTheme = currentTheme) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+            val configuration = LocalConfiguration.current
+            val context = LocalContext.current
+            val newConfiguration = remember(currentLanguage, configuration) {
+                Configuration(configuration).apply {
+                    setLocale(Locale(currentLanguage))
+                }
+            }
+            val newContext = remember(newConfiguration) {
+                context.createConfigurationContext(newConfiguration)
+            }
 
-                ) {
-                    AppNavigation(
-                        onThemeChange = { currentTheme = it }
-                    )
+            CompositionLocalProvider(
+                LocalContext provides newContext,
+                LocalConfiguration provides newConfiguration
+            ) {
+                TAMTAMDUKUTheme(appTheme = currentTheme) {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+
+                    ) {
+                        AppNavigation(
+                            onThemeChange = { currentTheme = it },
+                            onLanguageChange = { currentLanguage = it },
+                            currentLanguage = currentLanguage
+                        )
+                    }
                 }
             }
         }

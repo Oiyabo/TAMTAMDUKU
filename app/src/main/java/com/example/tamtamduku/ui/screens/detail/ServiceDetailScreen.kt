@@ -105,13 +105,13 @@ fun ServiceDetailScreen(
         },
         bottomBar = {
             Surface(
-                modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
+                modifier = Modifier.fillMaxWidth(),
                 color = Color.White,
                 shadowElevation = 8.dp
             ) {
                 Row(
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 12.dp),
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

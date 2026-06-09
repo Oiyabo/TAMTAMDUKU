@@ -37,16 +37,16 @@ class AuthViewModel @JvmOverloads constructor(
     }
 
     fun checkSession() {
-        if (sessionManager.isLoggedIn()) {
+        if (sessionManager.isLoggedIn() && sessionManager.getUserId() != null) {
             _uiState.update { it.copy(isLoggedIn = true) }
         }
     }
 
     private fun fetchAccount() {
+        val uid = sessionManager.getUserId() ?: return
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            repository.getUsers().collect { users ->
-                val account = users.firstOrNull()
+            repository.getUserProfile(uid).collect { account ->
                 _uiState.update { it.copy(
                     isLoading = false,
                     userAccount = account
@@ -79,13 +79,15 @@ class AuthViewModel @JvmOverloads constructor(
                 val response = ApiClient.dummyJsonApi.login(
                     LoginRequest(username = resolvedUsername, password = passwordInput)
                 )
-                sessionManager.saveToken(response.accessToken)
+                sessionManager.saveToken(response.accessToken, response.id.toString())
                 
                 _uiState.update { it.copy(
                     isLoading = false,
                     isLoggedIn = true,
                     userAccount = User(id = response.id.toString(), name = "${response.firstName} ${response.lastName}", email = response.email)
                 ) }
+                // Re-trigger fetchAccount to get Firestore data
+                fetchAccount()
                 onSuccess()
             } catch (e: Exception) {
                 _uiState.update { it.copy(
@@ -106,13 +108,24 @@ class AuthViewModel @JvmOverloads constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             // Simulating API call for registration
-            // In a real app, we would send this to the repository
-            _uiState.update { it.copy(
-                isLoading = false,
-                registrationSuccess = true,
-                userAccount = User(id = System.currentTimeMillis().toString(), name = name, email = email, phone = phone)
-            ) }
-            onSuccess()
+            val newUserId = System.currentTimeMillis().toString()
+            val newUser = User(
+                id = newUserId,
+                name = name,
+                email = email,
+                phone = phone,
+                address = "",
+                favoriteWorkers = emptyList(),
+                settings = com.example.tamtamduku.data.model.UserSettings()
+            )
+            repository.updateUserProfile(newUser) { success ->
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    registrationSuccess = true,
+                    userAccount = newUser
+                ) }
+                onSuccess()
+            }
         }
     }
 }

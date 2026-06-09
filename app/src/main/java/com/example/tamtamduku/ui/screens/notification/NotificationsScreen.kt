@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.notification
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -53,10 +56,10 @@ fun NotificationsScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "Notifikasi",
+                            text = stringResource(R.string.notifikasi),
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
@@ -65,13 +68,13 @@ fun NotificationsScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color(0xFFFAF6F0),
-                    titleContentColor = Color.Black
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
         },
@@ -79,7 +82,7 @@ fun NotificationsScreen(
     ) { innerPadding ->
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = Color(0xFFF97316))
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
             }
         } else {
             LazyColumn(
@@ -124,7 +127,7 @@ fun NotificationRow(item: Notification) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(if (item.isRead) Color(0xFFF5F5F5) else Color.White)
+            .background(if (item.isRead) Color(0xFFF5F5F5) else MaterialTheme.colorScheme.background)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -138,7 +141,7 @@ fun NotificationRow(item: Notification) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = Color.White,
+                tint = MaterialTheme.colorScheme.background,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -152,13 +155,13 @@ fun NotificationRow(item: Notification) {
                 text = item.title,
                 fontWeight = if (item.isRead) FontWeight.Normal else FontWeight.Bold,
                 fontSize = 14.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = item.body,
                 fontSize = 12.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -167,7 +170,7 @@ fun NotificationRow(item: Notification) {
         Text(
             text = formattedTime,
             fontSize = 11.sp,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.align(Alignment.Top)
         )
     }

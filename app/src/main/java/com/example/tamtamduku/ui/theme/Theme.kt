@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -18,9 +19,9 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = OrangePrimary,
+    secondary = OrangeOnPrimary,
+    tertiary = OrangeTertiary
 )
 
 private val OrangeColorScheme = lightColorScheme(
@@ -48,13 +49,30 @@ private val OrangeColorScheme = lightColorScheme(
     outlineVariant = OrangeOutlineVariant
 )
 
+private val DarkOrangeColorScheme = darkColorScheme(
+    primary = OrangePrimary,
+    onPrimary = OrangeOnPrimary,
+    primaryContainer = OrangePrimaryContainer,
+    onPrimaryContainer = OrangeOnPrimaryContainer,
+    secondary = OrangeSecondary,
+    onSecondary = OrangeOnSecondary,
+    tertiary = OrangeTertiary,
+    onTertiary = OrangeOnTertiary,
+    background = Color(0xFF121212),
+    onBackground = Color(0xFFE0E0E0),
+    surface = Color(0xFF1E1E1E),
+    onSurface = Color(0xFFE0E0E0),
+    surfaceVariant = Color(0xFF2C2C2C),
+    onSurfaceVariant = Color(0xFFC4C4C4)
+)
+
 enum class AppTheme {
-    LIGHT, DARK, MAIN
+    LIGHT, DARK
 }
 
 @Composable
 fun TAMTAMDUKUTheme(
-    appTheme: AppTheme = AppTheme.MAIN,
+    appTheme: AppTheme = AppTheme.LIGHT,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
@@ -62,8 +80,8 @@ fun TAMTAMDUKUTheme(
 ) {
     val colorScheme = when (appTheme) {
         AppTheme.LIGHT -> LightColorScheme
-        AppTheme.DARK -> DarkColorScheme
-        AppTheme.MAIN -> OrangeColorScheme
+        AppTheme.DARK -> DarkOrangeColorScheme
+        
     }
 
     MaterialTheme(

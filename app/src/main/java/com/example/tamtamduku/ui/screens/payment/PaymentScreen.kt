@@ -52,6 +52,7 @@ fun PaymentScreen(
     LaunchedEffect(Unit) {
         com.example.tamtamduku.payment.PaymentEventBus.paymentResult.collect { success ->
             if (success) {
+                com.example.tamtamduku.payment.PaymentEventBus.reset()
                 onNavigateToSuccess()
             }
         }
