@@ -1,7 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,13 +9,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,35 +24,52 @@ fun ReportListScreen(
     onBack: () -> Unit,
     onNavigateToCreateReport: () -> Unit
 ) {
-    val bgColor = Color(0xFFFFFDF8)
-    val orangeMain = Color(0xFFFF7A00)
-
     Scaffold(
         topBar = {
-            TopAppBar(
-                windowInsets = WindowInsets(0.dp),
+            CenterAlignedTopAppBar(
                 title = {
-                    Text("Lapor Masalah", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Black)
+                    Text(
+                        "Daftar Laporan Masalah",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = Color.Black)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = bgColor)
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
             )
         },
-        containerColor = bgColor,
+        containerColor = Color(0xFFFFFDF8),
         bottomBar = {
-            Box(modifier = Modifier.fillMaxWidth().padding(20.dp)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp)
+            ) {
                 Button(
                     onClick = onNavigateToCreateReport,
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
-                    shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = orangeMain),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFF7A00)
+                    )
                 ) {
-                    Text("+ Buat Laporan Baru", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(
+                        text = "+ Tambah Laporan",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -64,94 +78,86 @@ fun ReportListScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            contentPadding = PaddingValues(top = 12.dp, bottom = 100.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(horizontal = 24.dp),
+            contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                Text("Riwayat Laporan", fontWeight = FontWeight.SemiBold, fontSize = 13.sp, color = Color.Gray)
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            items(3) { index ->
-                PremiumReportCard(
-                    reportId = "#RE-00${index + 1}",
-                    workerName = listOf("Budi Santoso", "Siti Rahma", "Bambang Listrik")[index],
-                    issue = listOf("Datang Terlambat", "Pekerjaan Tidak Selesai", "Bahan Tidak Sesuai")[index],
-                    date = listOf("23 April 2026", "10 Mei 2026", "1 Juni 2026")[index],
-                    status = listOf("Selesai", "Diproses", "Selesai")[index]
-                )
+            items(3) {
+                ReportCard()
             }
         }
     }
 }
 
 @Composable
-fun PremiumReportCard(
-    reportId: String,
-    workerName: String,
-    issue: String,
-    date: String,
-    status: String
-) {
-    val isSelesai = status == "Selesai"
-    val statusColor = if (isSelesai) Color(0xFF22C55E) else Color(0xFFFF7A00)
-    val statusBg = if (isSelesai) Color(0xFFEFFDF4) else Color(0xFFFFF0E5)
-
+fun ReportCard() {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { /* Handle click */ },
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        border = BorderStroke(1.dp, Color.Gray.copy(alpha = 0.5f))
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        modifier = Modifier
-                            .size(36.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(Color(0xFFFFF0E5)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(Icons.Default.BugReport, contentDescription = null, tint = Color(0xFFFF7A00), modifier = Modifier.size(20.dp))
-                    }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(reportId, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
-                }
+                Text(
+                    text = "ID RE #0001",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
                 Box(
                     modifier = Modifier
-                        .background(statusBg, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 10.dp, vertical = 4.dp)
+                        .background(Color.LightGray.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
-                    Text(status, fontWeight = FontWeight.Bold, fontSize = 11.sp, color = statusColor)
+                    Text(
+                        text = "Selesai",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    )
                 }
             }
-
-            Spacer(modifier = Modifier.height(12.dp))
-            HorizontalDivider(color = Color(0xFFF5F0EA), thickness = 1.dp)
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(workerName, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(issue, fontSize = 13.sp, color = Color.Gray)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(date, fontSize = 12.sp, color = Color(0xFFAAAAAA))
+            Text(
+                text = "Pekerja",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Datang Terlambat",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "23 April 2026",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+                Icon(
+                    imageVector = Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
         }
     }
-}
-
-// keep old ReportCard
-@Composable
-fun ReportCard() {
-    PremiumReportCard(
-        reportId = "#RE-001",
-        workerName = "Pekerja",
-        issue = "Datang Terlambat",
-        date = "23 April 2026",
-        status = "Selesai"
-    )
 }

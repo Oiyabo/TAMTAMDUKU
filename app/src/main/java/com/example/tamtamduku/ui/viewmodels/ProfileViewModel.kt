@@ -53,4 +53,16 @@ class ProfileViewModel(private val repository: WorkerRepository = WorkerReposito
         // Implement logout logic if needed
         onLogoutSuccess()
     }
+
+    fun updateAddress(newAddress: String) {
+        _uiState.update { it.copy(address = newAddress) }
+    }
+
+    fun deleteAddress() {
+        _uiState.update { it.copy(address = "") }
+    }
+
+    fun updateProfile(name: String, email: String, address: String) {
+        _uiState.update { it.copy(name = name, email = email, address = address) }
+    }
 }

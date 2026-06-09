@@ -36,7 +36,8 @@ fun WorkerCard(
     worker: VocaWorker,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isFavorite: Boolean = false
+    isFavorite: Boolean = false,
+    onFavoriteToggle: (Boolean) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -88,7 +89,10 @@ fun WorkerCard(
                         tint = if (isFavoriteState) Color.Red else Color.Black,
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { isFavoriteState = !isFavoriteState }
+                            .clickable { 
+                                isFavoriteState = !isFavoriteState 
+                                onFavoriteToggle(isFavoriteState)
+                            }
                     )
                 }
 

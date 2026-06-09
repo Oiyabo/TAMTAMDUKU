@@ -60,6 +60,9 @@ import com.example.tamtamduku.ui.screens.payment.PaymentScreen
 import com.example.tamtamduku.ui.screens.payment.PaymentSuccessScreen
 import com.example.tamtamduku.ui.screens.notification.NotificationsScreen
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+import com.example.tamtamduku.ui.viewmodels.ReportViewModel
+import com.example.tamtamduku.ui.viewmodels.FavoriteWorkersViewModel
+import com.example.tamtamduku.ui.screens.profile.ReportDetailScreen
 import com.example.tamtamduku.ui.theme.AppTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -75,7 +78,9 @@ fun AppNavigation(
     authViewModel: AuthViewModel = viewModel(),
     workerViewModel: WorkerViewModel = viewModel(),
     trackingViewModel: TrackingViewModel = viewModel(),
-    profileViewModel: ProfileViewModel = viewModel()
+    profileViewModel: ProfileViewModel = viewModel(),
+    reportViewModel: ReportViewModel = viewModel(),
+    favoriteWorkersViewModel: FavoriteWorkersViewModel = viewModel()
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -328,33 +333,50 @@ fun AppNavigation(
                 )
             }
             composable("favorite_workers") {
-                FavoriteWorkersScreen(navCon = navCon)
+                FavoriteWorkersScreen(navCon = navCon, viewModel = favoriteWorkersViewModel)
             }
             composable("edit_profile") {
                 EditProfileScreen(
-                    onBack = { navCon.popBackStack() }
+                    onBack = { navCon.popBackStack() },
+                    viewModel = profileViewModel
                 )
             }
             composable("address_list") {
                 AddressListScreen(
                     onBack = { navCon.popBackStack() },
-                    onNavigateToEditAddress = { navCon.navigate("edit_address") }
+                    onNavigateToEditAddress = { navCon.navigate("edit_address") },
+                    viewModel = profileViewModel
                 )
             }
             composable("edit_address") {
                 EditAddressScreen(
-                    onBack = { navCon.popBackStack() }
+                    onBack = { navCon.popBackStack() },
+                    viewModel = profileViewModel
                 )
             }
             composable("report_list") {
                 ReportListScreen(
                     onBack = { navCon.popBackStack() },
-                    onNavigateToCreateReport = { navCon.navigate("create_report") }
+                    onNavigateToCreateReport = { navCon.navigate("create_report") },
+                    onReportClick = { reportId -> navCon.navigate("report_detail/${android.net.Uri.encode(reportId)}") },
+                    viewModel = reportViewModel
                 )
             }
             composable("create_report") {
                 CreateReportScreen(
-                    onBack = { navCon.popBackStack() }
+                    onBack = { navCon.popBackStack() },
+                    viewModel = reportViewModel
+                )
+            }
+            composable(
+                "report_detail/{reportId}",
+                arguments = listOf(navArgument("reportId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val reportId = backStackEntry.arguments?.getString("reportId") ?: ""
+                ReportDetailScreen(
+                    reportId = reportId,
+                    onBack = { navCon.popBackStack() },
+                    viewModel = reportViewModel
                 )
             }
             composable("settings") {

@@ -86,7 +86,12 @@ fun FavoriteWorkersScreen(
                     WorkerCard(
                         worker = worker,
                         onClick = { navCon.navigate("detail/${Uri.encode(worker.nama)}") },
-                        isFavorite = true
+                        isFavorite = true,
+                        onFavoriteToggle = { isFavorite ->
+                            if (!isFavorite) {
+                                viewModel.removeFavorite(worker.id)
+                            }
+                        }
                     )
                 }
             }
