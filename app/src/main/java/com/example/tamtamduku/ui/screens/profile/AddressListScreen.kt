@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
@@ -21,6 +22,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,12 +91,25 @@ fun AddressListScreen(
             contentPadding = PaddingValues(top = 16.dp, bottom = 100.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                AddressCard(
-                    name = uiState.name.ifEmpty { "Bang Lijen" },
-                    address = uiState.address.ifEmpty { "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." },
-                    onClick = onNavigateToEditAddress
-                )
+            if (uiState.addressList.isEmpty()) {
+                item {
+                    Text(
+                        "Belum ada alamat tersimpan.",
+                        modifier = Modifier.fillMaxWidth().padding(32.dp),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
+                    )
+                }
+            } else {
+                items(uiState.addressList) { addressItem ->
+                    AddressCard(
+                        name = addressItem.name,
+                        address = addressItem.fullAddress,
+                        isDefault = addressItem.isDefault,
+                        onSetDefault = { viewModel.setDefaultAddress(addressItem.id) },
+                        onDelete = { viewModel.deleteAddress(addressItem.id) }
+                    )
+                }
             }
         }
     }
@@ -103,31 +119,53 @@ fun AddressListScreen(
 fun AddressCard(
     name: String,
     address: String,
-    onClick: () -> Unit
+    isDefault: Boolean,
+    onSetDefault: () -> Unit,
+    onDelete: () -> Unit
 ) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.background
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
-        )
+        ),
+        border = if (isDefault) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(
-                text = name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                Text(
+                    text = name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                if (isDefault) {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = RoundedCornerShape(4.dp)
+                    ) {
+                        Text(
+                            text = "Utama",
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = address,
@@ -135,6 +173,31 @@ fun AddressCard(
                 color = MaterialTheme.colorScheme.onBackground,
                 lineHeight = 20.sp
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+            ) {
+                if (!isDefault) {
+                    Text(
+                        text = "Jadikan Utama",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable(onClick = onSetDefault)
+                            .padding(end = 16.dp)
+                    )
+                }
+                Text(
+                    text = "Hapus",
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.clickable(onClick = onDelete)
+                )
+            }
         }
     }
 }

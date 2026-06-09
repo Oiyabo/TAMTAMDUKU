@@ -23,6 +23,8 @@ import kotlinx.coroutines.launch
 fun PaymentSimulationScreen(
     paymentMethod: String,
     harga: String,
+    tanggal: String,
+    jam: String,
     onBack: () -> Unit,
     onPaymentCompleted: () -> Unit
 ) {

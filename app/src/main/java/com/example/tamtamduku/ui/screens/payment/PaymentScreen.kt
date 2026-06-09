@@ -36,6 +36,8 @@ fun PaymentScreen(
     workerName: String,
     layanan: String,
     harga: String,
+    tanggal: String,
+    jam: String,
     workerViewModel: com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 ) {
     val uiState by workerViewModel.uiState.collectAsState()

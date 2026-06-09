@@ -20,6 +20,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +47,29 @@ fun StatusPekerjaanScreen(
     val uiState by viewModel.uiState.collectAsState()
     val item = uiState.transactions.find { it.workerName == workerName && it.status == "Dikerjakan" } ?: uiState.transactions.find { it.workerName == workerName }
     val isSelesai = item?.status == "Selesai"
+    val isBatal = item?.status == "Batal"
+    var showCancelDialog by remember { mutableStateOf(false) }
+
+    if (showCancelDialog) {
+        AlertDialog(
+            onDismissRequest = { showCancelDialog = false },
+            title = { Text("Konfirmasi Batalkan") },
+            text = { Text("Apakah Anda yakin ingin membatalkan pekerjaan ini?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    item?.id?.let { viewModel.cancelTransaction(it) }
+                    showCancelDialog = false
+                }) {
+                    Text("Ya, Batalkan")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCancelDialog = false }) {
+                    Text("Tidak")
+                }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -99,7 +125,6 @@ fun StatusPekerjaanScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Timeline
-            val isBatal = item?.status == "Batal"
             val statusLevel = when (item?.tracking?.posisiSaatIni?.lowercase()) {
                 "menunggu konfirmasi" -> 1
                 "permintaan diterima" -> 2
@@ -227,8 +252,11 @@ fun StatusPekerjaanScreen(
 
             Button(
                 onClick = { 
-                    if (!isSelesai && !isBatal) viewModel.markAsSelesai(workerName)
-                    navCon.navigate("review/${Uri.encode(workerName)}")
+                    if (!isSelesai && !isBatal) {
+                        showCancelDialog = true
+                    } else {
+                        navCon.popBackStack()
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -236,13 +264,13 @@ fun StatusPekerjaanScreen(
                     .padding(bottom = 24.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSelesai || isBatal) primaryOrange else Color(0xFFD1D5DB)
+                    containerColor = if (isSelesai || isBatal) primaryOrange else Color.Red
                 ),
                 enabled = true
             ) {
                 Text(
-                    text = if (isBatal) "Tutup" else stringResource(R.string.konfirmasi_pekerjaan_selesai),
-                    color = if (isSelesai || isBatal) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background,
+                    text = if (isSelesai || isBatal) "Tutup" else "Batalkan",
+                    color = MaterialTheme.colorScheme.background,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )

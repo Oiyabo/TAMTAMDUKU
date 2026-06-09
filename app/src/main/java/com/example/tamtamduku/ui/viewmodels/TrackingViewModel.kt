@@ -94,6 +94,34 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
         }
     }
 
+    fun cancelTransaction(transactionId: String) {
+        viewModelScope.launch {
+            repository.updateTransactionStatus(
+                transactionId = transactionId,
+                newStatus = "Batal",
+                onSuccess = {
+                    // Locally update the state
+                    _uiState.update { currentState ->
+                        val updatedTransactions = currentState.transactions.map {
+                            if (it.id == transactionId) {
+                                it.copy(status = "Batal", tracking = it.tracking?.copy(posisiSaatIni = "Batal"))
+                            } else {
+                                it
+                            }
+                        }
+                        currentState.copy(
+                            transactions = updatedTransactions,
+                            transactionGroups = deriveTransactionGroups(updatedTransactions)
+                        )
+                    }
+                },
+                onFailure = {
+                    it.printStackTrace()
+                }
+            )
+        }
+    }
+
     private fun deriveTransactionGroups(transactions: List<Transaction>): List<TransactionGroup> {
         return transactions.groupBy { it.date }.map { (date, items) ->
             TransactionGroup(date, items)
@@ -105,18 +133,20 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun processSuccessfulPayment(workerName: String, layanan: String, paymentMethod: String, price: Double) {
+    fun processSuccessfulPayment(workerName: String, layanan: String, paymentMethod: String, price: Double, invoiceNumber: String, tanggal: String, jam: String) {
         viewModelScope.launch {
             val workers = repository.getWorkers().firstOrNull() ?: emptyList()
             val worker = workers.find { it.nama.equals(workerName, ignoreCase = true) }
             val workerId = worker?.id ?: ""
 
-            val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID"))
-            val timeFormat = SimpleDateFormat("HH:mm", Locale("id", "ID"))
-            val now = Date()
-            val dateStr = dateFormat.format(now)
-            val timeStr = "${timeFormat.format(now)} WIB"
-            val invoiceNumber = "#INV-${SimpleDateFormat("ddMMyy", Locale("id", "ID")).format(now)}-${(100..999).random()}"
+            val dateStr = if (tanggal.isNotBlank() && tanggal != " ") tanggal else {
+                val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID"))
+                dateFormat.format(Date())
+            }
+            val timeStr = if (jam.isNotBlank() && jam != " ") jam else {
+                val timeFormat = SimpleDateFormat("HH:mm", Locale("id", "ID"))
+                "${timeFormat.format(Date())} WIB"
+            }
 
             val transactionData = TransactionData(
                 invoiceNumber = invoiceNumber,
