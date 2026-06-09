@@ -100,7 +100,7 @@ fun EditAddressScreen(
             ) {
                 OutlinedButton(
                     onClick = { 
-                        viewModel.deleteAddress()
+                        // viewModel.deleteAddress()
                         onBack()
                     },
                     modifier = Modifier
@@ -121,7 +121,7 @@ fun EditAddressScreen(
 
                 Button(
                     onClick = { 
-                        viewModel.updateAddress(addressDetail)
+                        viewModel.addAddress(name, "$addressDetail, $district, $city, $province $postalCode")
                         onBack()
                     },
                     modifier = Modifier

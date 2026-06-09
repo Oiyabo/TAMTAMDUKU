@@ -170,17 +170,6 @@ fun HomeScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Temporary button to test payment
-            Button(
-                onClick = onNavigateToPaymentTest,
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-            ) {
-                Text(stringResource(R.string.test_midtrans_payment), color = MaterialTheme.colorScheme.onError)
-            }
-
             Spacer(modifier = Modifier.height(32.dp))
 
             // Categories Section
@@ -249,8 +238,8 @@ fun CategoryItem(icon: ImageVector, label: String, onClick: () -> Unit) {
             modifier = Modifier
                 .size(60.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)), // Very faint tint
+                .border(1.dp, Color.Gray.copy(alpha = 0.5f), RoundedCornerShape(12.dp))
+                .background(Color(0xFFFDECDA).copy(alpha = 0.3f)), // Very faint orange tint
             contentAlignment = Alignment.Center
         ) {
             Icon(

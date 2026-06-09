@@ -360,9 +360,7 @@ fun AppNavigation(
             composable("report_list") {
                 ReportListScreen(
                     onBack = { navCon.popBackStack() },
-                    onNavigateToCreateReport = { navCon.navigate("create_report") },
-                    onReportClick = { reportId -> navCon.navigate("report_detail/${android.net.Uri.encode(reportId)}") },
-                    viewModel = reportViewModel
+                    onNavigateToCreateReport = { navCon.navigate("create_report") }
                 )
             }
             composable("create_report") {
