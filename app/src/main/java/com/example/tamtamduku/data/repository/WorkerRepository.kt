@@ -3,73 +3,124 @@ package com.example.tamtamduku.data.repository
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.tamtamduku.data.model.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class WorkerRepository {
-    private inline fun <reified T> getCollectionAsList(collectionName: String): List<T> {
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val gson = Gson()
+
+    private inline fun <reified T> mapDocument(doc: com.google.firebase.firestore.DocumentSnapshot): T? {
         return try {
-            val inputStream = com.example.tamtamduku.TamtamApplication.appContext.assets.open("firestore_export.json")
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-            val root = Gson().fromJson(jsonString, com.google.gson.JsonObject::class.java)
-            val collectionJson = root.getAsJsonObject(collectionName)
-            if (collectionJson != null) {
-                val type = object : TypeToken<Map<String, T>>() {}.type
-                val map: Map<String, T> = Gson().fromJson(collectionJson, type)
-                map.values.toList()
-            } else {
-                emptyList()
-            }
+            val json = gson.toJson(doc.data)
+            gson.fromJson(json, T::class.java)
         } catch (e: Exception) {
             e.printStackTrace()
-            emptyList()
+            null
         }
     }
 
-    private inline fun <reified T> getCollectionAsMap(collectionName: String): Map<String, T> {
-        return try {
-            val inputStream = com.example.tamtamduku.TamtamApplication.appContext.assets.open("firestore_export.json")
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-            val root = Gson().fromJson(jsonString, com.google.gson.JsonObject::class.java)
-            val collectionJson = root.getAsJsonObject(collectionName)
-            if (collectionJson != null) {
-                val type = object : TypeToken<Map<String, T>>() {}.type
-                Gson().fromJson(collectionJson, type)
-            } else {
-                emptyMap()
+    fun getUsers(): Flow<List<User>> = callbackFlow {
+        val listener = firestore.collection("users")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val users = snapshot?.documents?.mapNotNull { doc ->
+                    mapDocument<User>(doc)?.copy(id = doc.id)
+                } ?: emptyList()
+                trySend(users)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            emptyMap()
-        }
-    }
-
-    fun getUsers(): Flow<List<User>> = flow {
-        val map = getCollectionAsMap<User>("users")
-        emit(map.map { it.value.copy(id = it.key) })
+        awaitClose { listener.remove() }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getWorkers(): Flow<List<VocaWorker>> = flow {
-        val map = getCollectionAsMap<VocaWorker>("workers")
-        emit(map.map { it.value.copy(id = it.key) })
+    fun getWorkers(): Flow<List<VocaWorker>> = callbackFlow {
+        val listener = firestore.collection("workers")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val workers = snapshot?.documents?.mapNotNull { doc ->
+                    mapDocument<VocaWorker>(doc)?.copy(id = doc.id)
+                } ?: emptyList()
+                trySend(workers)
+            }
+        awaitClose { listener.remove() }
     }
 
-    fun getChatLists(): Flow<List<ChatList>> = flow {
-        emit(getCollectionAsList("chatLists"))
+    fun getChatLists(): Flow<List<ChatList>> = callbackFlow {
+        val listener = firestore.collection("chatLists")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val items = snapshot?.documents?.mapNotNull { doc ->
+                    mapDocument<ChatList>(doc)
+                } ?: emptyList()
+                trySend(items)
+            }
+        awaitClose { listener.remove() }
     }
 
-    fun getChatRooms(): Flow<Map<String, List<ChatMessage>>> = flow {
-        emit(getCollectionAsMap("chatRooms"))
+    fun getChatRooms(): Flow<Map<String, List<ChatMessage>>> = callbackFlow {
+        val listener = firestore.collection("chatRooms")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val map = mutableMapOf<String, List<ChatMessage>>()
+                snapshot?.documents?.forEach { doc ->
+                    val messagesList = doc.get("messages") as? List<Map<String, Any>>
+                    if (messagesList != null) {
+                        val messages = messagesList.mapNotNull { msgMap ->
+                            try {
+                                val json = gson.toJson(msgMap)
+                                gson.fromJson(json, ChatMessage::class.java)
+                            } catch (e: Exception) { null }
+                        }
+                        map[doc.id] = messages
+                    }
+                }
+                trySend(map)
+            }
+        awaitClose { listener.remove() }
     }
 
-    fun getTransactions(): Flow<List<TransactionData>> = flow {
-        emit(getCollectionAsList("transactions"))
+    fun getTransactions(): Flow<List<TransactionData>> = callbackFlow {
+        val listener = firestore.collection("transactions")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val items = snapshot?.documents?.mapNotNull { doc ->
+                    mapDocument<TransactionData>(doc)
+                } ?: emptyList()
+                trySend(items)
+            }
+        awaitClose { listener.remove() }
     }
 
-    fun getNotifications(): Flow<List<Notification>> = flow {
-        emit(getCollectionAsList("notifications"))
+    fun getNotifications(): Flow<List<Notification>> = callbackFlow {
+        val listener = firestore.collection("notifications")
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val items = snapshot?.documents?.mapNotNull { doc ->
+                    mapDocument<Notification>(doc)
+                } ?: emptyList()
+                trySend(items)
+            }
+        awaitClose { listener.remove() }
     }
 }
