@@ -55,7 +55,7 @@ fun WorkerCard(
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = "https://i.pravatar.cc/150?u=${worker.nama}",
+                model = worker.profileUrl.ifEmpty { "https://i.pravatar.cc/150?u=${worker.nama}" },
                 contentDescription = "Profile Picture",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -107,7 +107,7 @@ fun WorkerCard(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         repeat(5) { index ->
                             Icon(
-                                imageVector = if (index < worker.rating.toInt()) Icons.Filled.Star else Icons.Outlined.Star,
+                                imageVector = if (index < worker.reviewSummary.averageRating.toInt()) Icons.Filled.Star else Icons.Outlined.Star,
                                 contentDescription = null,
                                 tint = Color(0xFFFFD700),
                                 modifier = Modifier.size(14.dp)
@@ -116,7 +116,7 @@ fun WorkerCard(
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "${worker.rating} (128)",
+                        text = "${worker.reviewSummary.averageRating} (${worker.reviewSummary.totalReviews})",
                         fontSize = 10.sp,
                         color = Color.Black,
                         fontWeight = FontWeight.Medium

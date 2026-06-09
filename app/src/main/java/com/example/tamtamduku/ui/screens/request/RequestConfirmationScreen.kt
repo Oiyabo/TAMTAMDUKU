@@ -98,7 +98,7 @@ fun RequestConfirmationScreen(
                 modifier = Modifier.padding(bottom = 24.dp, top = 8.dp)
             ) {
                 AsyncImage(
-                    model = "https://i.pravatar.cc/150?u=${worker.nama}",
+                    model = worker.profileUrl.ifEmpty { "https://i.pravatar.cc/150?u=${worker.nama}" },
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

@@ -135,8 +135,8 @@ fun HasilKerjaScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AsyncImage(
-                        model = "https://i.pravatar.cc/150?u=${transaction.workerName}",
-                        contentDescription = "Profile",
+                        model = transaction.profileUrl.ifEmpty { "https://i.pravatar.cc/150?u=${transaction.workerName}" },
+                        contentDescription = "Worker Image",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(72.dp)

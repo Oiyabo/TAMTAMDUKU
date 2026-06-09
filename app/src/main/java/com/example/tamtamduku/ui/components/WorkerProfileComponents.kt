@@ -174,7 +174,7 @@ fun ProfilTabContent(worker: VocaWorker) {
 
 @Composable
 fun UlasanTabContent(worker: VocaWorker) {
-    val distribution = getRatingDistribution(worker.rating)
+    val distribution = getRatingDistribution(worker.reviewSummary.averageRating)
     
     Column(
         modifier = Modifier
@@ -197,11 +197,11 @@ fun UlasanTabContent(worker: VocaWorker) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(end = 16.dp)
                 ) {
-                    Text(worker.rating.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF8C00))
+                    Text(worker.reviewSummary.averageRating.toString(), fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF8C00))
                     Row {
                         repeat(5) { index ->
                             Icon(
-                                imageVector = if (index < worker.rating.toInt()) Icons.Default.Star else Icons.Outlined.Star,
+                                imageVector = if (index < worker.reviewSummary.averageRating.toInt()) Icons.Default.Star else Icons.Outlined.Star,
                                 contentDescription = null,
                                 tint = Color(0xFFFFC107),
                                 modifier = Modifier.size(14.dp)

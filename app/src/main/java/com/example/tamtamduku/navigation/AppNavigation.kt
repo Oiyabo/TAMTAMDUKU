@@ -397,7 +397,8 @@ fun AppNavigation(
                         }
                     },
                     workerName = backStackEntry.arguments?.getString("workerName") ?: "",
-                    layanan = backStackEntry.arguments?.getString("layanan") ?: ""
+                    layanan = backStackEntry.arguments?.getString("layanan") ?: "",
+                    workerViewModel = workerViewModel
                 )
             }
             composable("payment_success") {

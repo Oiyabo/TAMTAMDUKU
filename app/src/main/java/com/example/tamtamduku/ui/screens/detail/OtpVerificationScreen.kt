@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tamtamduku.data.model.Transaction
+import com.example.tamtamduku.data.model.Tracking
 import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 import kotlinx.coroutines.delay
@@ -210,9 +211,15 @@ fun OtpVerificationScreen(
                                     invoiceNumber = nextInvoiceNum,
                                     workerName = worker.nama,
                                     workerProfession = worker.pekerjaan,
-                                    date = currentDateStr.split(",")[0],
+                                    status = "Menunggu Konfirmasi",
+                                    date = currentDateStr,
                                     price = totalAmount,
-                                    status = "Dikerjakan"
+                                    profileUrl = worker.profileUrl,
+                                    tracking = Tracking(
+                                        estimasiWaktu = "-",
+                                        posisiSaatIni = "Pesanan Dibuat",
+                                        iconType = "Work"
+                                    )
                                 )
                                 trackingViewModel.addTransaction(newTransaction)
                                 

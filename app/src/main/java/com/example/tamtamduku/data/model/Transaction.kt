@@ -20,6 +20,7 @@ data class Transaction(
     val status: String = "",
     val date: String = "",
     val price: Double = 0.0,
+    val profileUrl: String = "",
     val tracking: Tracking? = null,
     val icon: String = "Work",
     val iconColor: String = "#FF7A00",

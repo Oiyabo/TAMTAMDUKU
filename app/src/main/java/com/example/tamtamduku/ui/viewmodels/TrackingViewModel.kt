@@ -47,6 +47,7 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
                         status = tx.status,
                         date = tx.date,
                         price = tx.price,
+                        profileUrl = worker?.profileUrl ?: "",
                         tracking = tx.tracking,
                         icon = if (tx.status == "Dikerjakan") "Construction" else "Work"
                     )

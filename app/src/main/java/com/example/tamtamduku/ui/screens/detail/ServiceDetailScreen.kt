@@ -153,7 +153,7 @@ fun ServiceDetailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AsyncImage(
-                    model = "https://i.pravatar.cc/150?u=${worker.nama}",
+                    model = worker.profileUrl.ifEmpty { "https://i.pravatar.cc/150?u=${worker.nama}" },
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -188,11 +188,11 @@ fun ServiceDetailScreen(
                 )
                 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFFFC107), modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Star, contentDescription = "Rating", tint = Color(0xFFFFD700), modifier = Modifier.size(16.dp))
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(worker.rating.toString(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text(worker.reviewSummary.averageRating.toString(), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("(120)", fontSize = 14.sp, color = Color.Gray)
+                    Text("(${worker.reviewSummary.totalReviews} ulasan)", fontSize = 12.sp, color = Color.Gray)
                 }
                 
                 Text(

@@ -79,45 +79,45 @@
       ]
     },
     "wrk_2b3c4d": {
-      "pekerjaan": "Data Analyst",
+      "pekerjaan": "System Analyst",
       "nama": "M. Faris Adithya",
       "kategori": [
-        "Analisis Data",
-        "Konsultasi Bisnis"
+        "Analisis Sistem",
+        "Perancangan Solusi TI"
       ],
-      "deskripsi": "Membantu Anda menganalisis data untuk pengambilan keputusan strategis perusahaan.",
+      "deskripsi": "Membantu Anda menganalisis kebutuhan bisnis, merancang sistem informasi, serta menyusun solusi teknologi yang efektif dan efisien.",
       "lokasi": "Jakarta",
       "tanggalGabung": "2019-02-10",
-      "baseSalary": 250000.0,
+      "baseSalary": 350000.0,
       "skills": [
-        "Python",
-        "SQL",
-        "Tableau"
+        "System Analysis",
+        "UML",
+        "Business Process Modeling"
       ],
-      "profileUrl": "https://i.pravatar.cc/150?u=M. Faris Adithya",
+      "profileUrl": "https://i.imgur.com/OQJSAde.jpeg",
       "layanan": [
         {
           "id": "srv_2a",
           "namaLayanan": "Basic",
-          "harga": 250000.0
+          "harga": 350000.0
         },
         {
           "id": "srv_2b",
           "namaLayanan": "Premium",
-          "harga": 375000.0
+          "harga": 500000.0
         },
         {
           "id": "srv_2c",
           "namaLayanan": "VIP",
-          "harga": 500000.0
+          "harga": 750000.0
         }
       ],
       "portofolio": [
         {
           "id": "prt_2a",
-          "title": "Dashboard Penjualan Retail",
-          "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=400",
-          "description": "Visualisasi data penjualan menggunakan Tableau."
+          "title": "Analisis dan Perancangan Sistem Akademik",
+          "imageUrl": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=400",
+          "description": "Menyusun kebutuhan sistem, use case, activity diagram, dan rancangan basis data untuk sistem akademik kampus."
         }
       ],
       "reviewSummary": {
@@ -130,7 +130,7 @@
           "userId": "usr_9b8c7d",
           "username": "Michael",
           "rating": 5,
-          "comment": "Analisis sangat tajam dan bermanfaat",
+          "comment": "Analisis kebutuhan sistem sangat detail dan solutif.",
           "date": "2024-05-10"
         }
       ]

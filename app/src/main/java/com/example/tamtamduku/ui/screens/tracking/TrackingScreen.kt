@@ -158,8 +158,8 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = "https://i.pravatar.cc/150?u=${item.workerName}",
-                contentDescription = "Worker Image",
+                model = item.profileUrl.ifEmpty { "https://i.pravatar.cc/150?u=${item.workerName}" },
+                contentDescription = "Profile Picture",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)

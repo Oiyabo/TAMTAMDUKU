@@ -30,8 +30,12 @@ fun PaymentScreen(
     onBack: () -> Unit,
     onNavigateToSuccess: () -> Unit,
     workerName: String,
-    layanan: String
+    layanan: String,
+    workerViewModel: com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 ) {
+    val uiState by workerViewModel.uiState.collectAsState()
+    val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
+    val profileUrl = worker?.profileUrl ?: ""
     var selectedPaymentMethod by remember { mutableStateOf("Qris") }
 
     Scaffold(
@@ -120,7 +124,7 @@ fun PaymentScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AsyncImage(
-                                model = "https://i.pravatar.cc/150?u=${workerName}",
+                                model = profileUrl.ifEmpty { "https://i.pravatar.cc/150?u=${workerName}" },
                                 contentDescription = "Worker Image",
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
