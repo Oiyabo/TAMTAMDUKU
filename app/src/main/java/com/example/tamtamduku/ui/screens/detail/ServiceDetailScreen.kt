@@ -83,9 +83,11 @@ fun ServiceDetailScreen(
                     IconButton(onClick = {
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, "Lihat profil pekerja ini di TamtamDuku: https://tamtamduku-9647d.web.app/worker/${Uri.encode(worker.nama)}")
+                            putExtra(Intent.EXTRA_TEXT, "Lihat profil pekerja ini di TamtamDuku: https://us-central1-tamtamduku-9647d.cloudfunctions.net/shareWorker?worker=${Uri.encode(worker.nama)}")
                         }
-                        context.startActivity(Intent.createChooser(shareIntent, "Bagikan Profil Pekerja"))
+                        val chooser = Intent.createChooser(shareIntent, "Bagikan Profil Pekerja")
+                        chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(chooser)
                     }) {
                         Icon(Icons.Default.Share, contentDescription = "Share", tint = Color(0xFFFF8C00))
                     }

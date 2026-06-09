@@ -179,7 +179,7 @@ fun AppNavigation(
         }
     ) { innerPadding ->
         val authUiState by authViewModel.uiState.collectAsState()
-        val startDestination = if (authUiState.isLoggedIn) "home" else "login"
+        val startDestination = remember { if (authViewModel.uiState.value.isLoggedIn) "home" else "login" }
 
         NavHost(
             navController = navCon,
