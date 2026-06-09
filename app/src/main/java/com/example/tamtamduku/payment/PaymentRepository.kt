@@ -9,11 +9,15 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 object PaymentEventBus {
-    private val _paymentResult = MutableSharedFlow<Boolean>(extraBufferCapacity = 1)
+    private val _paymentResult = MutableSharedFlow<Boolean>(replay = 1, extraBufferCapacity = 1)
     val paymentResult = _paymentResult.asSharedFlow()
     
     fun emitSuccess() {
         _paymentResult.tryEmit(true)
+    }
+
+    fun reset() {
+        _paymentResult.tryEmit(false)
     }
 }
 
