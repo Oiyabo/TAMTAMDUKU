@@ -32,3 +32,16 @@ data class Tracking(
     val posisiSaatIni: String = "",
     val iconType: String = ""
 )
+
+data class Receipt(
+    val id: String = "",
+    val invoiceNumber: String = "",
+    val userId: String = "",
+    val workerId: String = "",
+    val workerName: String = "",
+    val layanan: String = "",
+    val paymentMethod: String = "",
+    val date: String = "",
+    val time: String = "",
+    val totalAmount: Double = 0.0
+)

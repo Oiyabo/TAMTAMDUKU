@@ -399,14 +399,16 @@ fun AppNavigation(
                 )
             }
             composable(
-                "request_confirmation/{workerName}/{layanan}/{lokasi}/{tanggal}/{jam}/{catatan}",
+                "request_confirmation/{workerName}/{layanan}/{lokasi}/{tanggal}/{jam}/{catatan}/{kategori}/{harga}",
                 arguments = listOf(
                     navArgument("workerName") { type = NavType.StringType },
                     navArgument("layanan") { type = NavType.StringType },
                     navArgument("lokasi") { type = NavType.StringType },
                     navArgument("tanggal") { type = NavType.StringType },
                     navArgument("jam") { type = NavType.StringType },
-                    navArgument("catatan") { type = NavType.StringType }
+                    navArgument("catatan") { type = NavType.StringType },
+                    navArgument("kategori") { type = NavType.StringType },
+                    navArgument("harga") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
                 RequestConfirmationScreen(
@@ -417,44 +419,75 @@ fun AppNavigation(
                     lokasi = backStackEntry.arguments?.getString("lokasi")?.trim() ?: "",
                     tanggal = backStackEntry.arguments?.getString("tanggal")?.trim() ?: "",
                     jam = backStackEntry.arguments?.getString("jam")?.trim() ?: "",
-                    catatan = backStackEntry.arguments?.getString("catatan")?.trim() ?: ""
+                    catatan = backStackEntry.arguments?.getString("catatan")?.trim() ?: "",
+                    kategori = backStackEntry.arguments?.getString("kategori")?.trim() ?: "",
+                    harga = backStackEntry.arguments?.getString("harga")?.trim() ?: ""
                 )
             }
             composable(
-                "payment/{workerName}/{layanan}",
+                "payment/{workerName}/{layanan}/{harga}",
                 arguments = listOf(
                     navArgument("workerName") { type = NavType.StringType },
-                    navArgument("layanan") { type = NavType.StringType }
+                    navArgument("layanan") { type = NavType.StringType },
+                    navArgument("harga") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
+                val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
+                val layanan = backStackEntry.arguments?.getString("layanan") ?: ""
+                val harga = backStackEntry.arguments?.getString("harga") ?: ""
                 PaymentScreen(
                     onBack = { navCon.popBackStack() },
                     onNavigateToSimulation = { paymentMethod -> 
-                        navCon.navigate("payment_simulation/${Uri.encode(paymentMethod)}") {
+                        navCon.navigate("payment_simulation/${Uri.encode(workerName)}/${Uri.encode(layanan)}/${Uri.encode(paymentMethod)}/${Uri.encode(harga)}") {
                             popUpTo("payment") { inclusive = true }
                         }
                     },
-                    workerName = backStackEntry.arguments?.getString("workerName") ?: "",
-                    layanan = backStackEntry.arguments?.getString("layanan") ?: "",
+                    workerName = workerName,
+                    layanan = layanan,
+                    harga = harga,
                     workerViewModel = workerViewModel
                 )
             }
             composable(
-                "payment_simulation/{paymentMethod}",
-                arguments = listOf(navArgument("paymentMethod") { type = NavType.StringType })
+                "payment_simulation/{workerName}/{layanan}/{paymentMethod}/{harga}",
+                arguments = listOf(
+                    navArgument("workerName") { type = NavType.StringType },
+                    navArgument("layanan") { type = NavType.StringType },
+                    navArgument("paymentMethod") { type = NavType.StringType },
+                    navArgument("harga") { type = NavType.StringType }
+                )
             ) { backStackEntry ->
+                val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
+                val layanan = backStackEntry.arguments?.getString("layanan") ?: ""
+                val paymentMethod = backStackEntry.arguments?.getString("paymentMethod") ?: "Lainnya"
+                val harga = backStackEntry.arguments?.getString("harga") ?: "0"
+                
                 PaymentSimulationScreen(
-                    paymentMethod = backStackEntry.arguments?.getString("paymentMethod") ?: "Lainnya",
+                    paymentMethod = paymentMethod,
                     onBack = { navCon.popBackStack() },
                     onPaymentCompleted = {
-                        navCon.navigate("payment_success") {
+                        navCon.navigate("payment_success/${Uri.encode(workerName)}/${Uri.encode(layanan)}/${Uri.encode(paymentMethod)}/${Uri.encode(harga)}") {
                             popUpTo("payment_simulation") { inclusive = true }
                         }
-                    }
+                    },
+                    harga = harga
                 )
             }
-            composable("payment_success") {
+            composable(
+                "payment_success/{workerName}/{layanan}/{paymentMethod}/{harga}",
+                arguments = listOf(
+                    navArgument("workerName") { type = NavType.StringType },
+                    navArgument("layanan") { type = NavType.StringType },
+                    navArgument("paymentMethod") { type = NavType.StringType },
+                    navArgument("harga") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
                 PaymentSuccessScreen(
+                    workerName = backStackEntry.arguments?.getString("workerName") ?: "",
+                    layanan = backStackEntry.arguments?.getString("layanan") ?: "",
+                    paymentMethod = backStackEntry.arguments?.getString("paymentMethod") ?: "",
+                    harga = backStackEntry.arguments?.getString("harga") ?: "0",
+                    trackingViewModel = trackingViewModel,
                     onNavigateHome = {
                         navCon.navigate("home") {
                             popUpTo("home") { inclusive = true }

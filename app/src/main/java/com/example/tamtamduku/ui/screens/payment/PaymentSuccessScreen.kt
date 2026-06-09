@@ -24,10 +24,41 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.runtime.LaunchedEffect
+import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PaymentSuccessScreen(
+    workerName: String,
+    layanan: String,
+    paymentMethod: String,
+    harga: String,
+    trackingViewModel: TrackingViewModel,
     onNavigateHome: () -> Unit
 ) {
+    val dateFormat = SimpleDateFormat("d MMMM yyyy, HH:mm", Locale("id", "ID"))
+    val now = Date()
+    val dateStr = "${dateFormat.format(now)} WIB"
+    val invoiceStr = "#INV-${SimpleDateFormat("ddMMyy", Locale("id", "ID")).format(now)}-${(100..999).random()}"
+
+    val baseHarga = harga.toDoubleOrNull() ?: 0.0
+    val adminFee = 5000.0
+    val total = baseHarga + adminFee
+
+    LaunchedEffect(Unit) {
+        trackingViewModel.processSuccessfulPayment(
+            workerName = workerName,
+            layanan = layanan,
+            paymentMethod = paymentMethod,
+            price = total
+        )
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -108,22 +139,32 @@ fun PaymentSuccessScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
-                            DetailRow("ID Transaksi", "#INV-260507-001", MaterialTheme.colorScheme.primary)
+                            DetailRow("ID Transaksi", invoiceStr, MaterialTheme.colorScheme.primary)
                             Spacer(modifier = Modifier.height(12.dp))
                             HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
                             
-                            DetailRow("Tanggal & Waktu", "6 Mei 2026, 10:23 WIB", MaterialTheme.colorScheme.primary)
+                            DetailRow("Pekerja", workerName, MaterialTheme.colorScheme.onBackground)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            DetailRow("Layanan", layanan, MaterialTheme.colorScheme.onBackground)
                             Spacer(modifier = Modifier.height(12.dp))
                             HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
                             
-                            DetailRow("Metode Pembayaran", "Qris", MaterialTheme.colorScheme.primary)
+                            DetailRow("Tanggal & Waktu", dateStr, MaterialTheme.colorScheme.primary)
                             Spacer(modifier = Modifier.height(12.dp))
                             HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                             Spacer(modifier = Modifier.height(12.dp))
                             
-                            DetailRow("Total Pembayaran", "Rp255.000", MaterialTheme.colorScheme.primary, isBold = true)
+                            DetailRow("Metode Pembayaran", paymentMethod, MaterialTheme.colorScheme.primary)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            
+                            DetailRow("Total Pembayaran", "Rp${total.toLong()}", MaterialTheme.colorScheme.primary, isBold = true)
                         }
                     }
                     

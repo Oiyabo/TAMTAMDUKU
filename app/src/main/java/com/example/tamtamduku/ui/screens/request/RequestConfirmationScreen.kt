@@ -43,7 +43,9 @@ fun RequestConfirmationScreen(
     lokasi: String,
     tanggal: String,
     jam: String,
-    catatan: String
+    catatan: String,
+    kategori: String,
+    harga: String
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
@@ -76,7 +78,8 @@ fun RequestConfirmationScreen(
                     onClick = {
                         val encodedWorkerName = Uri.encode(workerName ?: "")
                         val encodedLayanan = Uri.encode(layanan.ifBlank { "Pembuatan SIAKAD" })
-                        navCon.navigate("payment/$encodedWorkerName/$encodedLayanan")
+                        val encodedHarga = Uri.encode(harga.ifBlank { "300000" })
+                        navCon.navigate("payment/$encodedWorkerName/$encodedLayanan/$encodedHarga")
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
@@ -116,6 +119,9 @@ fun RequestConfirmationScreen(
                 }
             }
 
+            SummaryItem(icon = Icons.Outlined.WorkOutline, label = "Kategori", value = kategori.ifBlank { "Layanan Umum" })
+            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
+
             SummaryItem(icon = Icons.Outlined.WorkOutline, label = stringResource(R.string.layanan), value = layanan.ifBlank { "Pembuatan SIAKAD" })
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
             
@@ -131,7 +137,7 @@ fun RequestConfirmationScreen(
             SummaryItem(icon = Icons.Outlined.NoteAlt, label = stringResource(R.string.catatan), value = catatan.ifBlank { "Analisis dan perancangan (SIAKAD) untuk kebutuhan pengelolaan data mahasiswa, jadwal, nilai, dan administrasi kampus." })
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.LocalOffer, label = stringResource(R.string.estimasi_harga), value = "Rp300.000,00")
+            SummaryItem(icon = Icons.Outlined.LocalOffer, label = stringResource(R.string.estimasi_harga), value = "Rp$harga")
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
         }
     }

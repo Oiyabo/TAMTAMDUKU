@@ -19,5 +19,6 @@ data class SearchUiState(
     val maxRate: String = "",
     val workTypes: List<String> = listOf("Semua Pekerjaan"),
     val locations: List<String> = listOf("Semua Lokasi"),
-    val favoriteWorkerIds: List<String> = emptyList()
+    val favoriteWorkerIds: List<String> = emptyList(),
+    val userLocations: List<String> = emptyList()
 )

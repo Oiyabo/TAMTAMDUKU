@@ -35,6 +35,7 @@ fun PaymentScreen(
     onNavigateToSimulation: (String) -> Unit,
     workerName: String,
     layanan: String,
+    harga: String,
     workerViewModel: com.example.tamtamduku.ui.viewmodels.WorkerViewModel
 ) {
     val uiState by workerViewModel.uiState.collectAsState()
@@ -165,14 +166,18 @@ fun PaymentScreen(
                     Text("Rincian Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(16.dp))
                     
+                    val baseHarga = harga.toDoubleOrNull() ?: 0.0
+                    val adminFee = 5000.0
+                    val total = baseHarga + adminFee
+                    
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Harga Layanan", fontSize = 14.sp, color = Color.DarkGray)
-                        Text("Rp250.000", fontSize = 14.sp, color = Color.Black)
+                        Text("Rp${harga}", fontSize = 14.sp, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Biaya Admin", fontSize = 14.sp, color = Color.DarkGray)
-                        Text("Rp5.000", fontSize = 14.sp, color = Color.Black)
+                        Text("Rp5000", fontSize = 14.sp, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -184,7 +189,7 @@ fun PaymentScreen(
                     
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text("Total Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text("Rp255.000", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFFFF7A00))
+                        Text("Rp${total.toLong()}", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFFFF7A00))
                     }
                 }
             }

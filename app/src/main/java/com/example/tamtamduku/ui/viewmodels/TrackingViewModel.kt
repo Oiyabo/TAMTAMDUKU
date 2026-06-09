@@ -12,7 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
+import com.example.tamtamduku.data.model.TransactionData
+import com.example.tamtamduku.data.model.Tracking
+import com.example.tamtamduku.data.model.Receipt
 
 data class TrackingUiState(
     val isLoading: Boolean = false,
@@ -96,5 +102,65 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
 
     fun getTransactionByInvoice(invoiceId: String): Transaction? {
         return _uiState.value.transactions.find { it.invoiceNumber == invoiceId }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun processSuccessfulPayment(workerName: String, layanan: String, paymentMethod: String, price: Double) {
+        viewModelScope.launch {
+            val workers = repository.getWorkers().firstOrNull() ?: emptyList()
+            val worker = workers.find { it.nama.equals(workerName, ignoreCase = true) }
+            val workerId = worker?.id ?: ""
+
+            val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID"))
+            val timeFormat = SimpleDateFormat("HH:mm", Locale("id", "ID"))
+            val now = Date()
+            val dateStr = dateFormat.format(now)
+            val timeStr = "${timeFormat.format(now)} WIB"
+            val invoiceNumber = "#INV-${SimpleDateFormat("ddMMyy", Locale("id", "ID")).format(now)}-${(100..999).random()}"
+
+            val transactionData = TransactionData(
+                invoiceNumber = invoiceNumber,
+                userId = "usr_8a7b6c5d", // Dummy logged-in user
+                workerId = workerId,
+                status = "Dikerjakan",
+                date = dateStr,
+                price = price,
+                tracking = Tracking(
+                    estimasiWaktu = "-",
+                    posisiSaatIni = "Menunggu Konfirmasi",
+                    iconType = "Wait"
+                )
+            )
+
+            val receipt = Receipt(
+                invoiceNumber = invoiceNumber,
+                userId = "usr_8a7b6c5d",
+                workerId = workerId,
+                workerName = workerName,
+                layanan = layanan,
+                paymentMethod = paymentMethod,
+                date = dateStr,
+                time = timeStr,
+                totalAmount = price
+            )
+
+            repository.createTransaction(
+                transaction = transactionData,
+                onSuccess = {
+                    repository.createReceipt(
+                        receipt = receipt,
+                        onSuccess = {
+                            // Successfully saved both
+                        },
+                        onFailure = {
+                            it.printStackTrace()
+                        }
+                    )
+                },
+                onFailure = {
+                    it.printStackTrace()
+                }
+            )
+        }
     }
 }
