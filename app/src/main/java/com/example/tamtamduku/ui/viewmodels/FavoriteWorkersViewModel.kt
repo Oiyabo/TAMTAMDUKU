@@ -37,4 +37,8 @@ class FavoriteWorkersViewModel(private val repository: WorkerRepository = Worker
             }
         }
     }
+
+    fun removeFavorite(workerId: String) {
+        _favoriteWorkers.value = _favoriteWorkers.value.filter { it.id != workerId }
+    }
 }

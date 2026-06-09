@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.Alignment
 
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -86,11 +87,28 @@ fun AddressListScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item {
-                AddressCard(
-                    name = uiState.name.ifEmpty { "Bang Lijen" },
-                    address = uiState.address.ifEmpty { "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." },
-                    onClick = onNavigateToEditAddress
-                )
+                if (uiState.address.isNotEmpty()) {
+                    AddressCard(
+                        name = uiState.name.ifEmpty { "Bang Lijen" },
+                        address = uiState.address,
+                        onClick = onNavigateToEditAddress
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "+ Alamat",
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Gray,
+                            modifier = Modifier.clickable { onNavigateToEditAddress() }
+                        )
+                    }
+                }
             }
         }
     }

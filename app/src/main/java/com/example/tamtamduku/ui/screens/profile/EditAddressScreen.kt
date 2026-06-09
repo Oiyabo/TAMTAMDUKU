@@ -14,18 +14,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditAddressScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    viewModel: ProfileViewModel = viewModel()
 ) {
-    var name by remember { mutableStateOf("Bang Lijen") }
+    val uiState by viewModel.uiState.collectAsState()
+    var name by remember { mutableStateOf(if (uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
     var province by remember { mutableStateOf("Lampung") }
     var city by remember { mutableStateOf("Bandar Lampung") }
     var district by remember { mutableStateOf("Rajabasa") }
     var postalCode by remember { mutableStateOf("35141") }
-    var addressDetail by remember { mutableStateOf("Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141.") }
+    var addressDetail by remember { mutableStateOf(if (uiState.address.isEmpty()) "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." else uiState.address) }
     var additionalDetail by remember { mutableStateOf("Depan Parkiran") }
 
     Scaffold(
@@ -93,7 +97,10 @@ fun EditAddressScreen(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 OutlinedButton(
-                    onClick = { /* Delete action */ },
+                    onClick = { 
+                        viewModel.deleteAddress()
+                        onBack()
+                    },
                     modifier = Modifier
                         .weight(1f)
                         .height(50.dp),
@@ -111,7 +118,10 @@ fun EditAddressScreen(
                 }
 
                 Button(
-                    onClick = { /* Save action */ },
+                    onClick = { 
+                        viewModel.updateAddress(addressDetail)
+                        onBack()
+                    },
                     modifier = Modifier
                         .weight(1f)
                         .height(50.dp),
