@@ -57,6 +57,7 @@ import com.example.tamtamduku.ui.viewmodels.TrackingViewModel
 import com.example.tamtamduku.ui.screens.request.RequestFormScreen
 import com.example.tamtamduku.ui.screens.request.RequestConfirmationScreen
 import com.example.tamtamduku.ui.screens.payment.PaymentScreen
+import com.example.tamtamduku.ui.screens.payment.PaymentSimulationScreen
 import com.example.tamtamduku.ui.screens.payment.PaymentSuccessScreen
 import com.example.tamtamduku.ui.screens.notification.NotificationsScreen
 import com.example.tamtamduku.ui.viewmodels.ProfileViewModel
@@ -430,14 +431,28 @@ fun AppNavigation(
             ) { backStackEntry ->
                 PaymentScreen(
                     onBack = { navCon.popBackStack() },
-                    onNavigateToSuccess = { 
-                        navCon.navigate("payment_success") {
+                    onNavigateToSimulation = { paymentMethod -> 
+                        navCon.navigate("payment_simulation/${Uri.encode(paymentMethod)}") {
                             popUpTo("payment") { inclusive = true }
                         }
                     },
                     workerName = backStackEntry.arguments?.getString("workerName") ?: "",
                     layanan = backStackEntry.arguments?.getString("layanan") ?: "",
                     workerViewModel = workerViewModel
+                )
+            }
+            composable(
+                "payment_simulation/{paymentMethod}",
+                arguments = listOf(navArgument("paymentMethod") { type = NavType.StringType })
+            ) { backStackEntry ->
+                PaymentSimulationScreen(
+                    paymentMethod = backStackEntry.arguments?.getString("paymentMethod") ?: "Lainnya",
+                    onBack = { navCon.popBackStack() },
+                    onPaymentCompleted = {
+                        navCon.navigate("payment_success") {
+                            popUpTo("payment_simulation") { inclusive = true }
+                        }
+                    }
                 )
             }
             composable("payment_success") {

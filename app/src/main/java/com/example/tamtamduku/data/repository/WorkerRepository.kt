@@ -38,6 +38,32 @@ class WorkerRepository {
         awaitClose { listener.remove() }
     }
 
+    fun getUserProfile(uid: String): Flow<User?> = callbackFlow {
+        val listener = firestore.collection("users").document(uid)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val user = snapshot?.let { doc ->
+                    if (doc.exists()) mapDocument<User>(doc)?.copy(id = doc.id) else null
+                }
+                trySend(user)
+            }
+        awaitClose { listener.remove() }
+    }
+
+    fun updateUserProfile(user: User, onComplete: (Boolean) -> Unit) {
+        if (user.id.isNotEmpty()) {
+            firestore.collection("users").document(user.id)
+                .set(user)
+                .addOnSuccessListener { onComplete(true) }
+                .addOnFailureListener { onComplete(false) }
+        } else {
+            onComplete(false)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getWorkers(): Flow<List<VocaWorker>> = callbackFlow {
         val listener = firestore.collection("workers")

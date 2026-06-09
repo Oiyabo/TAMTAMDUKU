@@ -139,7 +139,10 @@ fun EditProfileScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Button(
-                onClick = { /* Save action */ },
+                onClick = { 
+                    viewModel.updateProfile(name, email, address)
+                    onBack()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
