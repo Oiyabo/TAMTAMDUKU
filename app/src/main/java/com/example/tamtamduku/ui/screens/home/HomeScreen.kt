@@ -42,6 +42,7 @@ fun HomeScreen(
 
     Scaffold(
         containerColor = Color(0xFFFFFDF8),
+        contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             Row(
                 modifier = Modifier
