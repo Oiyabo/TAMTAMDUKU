@@ -34,6 +34,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
 import com.example.tamtamduku.ui.viewmodels.AuthViewModel
 
 @Composable
@@ -49,9 +51,12 @@ fun LoginScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
-    val primaryOrange = Color(0xFFF97316)
-    val linkBlue = Color(0xFF0096FF)
-    val bgColor = Color(0xFFFFFDFB)
+    val primaryColor = MaterialTheme.colorScheme.primary
+    val linkColor = MaterialTheme.colorScheme.tertiary // or just primary
+    val bgColor = MaterialTheme.colorScheme.background
+    val onBgColor = MaterialTheme.colorScheme.onBackground
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
 
     LaunchedEffect(uiState.loginError) {
         uiState.loginError?.let {
@@ -68,7 +73,7 @@ fun LoginScreen(
     ) {
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(color = primaryOrange)
+                CircularProgressIndicator(color = primaryColor)
             }
         } else {
             Column(
@@ -82,13 +87,13 @@ fun LoginScreen(
                 Icon(
                     imageVector = Icons.Default.Handshake,
                     contentDescription = "Logo",
-                    tint = primaryOrange,
+                    tint = primaryColor,
                     modifier = Modifier.size(64.dp)
                 )
                 
                 Text(
                     text = buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = Color.Black, fontWeight = FontWeight.Normal)) { append("V O C A") }
+                        withStyle(style = SpanStyle(color = onBgColor, fontWeight = FontWeight.Normal)) { append(stringResource(R.string.voca)) }
                     },
                     fontSize = 20.sp,
                     letterSpacing = 2.sp
@@ -97,17 +102,17 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Selamat Datang",
+                    text = stringResource(R.string.welcome),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 28.sp,
-                    color = Color.Black
+                    color = onBgColor
                 )
                 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Masuk untuk Melanjutkan",
-                    style = TextStyle(color = Color.Black, fontSize = 16.sp)
+                    text = stringResource(R.string.login_to_continue),
+                    style = TextStyle(color = onBgColor, fontSize = 16.sp)
                 )
 
                 Spacer(modifier = Modifier.height(48.dp))
@@ -115,24 +120,26 @@ fun LoginScreen(
                 // Email / Username Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Masukkan Email atau Username",
+                        text = stringResource(R.string.enter_email_or_username),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
-                        color = Color.Black,
+                        color = onBgColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
-                        placeholder = { Text("Email atau Username", color = Color.Black) },
-                        trailingIcon = { Icon(imageVector = Icons.Outlined.Email, contentDescription = "Email Icon", tint = Color.Black) },
+                        placeholder = { Text(stringResource(R.string.email_or_username), color = onSurfaceColor) },
+                        trailingIcon = { Icon(imageVector = Icons.Outlined.Email, contentDescription = "Email Icon", tint = onSurfaceColor) },
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = primaryColor,
+                            unfocusedBorderColor = onBgColor,
+                            focusedContainerColor = surfaceColor,
+                            unfocusedContainerColor = surfaceColor,
+                            focusedTextColor = onSurfaceColor,
+                            unfocusedTextColor = onSurfaceColor
                         ),
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email, imeAction = ImeAction.Next),
@@ -145,22 +152,22 @@ fun LoginScreen(
                 // Password Input
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Text(
-                        text = "Masukkan Password",
+                        text = stringResource(R.string.enter_password),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
-                        color = Color.Black,
+                        color = onBgColor,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
-                        placeholder = { Text("Kata Sandi", color = Color.Black) },
+                        placeholder = { Text(stringResource(R.string.password), color = onSurfaceColor) },
                         trailingIcon = {
                             IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                                 Icon(
                                     imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                                     contentDescription = "Toggle Password Visibility",
-                                    tint = Color.Black
+                                    tint = onSurfaceColor
                                 )
                             }
                         },
@@ -170,10 +177,12 @@ fun LoginScreen(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.Black,
-                            unfocusedBorderColor = Color.Black,
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White
+                            focusedBorderColor = primaryColor,
+                            unfocusedBorderColor = onBgColor,
+                            focusedContainerColor = surfaceColor,
+                            unfocusedContainerColor = surfaceColor,
+                            focusedTextColor = onSurfaceColor,
+                            unfocusedTextColor = onSurfaceColor
                         ),
                         singleLine = true
                     )
@@ -183,9 +192,9 @@ fun LoginScreen(
 
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
                     Text(
-                        text = "Lupa Password?",
+                        text = stringResource(R.string.forgot_password),
                         modifier = Modifier.clickable { },
-                        style = TextStyle(color = linkBlue, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                        style = TextStyle(color = linkColor, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     )
                 }
 
@@ -196,24 +205,24 @@ fun LoginScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = primaryOrange)
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = primaryColor)
                 ) {
                     Text(
-                        text = "Masuk",
+                        text = stringResource(R.string.login),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
                 
                 Text(
-                    text = "atau masuk dengan",
+                    text = stringResource(R.string.or_login_with),
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
-                    color = Color.Black
+                    color = onBgColor
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -224,11 +233,11 @@ fun LoginScreen(
                         .width(96.dp)
                         .height(52.dp),
                     shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, Color.Black)
+                    colors = ButtonDefaults.outlinedButtonColors(containerColor = surfaceColor),
+                    border = BorderStroke(1.dp, onBgColor)
                 ) {
                     Text(
-                        text = "G",
+                        text = stringResource(R.string.g),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 24.sp,
                         color = Color(0xFF4285F4)
@@ -241,13 +250,13 @@ fun LoginScreen(
                     modifier = Modifier.padding(bottom = 32.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "Belum Punya Akun? ", fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Bold)
+                    Text(text = stringResource(R.string.dont_have_account), fontSize = 14.sp, color = onBgColor, fontWeight = FontWeight.Bold)
                     Text(
-                        text = "Daftar Sekarang",
+                        text = stringResource(R.string.register_now),
                         modifier = Modifier.clickable { onToRegister() },
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = linkBlue
+                        color = linkColor
                     )
                 }
             }

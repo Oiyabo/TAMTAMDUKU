@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -30,7 +33,7 @@ fun ReportDetailScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text("Detail Laporan", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(stringResource(R.string.detail_laporan), fontWeight = FontWeight.Bold, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -42,7 +45,7 @@ fun ReportDetailScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8)
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         if (report != null) {
             Column(
@@ -63,36 +66,36 @@ fun ReportDetailScreen(
                     )
                     Box(
                         modifier = Modifier
-                            .background(Color.LightGray.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                             .padding(horizontal = 12.dp, vertical = 6.dp)
                     ) {
                         Text(
                             text = report.status,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
                 
                 Spacer(modifier = Modifier.height(24.dp))
                 
-                Text("Kategori Masalah", color = Color.Gray, fontSize = 14.sp)
+                Text(stringResource(R.string.kategori_masalah), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                 Text(text = report.category, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                Text("Deskripsi", color = Color.Gray, fontSize = 14.sp)
+                Text(stringResource(R.string.deskripsi), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                 Text(text = report.description, fontSize = 16.sp, lineHeight = 24.sp)
                 
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                Text("Tanggal", color = Color.Gray, fontSize = 14.sp)
+                Text(stringResource(R.string.tanggal), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                 Text(text = report.date, fontSize = 16.sp)
             }
         } else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Laporan tidak ditemukan")
+                Text(stringResource(R.string.laporan_tidak_ditemukan))
             }
         }
     }

@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -33,8 +36,7 @@ fun ReportListScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Daftar Laporan Masalah",
+                    Text(stringResource(R.string.daftar_laporan_masalah),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -52,7 +54,7 @@ fun ReportListScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -66,14 +68,14 @@ fun ReportListScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFF7A00)
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(
-                        text = "+ Tambah Laporan",
+                        text = stringResource(R.string.tambah_laporan),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.background
                     )
                 }
             }
@@ -104,7 +106,7 @@ fun ReportCard() {
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),
-        border = BorderStroke(1.dp, Color.Gray.copy(alpha = 0.5f))
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f))
     ) {
         Column(
             modifier = Modifier
@@ -117,34 +119,34 @@ fun ReportCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "ID RE #0001",
+                    text = stringResource(R.string.id_re_0001),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
                 Box(
                     modifier = Modifier
-                        .background(Color.LightGray.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                         .padding(horizontal = 12.dp, vertical = 4.dp)
                 ) {
                     Text(
-                        text = "Selesai",
+                        text = stringResource(R.string.selesai),
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Pekerja",
+                text = stringResource(R.string.pekerja),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Datang Terlambat",
+                text = stringResource(R.string.datang_terlambat),
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -153,14 +155,14 @@ fun ReportCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "23 April 2026",
+                    text = stringResource(R.string.date_23_april_2026),
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
                     contentDescription = null,
-                    tint = Color.Black
+                    tint = MaterialTheme.colorScheme.onBackground
                 )
             }
         }

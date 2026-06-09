@@ -19,6 +19,8 @@ class FavoriteWorkersViewModel(private val repository: WorkerRepository = Worker
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    
+    private var currentUserId: String = ""
 
     init {
         loadFavoriteWorkers()
@@ -29,6 +31,7 @@ class FavoriteWorkersViewModel(private val repository: WorkerRepository = Worker
             _isLoading.value = true
             combine(repository.getUsers(), repository.getWorkers()) { users, workers ->
                 val user = users.firstOrNull()
+                if (user != null) currentUserId = user.id
                 val favoriteIds = user?.favoriteWorkers ?: emptyList()
                 workers.filter { it.id in favoriteIds }
             }.collect { favWorkers ->
@@ -40,5 +43,6 @@ class FavoriteWorkersViewModel(private val repository: WorkerRepository = Worker
 
     fun removeFavorite(workerId: String) {
         _favoriteWorkers.value = _favoriteWorkers.value.filter { it.id != workerId }
+        repository.removeFavoriteWorker(currentUserId, workerId)
     }
 }

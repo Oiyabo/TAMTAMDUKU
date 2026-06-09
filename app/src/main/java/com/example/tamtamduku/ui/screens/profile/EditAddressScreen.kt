@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.profile
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -36,8 +39,7 @@ fun EditAddressScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Ubah Alamat",
+                    Text(stringResource(R.string.ubah_alamat),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
                     )
@@ -55,7 +57,7 @@ fun EditAddressScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8)
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -69,7 +71,7 @@ fun EditAddressScreen(
             AddressSectionHeader("Nama Lengkap")
             AddressTextField(value = name, onValueChange = { name = it })
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
             AddressSectionHeader("Provinsi, Kota, Kecamatan, Kode Pos")
             AddressTextField(value = province, onValueChange = { province = it })
@@ -80,12 +82,12 @@ fun EditAddressScreen(
             Spacer(modifier = Modifier.height(8.dp))
             AddressTextField(value = postalCode, onValueChange = { postalCode = it })
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
             AddressSectionHeader("Nama Jalan, Gedung, No Rumah")
             AddressTextField(value = addressDetail, onValueChange = { addressDetail = it }, singleLine = false, minLines = 4)
 
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
             AddressSectionHeader("Detail Lainnya (Opsional)")
             AddressTextField(value = additionalDetail, onValueChange = { additionalDetail = it })
@@ -106,12 +108,12 @@ fun EditAddressScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = Color(0xFFFF7A00)
+                        contentColor = MaterialTheme.colorScheme.primary
                     ),
-                    border = BorderStroke(1.dp, Color(0xFFFF7A00))
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
                 ) {
                     Text(
-                        text = "Hapus Alamat",
+                        text = stringResource(R.string.hapus_alamat),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -127,14 +129,14 @@ fun EditAddressScreen(
                         .height(50.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFF7A00)
+                        containerColor = MaterialTheme.colorScheme.primary
                     )
                 ) {
                     Text(
-                        text = "Simpan",
+                        text = stringResource(R.string.simpan),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.background
                     )
                 }
             }
@@ -148,7 +150,7 @@ fun EditAddressScreen(
 fun AddressSectionHeader(title: String) {
     Text(
         text = title,
-        color = Color.Gray,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 14.sp,
         fontWeight = FontWeight.Medium
     )
@@ -170,9 +172,9 @@ fun AddressTextField(
         shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = Color.Transparent,
-            focusedBorderColor = Color(0xFFFF7A00),
-            unfocusedContainerColor = Color.White,
-            focusedContainerColor = Color.White
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedContainerColor = MaterialTheme.colorScheme.background,
+            focusedContainerColor = MaterialTheme.colorScheme.background
         ),
         singleLine = singleLine,
         minLines = minLines

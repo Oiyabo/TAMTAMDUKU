@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.components
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -102,11 +105,11 @@ fun ProfilTabContent(worker: VocaWorker) {
     ) {
         // Tentang Saya
         Column {
-            Text("Tentang Saya", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
+            Text(stringResource(R.string.tentang_saya), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
             Text(
                 text = worker.deskripsi.ifBlank { "Halo, saya adalah seorang ${worker.pekerjaan} profesional yang siap membantu Anda." },
                 fontSize = 14.sp,
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.secondaryContainer,
                 lineHeight = 20.sp
             )
         }
@@ -114,7 +117,7 @@ fun ProfilTabContent(worker: VocaWorker) {
         // Keahlian
         if (worker.skills.isNotEmpty()) {
             Column {
-                Text("Keahlian", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
+                Text(stringResource(R.string.keahlian), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
                 @OptIn(ExperimentalLayoutApi::class)
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -136,7 +139,7 @@ fun ProfilTabContent(worker: VocaWorker) {
 
         // Pengalaman
         Column {
-            Text("Pengalaman", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 12.dp))
+            Text(stringResource(R.string.pengalaman), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 12.dp))
             experiences.forEach { exp ->
                 Row(
                     modifier = Modifier.padding(bottom = 16.dp),
@@ -151,21 +154,21 @@ fun ProfilTabContent(worker: VocaWorker) {
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
                         Text(exp.duration, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                        Text(exp.role, fontSize = 14.sp, color = Color.DarkGray)
-                        Text(exp.period, fontSize = 12.sp, color = Color.Gray)
+                        Text(exp.role, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                        Text(exp.period, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
         }
 
-        HorizontalDivider(color = Color.LightGray)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         // Tarif
         Column {
-            Text("Tarif", fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
+            Text(stringResource(R.string.tarif), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
             val formattedSalary = String.format(Locale("id", "ID"), "%,d", worker.baseSalary.toInt()).replace(',', '.')
             Text("RP $formattedSalary / jam", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text("Minimal pemesanan 2 jam", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(top = 4.dp))
+            Text(stringResource(R.string.minimal_pemesanan_2_jam), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
         }
         
         Spacer(modifier = Modifier.height(20.dp))
@@ -185,7 +188,7 @@ fun UlasanTabContent(worker: VocaWorker) {
         Card(
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
             elevation = CardDefaults.cardElevation(2.dp),
             border = BorderStroke(1.dp, Color(0xFFF0F0F0))
         ) {
@@ -208,7 +211,7 @@ fun UlasanTabContent(worker: VocaWorker) {
                             )
                         }
                     }
-                    Text("120 Ulasan", fontSize = 12.sp, color = Color.Gray, modifier = Modifier.padding(top = 4.dp))
+                    Text(stringResource(R.string.review_120_ulasan), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))
                 }
                 
                 // Progress Bars
@@ -217,17 +220,17 @@ fun UlasanTabContent(worker: VocaWorker) {
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(vertical = 2.dp)) {
                             Row(modifier = Modifier.width(50.dp)) {
                                 repeat(5 - index) { Icon(Icons.Default.Star, null, tint = Color(0xFFFFC107), modifier = Modifier.size(10.dp)) }
-                                repeat(index) { Icon(Icons.Outlined.Star, null, tint = Color.LightGray, modifier = Modifier.size(10.dp)) }
+                                repeat(index) { Icon(Icons.Outlined.Star, null, tint = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.size(10.dp)) }
                             }
                             Spacer(modifier = Modifier.width(8.dp))
                             LinearProgressIndicator(
                                 progress = { progress },
                                 modifier = Modifier.weight(1f).height(6.dp).clip(RoundedCornerShape(3.dp)),
                                 color = Color(0xFFFF8C00),
-                                trackColor = Color(0xFFE0E0E0),
+                                trackColor = MaterialTheme.colorScheme.outline,
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("${(progress * 100).toInt()}%", fontSize = 10.sp, color = Color.Gray, modifier = Modifier.width(24.dp))
+                            Text("${(progress * 100).toInt()}%", fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.width(24.dp))
                         }
                     }
                 }
@@ -246,13 +249,13 @@ fun UlasanTabContent(worker: VocaWorker) {
                     .padding(horizontal = 12.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Semua Layanan", fontSize = 12.sp, color = Color.DarkGray)
+                Text(stringResource(R.string.semua_layanan), fontSize = 12.sp, color = MaterialTheme.colorScheme.secondaryContainer)
                 Icon(Icons.Default.ArrowDropDown, null, tint = Color(0xFFFF8C00), modifier = Modifier.size(16.dp))
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Terbaru", fontSize = 12.sp, color = Color.DarkGray)
+                Text(stringResource(R.string.terbaru), fontSize = 12.sp, color = MaterialTheme.colorScheme.secondaryContainer)
                 Spacer(modifier = Modifier.width(4.dp))
-                Text("↑↓", color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.str_empty), color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.Bold)
             }
         }
 
@@ -261,7 +264,7 @@ fun UlasanTabContent(worker: VocaWorker) {
             Card(
                 modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 border = BorderStroke(1.dp, Color(0xFFF0F0F0))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -280,12 +283,12 @@ fun UlasanTabContent(worker: VocaWorker) {
                                 }
                             }
                         }
-                        Text(review.timeAgo, fontSize = 12.sp, color = Color.Gray)
+                        Text(review.timeAgo, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(review.text, fontSize = 14.sp, color = Color.DarkGray)
+                    Text(review.text, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("Layanan :", fontSize = 10.sp, color = Color.Gray)
+                    Text(stringResource(R.string.layanan), fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Box(
                         modifier = Modifier
                             .padding(top = 4.dp)
@@ -316,7 +319,7 @@ fun PortofolioTabContent(worker: VocaWorker) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
                     .border(1.dp, Color(0xFFF0F0F0), RoundedCornerShape(12.dp))
                     .padding(12.dp),
                 verticalAlignment = Alignment.Top
@@ -335,11 +338,11 @@ fun PortofolioTabContent(worker: VocaWorker) {
                 Spacer(modifier = Modifier.width(12.dp))
                 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(portfolio.title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = Color.Black)
+                    Text(portfolio.title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     Text(
                         text = portfolio.description,
                         fontSize = 12.sp,
-                        color = Color.DarkGray,
+                        color = MaterialTheme.colorScheme.secondaryContainer,
                         lineHeight = 16.sp,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )

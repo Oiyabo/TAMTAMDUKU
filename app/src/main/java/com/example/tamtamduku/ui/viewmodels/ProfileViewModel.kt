@@ -24,6 +24,7 @@ data class ProfileUiState(
 class ProfileViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+    private var currentUserId: String = ""
 
     init {
         loadUserProfile()
@@ -34,6 +35,7 @@ class ProfileViewModel(private val repository: WorkerRepository = WorkerReposito
             repository.getUsers().collect { accounts ->
                 val account = accounts.firstOrNull()
                 if (account != null) {
+                    currentUserId = account.id
                     _uiState.update { 
                         it.copy(
                             name = account.name,
@@ -56,13 +58,16 @@ class ProfileViewModel(private val repository: WorkerRepository = WorkerReposito
 
     fun updateAddress(newAddress: String) {
         _uiState.update { it.copy(address = newAddress) }
+        repository.updateAddress(currentUserId, newAddress)
     }
 
     fun deleteAddress() {
         _uiState.update { it.copy(address = "") }
+        repository.updateAddress(currentUserId, "")
     }
 
     fun updateProfile(name: String, email: String, address: String) {
         _uiState.update { it.copy(name = name, email = email, address = address) }
+        repository.updateUserProfile(currentUserId, name, email, address)
     }
 }

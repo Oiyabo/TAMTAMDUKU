@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.tracking
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -48,7 +51,7 @@ fun TrackingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -58,13 +61,13 @@ fun TrackingScreen(
                 modifier = Modifier
                     .size(24.dp)
                     .clickable { navCon.popBackStack() },
-                tint = Color.Black
+                tint = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                text = "Riwayat Transaksi",
+                text = stringResource(R.string.riwayat_transaksi),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center
             )
@@ -75,7 +78,7 @@ fun TrackingScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -86,10 +89,10 @@ fun TrackingScreen(
                         .weight(1f)
                         .padding(horizontal = 4.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (isSelected) Color(0xFFFF8C00) else Color.White)
+                        .background(if (isSelected) Color(0xFFFF8C00) else MaterialTheme.colorScheme.background)
                         .border(
                             width = 1.dp,
-                            color = if (isSelected) Color(0xFFFF8C00) else Color.LightGray,
+                            color = if (isSelected) Color(0xFFFF8C00) else MaterialTheme.colorScheme.outlineVariant,
                             shape = RoundedCornerShape(8.dp)
                         )
                         .clickable { selectedTab = index }
@@ -98,7 +101,7 @@ fun TrackingScreen(
                 ) {
                     Text(
                         text = title,
-                        color = if (isSelected) Color.White else Color.Black,
+                        color = if (isSelected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground,
                         fontSize = 12.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         textAlign = TextAlign.Center
@@ -107,7 +110,7 @@ fun TrackingScreen(
             }
         }
 
-        Divider(color = Color.LightGray, thickness = 1.dp)
+        Divider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
 
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -149,7 +152,7 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
             .padding(horizontal = 16.dp, vertical = 6.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         border = BorderStroke(1.dp, Color(0xFFEEEEEE))
     ) {
@@ -164,7 +167,7 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
                 modifier = Modifier
                     .size(64.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.LightGray)
+                    .background(MaterialTheme.colorScheme.outlineVariant)
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -179,7 +182,7 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
                         text = item.invoiceNumber,
                         fontWeight = FontWeight.Bold,
                         fontSize = 12.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                     val formattedPrice = String.format("%,d", item.price.toInt()).replace(',', '.')
                     Text(
@@ -196,13 +199,13 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
                     text = item.workerName,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
                 Text(
                     text = item.workerProfession,
                     fontSize = 11.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -217,13 +220,13 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
                             imageVector = Icons.Default.CalendarToday,
                             contentDescription = "Date",
                             modifier = Modifier.size(12.dp),
-                            tint = Color.Gray
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = item.date,
                             fontSize = 11.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -237,10 +240,10 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
 @Composable
 fun StatusBadge(status: String) {
     val (bgColor, textColor) = when (status) {
-        "Selesai" -> Color(0xFF6FCF97) to Color.White
-        "Batal" -> Color(0xFFFF6B6B) to Color.White
-        "Dikerjakan" -> Color(0xFFFFD54F) to Color.Black
-        else -> Color.LightGray to Color.Black
+        "Selesai" -> Color(0xFF6FCF97) to MaterialTheme.colorScheme.background
+        "Batal" -> Color(0xFFFF6B6B) to MaterialTheme.colorScheme.background
+        "Dikerjakan" -> Color(0xFFFFD54F) to MaterialTheme.colorScheme.onBackground
+        else -> MaterialTheme.colorScheme.outlineVariant to MaterialTheme.colorScheme.onBackground
     }
 
     Box(

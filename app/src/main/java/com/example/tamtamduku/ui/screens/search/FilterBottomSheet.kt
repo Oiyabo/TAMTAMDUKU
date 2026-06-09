@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.search
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -59,10 +62,10 @@ fun FilterBottomSheetContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Filter",
+                text = stringResource(R.string.filter),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Medium,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onBackground
             )
             
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -73,11 +76,11 @@ fun FilterBottomSheetContent(
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
                     modifier = Modifier.height(32.dp)
                 ) {
-                    Text("Reset All", color = Color.White, fontSize = 12.sp)
+                    Text(stringResource(R.string.reset_all), color = MaterialTheme.colorScheme.background, fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = onDismiss, modifier = Modifier.size(32.dp)) {
-                    Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Black)
+                    Icon(Icons.Default.Close, contentDescription = "Close", tint = MaterialTheme.colorScheme.onBackground)
                 }
             }
         }
@@ -87,7 +90,7 @@ fun FilterBottomSheetContent(
         // Dropdowns & Inputs
         var workTypeExpanded by remember { mutableStateOf(false) }
         CustomFilterDropdown(
-            label = "Tipe Pekerjaan",
+            label = stringResource(R.string.tipe_pekerjaan),
             selectedValue = uiState.selectedWorkType,
             placeholder = "(Tutoring, programming)",
             expanded = workTypeExpanded,
@@ -100,7 +103,7 @@ fun FilterBottomSheetContent(
         
         var locationExpanded by remember { mutableStateOf(false) }
         CustomFilterDropdown(
-            label = "Lokasi",
+            label = stringResource(R.string.lokasi),
             selectedValue = uiState.selectedLocation,
             placeholder = "(Jakarta, Surabaya)",
             expanded = locationExpanded,
@@ -139,7 +142,7 @@ fun FilterBottomSheetContent(
         
         // Gaji Range: Max 10 Juta, Step 50 Ribu (10.000.000 / 50.000 = 200 segments, so 199 steps)
         CustomRangeSliderSection(
-            title = "Gaji",
+            title = stringResource(R.string.gaji),
             minValueStr = uiState.minGaji,
             maxValueStr = uiState.maxGaji,
             onMinChange = viewModel::onMinGajiChange,
@@ -154,7 +157,7 @@ fun FilterBottomSheetContent(
         
         // Rating Range
         CustomRangeSliderSection(
-            title = "Rating",
+            title = stringResource(R.string.rating),
             minValueStr = uiState.minRate,
             maxValueStr = uiState.maxRate,
             onMinChange = viewModel::onMinRateChange,
@@ -176,8 +179,8 @@ fun FilterBottomSheetContent(
             shape = RoundedCornerShape(24.dp)
         ) {
             Text(
-                text = "Terapkan",
-                color = Color.White,
+                text = stringResource(R.string.terapkan),
+                color = MaterialTheme.colorScheme.background,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -214,30 +217,30 @@ fun CustomFilterDropdown(
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .fillMaxWidth(),
             readOnly = false,
-            label = { Text(label, color = Color.Black, fontWeight = FontWeight.Medium) },
-            placeholder = { Text(placeholder, color = Color.Gray) },
+            label = { Text(label, color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Medium) },
+            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
             singleLine = true,
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier
                         .size(16.dp)
                         .background(Color.Transparent, CircleShape)
-                        .border(1.dp, Color.Black, CircleShape)
+                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
                 )
             },
             shape = RoundedCornerShape(4.dp),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color(0xFFEFEFEF),
                 unfocusedContainerColor = Color(0xFFEFEFEF),
-                focusedBorderColor = Color.Black,
-                unfocusedBorderColor = Color.Black,
-                focusedLabelColor = Color.Black,
-                unfocusedLabelColor = Color.Black,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black,
+                focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+                focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+                focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
                 errorContainerColor = Color(0xFFEFEFEF)
             )
         )
@@ -246,7 +249,7 @@ fun CustomFilterDropdown(
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { onExpandedChange(false) },
-                containerColor = Color.White
+                containerColor = MaterialTheme.colorScheme.background
             ) {
                 filteredItems.forEach { (text, value) ->
                     DropdownMenuItem(
@@ -272,8 +275,8 @@ fun CustomKeywordInput(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
-        label = { Text("Keyword", color = Color.Black, fontWeight = FontWeight.Medium) },
-        placeholder = { Text("(Database, Instan Delivery)", color = Color.Gray) },
+        label = { Text(stringResource(R.string.keyword), color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Medium) },
+        placeholder = { Text(stringResource(R.string.database_instan_delivery), color = MaterialTheme.colorScheme.onSurfaceVariant) },
         singleLine = true,
         trailingIcon = {
             IconButton(
@@ -283,7 +286,7 @@ fun CustomKeywordInput(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add Keyword",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -294,12 +297,12 @@ fun CustomKeywordInput(
         colors = OutlinedTextFieldDefaults.colors(
             focusedContainerColor = Color(0xFFEFEFEF),
             unfocusedContainerColor = Color(0xFFEFEFEF),
-            focusedBorderColor = Color.Black,
-            unfocusedBorderColor = Color.Black,
-            focusedLabelColor = Color.Black,
-            unfocusedLabelColor = Color.Black,
-            focusedTextColor = Color.Black,
-            unfocusedTextColor = Color.Black
+            focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+            focusedLabelColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
         )
     )
 }
@@ -385,7 +388,7 @@ fun CustomRangeSliderSection(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .width(60.dp),
@@ -413,13 +416,13 @@ fun CustomNumberInput(
         modifier = modifier
             .height(36.dp)
             .background(Color(0xFFD9D9D9), CircleShape)
-            .border(1.dp, Color.Black, CircleShape),
+            .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape),
         contentAlignment = Alignment.Center
     ) {
         if (value.isEmpty()) {
             Text(
                 text = placeholder,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
@@ -429,7 +432,7 @@ fun CustomNumberInput(
             onValueChange = onValueChange,
             textStyle = TextStyle(
                 fontSize = 14.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             ),
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),

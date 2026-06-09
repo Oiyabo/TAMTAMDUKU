@@ -1,4 +1,7 @@
 package com.example.tamtamduku.ui.screens.payment
+import androidx.compose.ui.res.stringResource
+import com.example.tamtamduku.R
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -62,11 +65,10 @@ fun PaymentScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        "Pembayaran",
+                    Text(stringResource(R.string.pembayaran),
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.background
                     )
                 },
                 navigationIcon = {
@@ -74,16 +76,16 @@ fun PaymentScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.background
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xFFFF7A00)
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             Column(
                 modifier = Modifier
@@ -122,13 +124,13 @@ fun PaymentScreen(
                     },
                     modifier = Modifier.fillMaxWidth().height(50.dp),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00)),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     enabled = !isLoading
                 ) {
                     if (isLoading) {
-                        CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.background, modifier = Modifier.size(24.dp))
                     } else {
-                        Text("Bayar Sekarang", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                        Text(stringResource(R.string.bayar_sekarang), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.background)
                     }
                 }
             }
@@ -145,7 +147,7 @@ fun PaymentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(60.dp)
-                    .background(Color(0xFFFF7A00))
+                    .background(MaterialTheme.colorScheme.primary)
             )
 
             // Detail Pesanan Card
@@ -155,7 +157,7 @@ fun PaymentScreen(
                     .padding(horizontal = 24.dp)
                     .offset(y = (-40).dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Row(
@@ -166,18 +168,18 @@ fun PaymentScreen(
                     Box(
                         modifier = Modifier
                             .size(50.dp)
-                            .background(Color(0xFFFFF0E5), RoundedCornerShape(8.dp)),
+                            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.Outlined.ReceiptLong, contentDescription = null, tint = Color(0xFFFF7A00), modifier = Modifier.size(30.dp))
+                        Icon(Icons.Outlined.ReceiptLong, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(30.dp))
                     }
                     
                     Spacer(modifier = Modifier.width(16.dp))
                     
                     Column {
-                        Text("Detail Pesanan", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(stringResource(R.string.detail_pesanan), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(layanan, fontSize = 14.sp, color = Color.DarkGray)
+                        Text(layanan, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AsyncImage(
@@ -187,10 +189,10 @@ fun PaymentScreen(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .clip(CircleShape)
-                                    .background(Color.LightGray)
+                                    .background(MaterialTheme.colorScheme.outlineVariant)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(workerName, fontSize = 14.sp, color = Color.Black)
+                            Text(workerName, fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                         }
                     }
                 }
@@ -203,40 +205,39 @@ fun PaymentScreen(
                     .padding(horizontal = 24.dp)
                     .offset(y = (-24).dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Rincian Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(stringResource(R.string.rincian_pembayaran), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Spacer(modifier = Modifier.height(16.dp))
                     
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Harga Layanan", fontSize = 14.sp, color = Color.DarkGray)
-                        Text("Rp250.000", fontSize = 14.sp, color = Color.Black)
+                        Text(stringResource(R.string.harga_layanan), fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                        Text(stringResource(R.string.rp250000), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Biaya Admin", fontSize = 14.sp, color = Color.DarkGray)
-                        Text("Rp5.000", fontSize = 14.sp, color = Color.Black)
+                        Text(stringResource(R.string.biaya_admin), fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                        Text(stringResource(R.string.rp5000), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Diskon", fontSize = 14.sp, color = Color.DarkGray)
-                        Text("-Rp0", fontSize = 14.sp, color = Color.Black)
+                        Text(stringResource(R.string.diskon), fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                        Text(stringResource(R.string.rp0), fontSize = 14.sp, color = MaterialTheme.colorScheme.onBackground)
                     }
                     
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), thickness = 0.5.dp, color = Color.LightGray)
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Total Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text("Rp255.000", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFFFF7A00))
+                        Text(stringResource(R.string.total_pembayaran), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(stringResource(R.string.rp255000), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
 
             // Metode Pembayaran Title
-            Text(
-                "Metode Pembayaran",
+            Text(stringResource(R.string.metode_pembayaran),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 modifier = Modifier
@@ -250,8 +251,8 @@ fun PaymentScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 8.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color.LightGray)
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                     // Qris Option
@@ -265,16 +266,16 @@ fun PaymentScreen(
                         RadioButton(
                             selected = selectedPaymentMethod == "Qris",
                             onClick = { selectedPaymentMethod = "Qris" },
-                            colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFFF7A00))
+                            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text("Qris", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                            Text("Bayar dengan Scan Qris", fontSize = 12.sp, color = Color.Gray)
+                            Text(stringResource(R.string.qris), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text(stringResource(R.string.bayar_dengan_scan_qris), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                     
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     
                     // Lainnya Option
                     Row(
@@ -289,12 +290,12 @@ fun PaymentScreen(
                             RadioButton(
                                 selected = selectedPaymentMethod == "Lainnya",
                                 onClick = { selectedPaymentMethod = "Lainnya" },
-                                colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFFF7A00))
+                                colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colorScheme.primary)
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
-                                Text("Lainnya", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                                Text("Lihat Pembayaran Lainmu", fontSize = 12.sp, color = Color.Gray)
+                                Text(stringResource(R.string.lainnya), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text(stringResource(R.string.lihat_pembayaran_lainmu), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                         Icon(Icons.Default.MoreHoriz, contentDescription = "More")

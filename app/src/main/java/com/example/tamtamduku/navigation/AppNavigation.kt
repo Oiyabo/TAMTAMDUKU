@@ -94,7 +94,7 @@ fun AppNavigation(
                 NavigationBar(
                     modifier = Modifier.fillMaxWidth().navigationBarsPadding(),
                     windowInsets = WindowInsets(0.dp),
-                    containerColor = Color(0xFFFFFDF8),
+                    containerColor = MaterialTheme.colorScheme.surface,
                     tonalElevation = 8.dp
                 ) {
                     NavigationBarItem(
@@ -111,9 +111,9 @@ fun AppNavigation(
                             }
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            unselectedIconColor = Color.Gray,
-                            indicatorColor = Color(0xFFFF6D00)
+                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primary
                         )
                     )
                     NavigationBarItem(
@@ -130,9 +130,9 @@ fun AppNavigation(
                             }
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            unselectedIconColor = Color.Gray,
-                            indicatorColor = Color(0xFFFF6D00)
+                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primary
                         )
                     )
                     NavigationBarItem(
@@ -149,9 +149,9 @@ fun AppNavigation(
                             }
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            unselectedIconColor = Color.Gray,
-                            indicatorColor = Color(0xFFFF6D00)
+                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primary
                         )
                     )
                     NavigationBarItem(
@@ -168,9 +168,9 @@ fun AppNavigation(
                             }
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = Color.White,
-                            unselectedIconColor = Color.Gray,
-                            indicatorColor = Color(0xFFFF6D00)
+                            selectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            indicatorColor = MaterialTheme.colorScheme.primary
                         )
                     )
                 }
