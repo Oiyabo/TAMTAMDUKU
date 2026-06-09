@@ -148,4 +148,32 @@ class WorkerRepository {
             firestore.collection("chatLists").document(chatListId).update(updateData)
         }
     }
+
+    fun createTransaction(transaction: TransactionData, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val documentRef = if (transaction.id.isEmpty()) {
+            firestore.collection("transactions").document()
+        } else {
+            firestore.collection("transactions").document(transaction.id)
+        }
+        
+        val txWithId = if (transaction.id.isEmpty()) transaction.copy(id = documentRef.id) else transaction
+        
+        documentRef.set(txWithId)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
+
+    fun createReceipt(receipt: Receipt, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        val documentRef = if (receipt.id.isEmpty()) {
+            firestore.collection("receipts").document()
+        } else {
+            firestore.collection("receipts").document(receipt.id)
+        }
+
+        val receiptWithId = if (receipt.id.isEmpty()) receipt.copy(id = documentRef.id) else receipt
+
+        documentRef.set(receiptWithId)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { onFailure(it) }
+    }
 }

@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PaymentSimulationScreen(
     paymentMethod: String,
+    harga: String,
     onBack: () -> Unit,
     onPaymentCompleted: () -> Unit
 ) {
@@ -117,8 +118,12 @@ fun PaymentSimulationScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(32.dp))
+                val baseHarga = harga.toDoubleOrNull() ?: 0.0
+                val adminFee = 5000.0
+                val total = baseHarga + adminFee
+                
                 Text(
-                    text = "Total: Rp255.000",
+                    text = "Total: Rp${total.toLong()}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color(0xFFFF7A00)
@@ -155,8 +160,12 @@ fun PaymentSimulationScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(32.dp))
+                val baseHarga = harga.toDoubleOrNull() ?: 0.0
+                val adminFee = 5000.0
+                val total = baseHarga + adminFee
+                
                 Text(
-                    text = "Total: Rp255.000",
+                    text = "Total: Rp${total.toLong()}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     color = Color(0xFFFF7A00)

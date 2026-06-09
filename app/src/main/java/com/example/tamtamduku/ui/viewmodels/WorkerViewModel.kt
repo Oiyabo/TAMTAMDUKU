@@ -31,13 +31,21 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                 val workers = allWorkers.take(5)
                 val workTypes = listOf("Semua Pekerjaan") + workers.map { it.pekerjaan }.distinct().sorted()
                 val locations = listOf("Semua Lokasi") + workers.map { it.lokasi }.distinct().sorted()
+                val userLocations = user?.let {
+                    val list = mutableListOf<String>()
+                    if (it.address.isNotBlank()) list.add(it.address)
+                    list.addAll(it.locations)
+                    if (list.isEmpty()) listOf("Rumah - Jl. Mawar No. 1", "Kantor - Jl. Sudirman No. 10") else list.distinct()
+                } ?: listOf("Rumah - Jl. Mawar No. 1", "Kantor - Jl. Sudirman No. 10")
+
                 _uiState.update { it.copy(
                     isLoading = false,
                     workers = workers,
                     filteredWorkers = workers,
                     workTypes = workTypes,
                     locations = locations,
-                    favoriteWorkerIds = favoriteIds
+                    favoriteWorkerIds = favoriteIds,
+                    userLocations = userLocations
                 ) }
             }.collect()
         }

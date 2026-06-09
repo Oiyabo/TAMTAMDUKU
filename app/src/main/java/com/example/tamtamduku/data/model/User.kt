@@ -6,6 +6,7 @@ data class User(
     val email: String = "",
     val phone: String = "",
     val address: String = "",
+    val locations: List<String> = emptyList(),
     val favoriteWorkers: List<String> = emptyList(),
     val settings: UserSettings = UserSettings()
 )

@@ -39,7 +39,7 @@ fun StatusPekerjaanScreen(
     val yellowBadge = Color(0xFFFFC107)
 
     val uiState by viewModel.uiState.collectAsState()
-    val item = uiState.transactions.find { it.workerName == workerName }
+    val item = uiState.transactions.find { it.workerName == workerName && it.status == "Dikerjakan" } ?: uiState.transactions.find { it.workerName == workerName }
     val isSelesai = item?.status == "Selesai"
 
     Scaffold(
@@ -82,47 +82,70 @@ fun StatusPekerjaanScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Surface(
-                color = if (isSelesai) Color(0xFFE8F5E9) else yellowBadge,
+                color = if (isSelesai) Color(0xFFE8F5E9) else if (item?.status == "Batal") Color(0xFFFFEBEE) else yellowBadge,
                 shape = RoundedCornerShape(8.dp)
             ) {
                 Text(
-                    text = if (isSelesai) "Selesai" else "Sedang Dikerjakan",
+                    text = if (isSelesai) "Selesai" else if (item?.status == "Batal") "Dibatalkan" else item?.tracking?.posisiSaatIni ?: "Sedang Dikerjakan",
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                     fontWeight = FontWeight.Bold,
-                    color = if (isSelesai) Color(0xFF4CAF50) else Color.Black
+                    color = if (isSelesai) Color(0xFF4CAF50) else if (item?.status == "Batal") Color(0xFFF44336) else Color.Black
                 )
             }
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Timeline
+            val isBatal = item?.status == "Batal"
+            val statusLevel = when (item?.tracking?.posisiSaatIni?.lowercase()) {
+                "menunggu konfirmasi" -> 1
+                "permintaan diterima" -> 2
+                "sedang menuju lokasi" -> 3
+                "pekerjaan dimulai" -> 4
+                "sedang dikerjakan" -> 5
+                "selesai" -> 6
+                "batal", "dibatalkan" -> 6
+                else -> 1
+            }
+
             Column(modifier = Modifier.fillMaxWidth()) {
                 TimelineItem(
+                    title = "Menunggu Konfirmasi",
+                    time = if (statusLevel >= 1) item?.date ?: "-" else "-",
+                    isCompleted = statusLevel >= 1,
+                    isLast = false
+                )
+                TimelineItem(
                     title = "Permintaan Diterima",
-                    time = "20 Mei 2026, 09.15",
-                    isCompleted = true,
+                    time = if (statusLevel >= 2) item?.date ?: "-" else "-",
+                    isCompleted = statusLevel >= 2,
+                    isLast = false
+                )
+                TimelineItem(
+                    title = "Sedang Menuju Lokasi",
+                    time = if (statusLevel >= 3) item?.date ?: "-" else "-",
+                    isCompleted = statusLevel >= 3,
                     isLast = false
                 )
                 TimelineItem(
                     title = "Pekerjaan Dimulai",
-                    time = "20 Mei 2026, 09.45",
-                    isCompleted = true,
+                    time = if (statusLevel >= 4) item?.date ?: "-" else "-",
+                    isCompleted = statusLevel >= 4,
                     isLast = false
                 )
                 TimelineItem(
                     title = "Sedang Dikerjakan",
-                    time = "20 Mei 2026, 10.00",
-                    isCompleted = true,
+                    time = if (statusLevel >= 5) item?.date ?: "-" else "-",
+                    isCompleted = statusLevel >= 5,
                     isLast = false
                 )
                 TimelineItem(
-                    title = "Selesai",
-                    time = if (isSelesai) "20 Mei 2026, 11.00" else "-",
-                    isCompleted = isSelesai,
+                    title = if (isBatal) "Dibatalkan" else "Selesai",
+                    time = if (statusLevel >= 6) item?.date ?: "-" else "-",
+                    isCompleted = statusLevel >= 6,
                     isLast = true
                 )
             }
-
             Spacer(modifier = Modifier.height(32.dp))
 
             // Progress bar
@@ -142,15 +165,15 @@ fun StatusPekerjaanScreen(
                     ) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(if (isSelesai) 1f else 0.6f)
+                                .fillMaxWidth(if (isSelesai || isBatal) 1f else (statusLevel / 6f))
                                 .height(12.dp)
-                                .background(primaryOrange, RoundedCornerShape(50))
+                                .background(if (isBatal) Color.Red else primaryOrange, RoundedCornerShape(50))
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
-                        text = if (isSelesai) "100%" else "60%",
-                        color = if (isSelesai) primaryOrange else primaryOrange,
+                        text = if (isSelesai || isBatal) "100%" else "${(statusLevel * 100) / 6}%",
+                        color = if (isBatal) Color.Red else primaryOrange,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -201,7 +224,7 @@ fun StatusPekerjaanScreen(
 
             Button(
                 onClick = { 
-                    if (!isSelesai) viewModel.markAsSelesai(workerName)
+                    if (!isSelesai && !isBatal) viewModel.markAsSelesai(workerName)
                     navCon.navigate("review/${Uri.encode(workerName)}")
                 },
                 modifier = Modifier
@@ -210,13 +233,13 @@ fun StatusPekerjaanScreen(
                     .padding(bottom = 24.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSelesai) primaryOrange else Color(0xFFD1D5DB)
+                    containerColor = if (isSelesai || isBatal) primaryOrange else Color(0xFFD1D5DB)
                 ),
                 enabled = true
             ) {
                 Text(
-                    text = "Konfirmasi Pekerjaan Selesai",
-                    color = if (isSelesai) Color.White else Color.White,
+                    text = if (isBatal) "Tutup" else "Konfirmasi Pekerjaan Selesai",
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
