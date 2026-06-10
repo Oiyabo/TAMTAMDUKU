@@ -47,6 +47,7 @@ fun RegisterScreen(
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+    val pleaseCompleteDataMsg = stringResource(R.string.please_complete_data)
 
     val primaryColor = MaterialTheme.colorScheme.primary
     val bgColor = MaterialTheme.colorScheme.background
@@ -241,7 +242,7 @@ fun RegisterScreen(
                             val phone = if (!emailOrPhone.contains("@")) emailOrPhone else ""
                             viewModel.register(nama, email, phone, password, onRegisterSuccess)
                         } else {
-                            Toast.makeText(context, context.getString(R.string.please_complete_data), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, pleaseCompleteDataMsg, Toast.LENGTH_SHORT).show()
                         }
                     },
                     modifier = Modifier

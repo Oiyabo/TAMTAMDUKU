@@ -1,6 +1,8 @@
 package com.example.tamtamduku.navigation
 
 import android.net.Uri
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -36,7 +38,8 @@ fun NavGraphBuilder.trackingGraph(
         arguments = listOf(navArgument("workerName") { type = NavType.StringType })
     ) { backStackEntry ->
         val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
-        val transaction = trackingViewModel.uiState.value.transactions.find { it.workerName == workerName }
+        val uiState by trackingViewModel.uiState.collectAsState()
+        val transaction = uiState.transactions.find { it.workerName == workerName }
         HasilKerjaScreen(
             transaction = transaction,
             onBack = { navCon.popBackStack() },
@@ -50,7 +53,8 @@ fun NavGraphBuilder.trackingGraph(
         arguments = listOf(navArgument("workerName") { type = NavType.StringType })
     ) { backStackEntry ->
         val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
-        val transaction = trackingViewModel.uiState.value.transactions.find { it.workerName == workerName }
+        val uiState by trackingViewModel.uiState.collectAsState()
+        val transaction = uiState.transactions.find { it.workerName == workerName }
         BatalJobScreen(
             transaction = transaction,
             onBack = { navCon.popBackStack() }
