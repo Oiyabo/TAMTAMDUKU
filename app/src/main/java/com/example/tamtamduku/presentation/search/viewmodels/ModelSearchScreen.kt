@@ -1,4 +1,4 @@
-package com.example.tamtamduku.presentation.search
+package com.example.tamtamduku.presentation.search.viewmodels
 
 import com.example.tamtamduku.domain.model.VocaWorker
 

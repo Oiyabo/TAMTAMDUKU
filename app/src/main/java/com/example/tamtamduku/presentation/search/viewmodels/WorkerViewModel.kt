@@ -1,19 +1,22 @@
 package com.example.tamtamduku.presentation.search.viewmodels
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.data.repository.WorkerRepository
-import com.example.tamtamduku.presentation.search.SearchUiState
-import kotlinx.coroutines.flow.*
+import com.example.tamtamduku.domain.model.WorkerReview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import com.example.tamtamduku.domain.model.WorkerReview
+import kotlin.math.roundToLong
 
-@RequiresApi(Build.VERSION_CODES.O)
 class WorkerViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -64,11 +67,6 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
 
     fun onLocationChange(location: String) {
         _uiState.update { it.copy(selectedLocation = location) }
-        applyFilters()
-    }
-
-    fun onDateChange(date: Long?) {
-        _uiState.update { it.copy(selectedDate = date) }
         applyFilters()
     }
 
@@ -234,7 +232,7 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
                 val newAverageRating = ((currentSummary.averageRating * currentSummary.totalReviews) + rating) / newTotalReviews
                 
                 // Format average rating to 1 decimal place max (e.g., 4.5)
-                val roundedAverageRating = Math.round(newAverageRating * 10.0) / 10.0
+                val roundedAverageRating = (newAverageRating * 10.0).roundToLong() / 10.0
                 
                 repository.submitWorkerReview(workerId, review, roundedAverageRating, newTotalReviews, onComplete)
             } else {

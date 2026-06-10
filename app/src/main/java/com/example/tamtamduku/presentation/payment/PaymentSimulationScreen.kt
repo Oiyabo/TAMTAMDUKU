@@ -23,8 +23,6 @@ import kotlinx.coroutines.launch
 fun PaymentSimulationScreen(
     paymentMethod: String,
     harga: String,
-    tanggal: String,
-    jam: String,
     onBack: () -> Unit,
     onPaymentCompleted: () -> Unit
 ) {
@@ -51,8 +49,12 @@ fun PaymentSimulationScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xFFFF7A00)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFFFF7A00),
+                    scrolledContainerColor = Color.Unspecified,
+                    navigationIconContentColor = Color.Unspecified,
+                    titleContentColor = Color.Unspecified,
+                    actionIconContentColor = Color.Unspecified
                 )
             )
         },

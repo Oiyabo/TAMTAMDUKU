@@ -1,12 +1,20 @@
 package com.example.tamtamduku.presentation.request
-import androidx.compose.ui.res.stringResource
-import com.example.tamtamduku.R
-import androidx.compose.material3.MaterialTheme
 
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,20 +26,49 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.NoteAlt
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.WorkOutline
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.tamtamduku.core.components.*
+import com.example.tamtamduku.R
+import com.example.tamtamduku.core.components.FormClickableField
+import com.example.tamtamduku.core.components.FormDropdownField
+import com.example.tamtamduku.core.components.FormInputField
+import com.example.tamtamduku.core.components.FormTextAreaField
 import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -47,19 +84,19 @@ fun RequestFormScreen(
     val uiState by viewModel.uiState.collectAsState()
     val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
 
-    var kategori by remember { mutableStateOf("") }
-    var layanan by remember { mutableStateOf("") }
-    var customHarga by remember { mutableStateOf("") }
-    var selectedHarga by remember { mutableStateOf(0.0) }
+    val (kategori, setKategori) = remember { mutableStateOf("") }
+    val (layanan, setLayanan) = remember { mutableStateOf("") }
+    val (customHarga, setCustomHarga) = remember { mutableStateOf("") }
+    val (selectedHarga, setSelectedHarga) = remember { mutableDoubleStateOf(0.0) }
     
-    var lokasi by remember { mutableStateOf("") }
-    var tanggal by remember { mutableStateOf("") }
-    var jam by remember { mutableStateOf("") }
-    var catatan by remember { mutableStateOf("") }
+    val (lokasi, setLokasi) = remember { mutableStateOf("") }
+    val (tanggal, setTanggal) = remember { mutableStateOf("") }
+    val (jam, setJam) = remember { mutableStateOf("") }
+    val (catatan, setCatatan) = remember { mutableStateOf("") }
 
-    var showDatePicker by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) }
-    var showLocationPicker by remember { mutableStateOf(false) }
+    val (showDatePicker, setShowDatePicker) = remember { mutableStateOf(false) }
+    val (showTimePicker, setShowTimePicker) = remember { mutableStateOf(false) }
+    val (showLocationPicker, setShowLocationPicker) = remember { mutableStateOf(false) }
 
     if (worker == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -71,20 +108,20 @@ fun RequestFormScreen(
     if (showDatePicker) {
         val datePickerState = rememberDatePickerState()
         DatePickerDialog(
-            onDismissRequest = { showDatePicker = false },
+            onDismissRequest = { setShowDatePicker(false) },
             confirmButton = {
                 TextButton(onClick = {
                     datePickerState.selectedDateMillis?.let {
                         val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-                        tanggal = sdf.format(Date(it))
+                        setTanggal(sdf.format(Date(it)))
                     }
-                    showDatePicker = false
+                    setShowDatePicker(false)
                 }) {
                     Text("OK")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Batal") }
+                TextButton(onClick = { setShowDatePicker(false) }) { Text("Batal") }
             }
         ) {
             DatePicker(state = datePickerState)
@@ -94,19 +131,19 @@ fun RequestFormScreen(
     if (showTimePicker) {
         val timePickerState = rememberTimePickerState()
         AlertDialog(
-            onDismissRequest = { showTimePicker = false },
+            onDismissRequest = { setShowTimePicker(false) },
             confirmButton = {
                 TextButton(onClick = {
                     val hour = timePickerState.hour.toString().padStart(2, '0')
                     val minute = timePickerState.minute.toString().padStart(2, '0')
-                    jam = "$hour:$minute"
-                    showTimePicker = false
+                    setJam("$hour:$minute")
+                    setShowTimePicker(false)
                 }) {
                     Text("OK")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showTimePicker = false }) { Text("Batal") }
+                TextButton(onClick = { setShowTimePicker(false) }) { Text("Batal") }
             },
             text = {
                 TimePicker(state = timePickerState)
@@ -115,9 +152,9 @@ fun RequestFormScreen(
     }
 
     if (showLocationPicker) {
-        val locationOptions = if (uiState.userLocations.isNotEmpty()) uiState.userLocations else listOf("Lokasi Saya")
+        val locationOptions = uiState.userLocations.ifEmpty { listOf("Lokasi Saya") }
         AlertDialog(
-            onDismissRequest = { showLocationPicker = false },
+            onDismissRequest = { setShowLocationPicker(false) },
             title = { Text("Pilih Lokasi", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
             text = {
                 Column(
@@ -129,8 +166,8 @@ fun RequestFormScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    lokasi = loc
-                                    showLocationPicker = false
+                                    setLokasi(loc)
+                                    setShowLocationPicker(false)
                                 },
                             shape = RoundedCornerShape(12.dp),
                             colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -161,7 +198,7 @@ fun RequestFormScreen(
             },
             confirmButton = {
                 Button(
-                    onClick = { showLocationPicker = false },
+                    onClick = { setShowLocationPicker(false) },
                     modifier = Modifier.fillMaxWidth().height(48.dp),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF7A00))
@@ -242,13 +279,13 @@ fun RequestFormScreen(
                 }
             }
 
-            val kategoriOptions = if (worker.kategori.isNotEmpty()) worker.kategori else listOf("Layanan Umum")
+            val kategoriOptions = worker.kategori.ifEmpty { listOf("Layanan Umum") }
             FormDropdownField(
                 icon = Icons.Outlined.WorkOutline, 
                 placeholder = "Kategori", 
                 value = kategori, 
                 options = kategoriOptions,
-                onValueChange = { kategori = it }
+                onValueChange = setKategori
             )
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
             
@@ -259,12 +296,12 @@ fun RequestFormScreen(
                 value = layanan, 
                 options = layananOptions,
                 onValueChange = { selectedLayanan -> 
-                    layanan = selectedLayanan 
+                    setLayanan(selectedLayanan) 
                     val foundLayanan = worker.layanan.find { it.namaLayanan == selectedLayanan }
                     if (foundLayanan != null) {
-                        selectedHarga = foundLayanan.harga
+                        setSelectedHarga(foundLayanan.harga)
                     } else if (selectedLayanan == "Custom") {
-                        selectedHarga = 0.0
+                        setSelectedHarga(0.0)
                     }
                 }
             )
@@ -275,7 +312,7 @@ fun RequestFormScreen(
                     icon = Icons.Outlined.WorkOutline,
                     placeholder = "Masukkan Harga",
                     value = customHarga,
-                    onValueChange = { customHarga = it },
+                    onValueChange = setCustomHarga,
                     keyboardType = androidx.compose.ui.text.input.KeyboardType.Number
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
@@ -285,7 +322,7 @@ fun RequestFormScreen(
                 icon = Icons.Outlined.LocationOn, 
                 placeholder = "Lokasi", 
                 value = lokasi, 
-                onClick = { showLocationPicker = true },
+                onClick = { setShowLocationPicker(true) },
                 modifier = Modifier.fillMaxWidth()
             )
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
@@ -295,7 +332,7 @@ fun RequestFormScreen(
                     icon = Icons.Outlined.CalendarMonth,
                     placeholder = "Tanggal",
                     value = tanggal,
-                    onClick = { showDatePicker = true },
+                    onClick = { setShowDatePicker(true) },
                     modifier = Modifier.weight(1.5f)
                 )
                 Spacer(modifier = Modifier.width(12.dp))
@@ -303,7 +340,7 @@ fun RequestFormScreen(
                     icon = Icons.Outlined.Schedule,
                     placeholder = "Jam",
                     value = jam,
-                    onClick = { showTimePicker = true },
+                    onClick = { setShowTimePicker(true) },
                     modifier = Modifier.weight(1f),
                     showIcon = false // Optional: hide icon to save space, but let's see if we can keep it
                 )
@@ -314,7 +351,7 @@ fun RequestFormScreen(
                 icon = Icons.Outlined.NoteAlt, 
                 placeholder = "Catatan", 
                 value = catatan, 
-                onValueChange = { catatan = it }
+                onValueChange = setCatatan
             )
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
         }

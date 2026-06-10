@@ -1,38 +1,50 @@
 package com.example.tamtamduku.presentation.payment
-import androidx.compose.ui.res.stringResource
-import com.example.tamtamduku.R
-import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.outlined.Assignment
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.runtime.LaunchedEffect
+import com.example.tamtamduku.R
 import com.example.tamtamduku.presentation.tracking.viewmodels.TrackingViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PaymentSuccessScreen(
     workerName: String,
@@ -44,10 +56,10 @@ fun PaymentSuccessScreen(
     trackingViewModel: TrackingViewModel,
     onNavigateHome: () -> Unit
 ) {
-    val dateFormat = SimpleDateFormat("d MMMM yyyy, HH:mm", Locale("id", "ID"))
+    val dateFormat = SimpleDateFormat("d MMMM yyyy, HH:mm", Locale.forLanguageTag("id-ID"))
     val now = Date()
     val dateStr = "${dateFormat.format(now)} WIB"
-    val invoiceStr = "#INV-${SimpleDateFormat("ddMMyy", Locale("id", "ID")).format(now)}-${(100..999).random()}"
+    val invoiceStr = "#INV-${SimpleDateFormat("ddMMyy", Locale.forLanguageTag("id-ID")).format(now)}-${(100..999).random()}"
 
     val baseHarga = harga.toDoubleOrNull() ?: 0.0
     val adminFee = 5000.0
@@ -177,7 +189,7 @@ fun PaymentSuccessScreen(
                     
                     // Langkah Selanjutnya Info Box
                     InfoBox(
-                        icon = { Icon(Icons.Outlined.Assignment, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp)) },
+                        icon = { Icon(Icons.AutoMirrored.Outlined.Assignment, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp)) },
                         title = stringResource(R.string.langkah_selanjutnya),
                         description = "Penyedia jasa akan segera menerima pesanan Anda dan menghubungi Anda melalui chat."
                     )

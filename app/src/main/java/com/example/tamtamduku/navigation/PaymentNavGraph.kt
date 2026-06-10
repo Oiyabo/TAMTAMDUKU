@@ -82,8 +82,6 @@ fun NavGraphBuilder.paymentGraph(
             workerName = workerName,
             layanan = layanan,
             harga = harga,
-            tanggal = tanggal,
-            jam = jam,
             workerViewModel = workerViewModel
         )
     }
@@ -113,9 +111,7 @@ fun NavGraphBuilder.paymentGraph(
                     popUpTo("payment_simulation") { inclusive = true }
                 }
             },
-            harga = harga,
-            tanggal = tanggal,
-            jam = jam
+            harga = harga
         )
     }
     composable(
