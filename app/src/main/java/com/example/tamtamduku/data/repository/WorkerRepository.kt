@@ -2,7 +2,7 @@ package com.example.tamtamduku.data.repository
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.tamtamduku.data.model.*
+import com.example.tamtamduku.domain.model.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
