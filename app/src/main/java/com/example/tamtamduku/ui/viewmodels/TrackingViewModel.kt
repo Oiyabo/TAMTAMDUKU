@@ -55,7 +55,8 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
                         price = tx.price,
                         profileUrl = worker?.profileUrl ?: "",
                         tracking = tx.tracking,
-                        icon = if (tx.status == "Dikerjakan") "Construction" else "Work"
+                        icon = if (tx.status == "Dikerjakan") "Construction" else "Work",
+                        cancellationReason = tx.cancellationReason
                     )
                 }
             }.collect { mappedTransactions ->
@@ -94,17 +95,22 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
         }
     }
 
-    fun cancelTransaction(transactionId: String) {
+    fun cancelTransaction(transactionId: String, reason: String) {
         viewModelScope.launch {
             repository.updateTransactionStatus(
                 transactionId = transactionId,
                 newStatus = "Batal",
+                cancellationReason = reason,
                 onSuccess = {
                     // Locally update the state
                     _uiState.update { currentState ->
                         val updatedTransactions = currentState.transactions.map {
                             if (it.id == transactionId) {
-                                it.copy(status = "Batal", tracking = it.tracking?.copy(posisiSaatIni = "Batal"))
+                                it.copy(
+                                    status = "Batal",
+                                    tracking = it.tracking?.copy(posisiSaatIni = "Batal"),
+                                    cancellationReason = reason
+                                )
                             } else {
                                 it
                             }

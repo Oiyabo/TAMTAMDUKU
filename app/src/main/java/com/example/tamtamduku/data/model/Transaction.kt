@@ -8,7 +8,8 @@ data class TransactionData(
     val status: String = "", // "Menunggu Konfirmasi", "Dikerjakan", "Menuju Lokasi", "Selesai", "Dibatalkan"
     val date: String = "",
     val price: Double = 0.0,
-    val tracking: Tracking? = null
+    val tracking: Tracking? = null,
+    val cancellationReason: String = ""
 )
 
 data class Transaction(
@@ -24,7 +25,8 @@ data class Transaction(
     val tracking: Tracking? = null,
     val icon: String = "Work",
     val iconColor: String = "#FF7A00",
-    val iconBgColor: String = "#FFF4E5"
+    val iconBgColor: String = "#FFF4E5",
+    val cancellationReason: String = ""
 )
 
 data class Tracking(
