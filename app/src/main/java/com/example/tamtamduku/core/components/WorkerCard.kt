@@ -48,10 +48,10 @@ fun WorkerCard(
             .fillMaxWidth()
             .clickable { onClick() }
             .padding(vertical = 4.dp),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onBackground),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFE0C2))
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -65,8 +65,8 @@ fun WorkerCard(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(width = 90.dp, height = 110.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .border(2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(12.dp))
+                    .border(1.dp, Color(0xFFEEEEEE), RoundedCornerShape(12.dp))
             )
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -103,7 +103,7 @@ fun WorkerCard(
                 Text(
                     text = worker.pekerjaan,
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = Color.Gray,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
@@ -126,20 +126,20 @@ fun WorkerCard(
                     Text(
                         text = "${worker.reviewSummary.averageRating} (${worker.reviewSummary.totalReviews})",
                         fontSize = 10.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = Color.Gray,
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(R.string.str_empty),
                         fontSize = 10.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = Color.Gray
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(R.string.distance_32_km),
                         fontSize = 10.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = Color.Gray,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -147,14 +147,13 @@ fun WorkerCard(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFE2E8F0), RoundedCornerShape(percent = 50))
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(percent = 50))
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .background(Color(0xFFF5F5F5), RoundedCornerShape(percent = 50))
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Text(
                         text = worker.deskripsi,
                         fontSize = 10.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        color = Color(0xFF4A4A4A),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 12.sp
@@ -174,9 +173,8 @@ fun WorkerCard(
                     Box(
                         modifier = Modifier
                             .background(Color(0xFFFF8C00), RoundedCornerShape(percent = 50))
-                            .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(percent = 50))
                             .clickable { expanded = true }
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -192,16 +190,13 @@ fun WorkerCard(
                                 text = displayText,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = Color.White
                             )
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = "Expand",
-                                tint = MaterialTheme.colorScheme.onBackground,
-                                modifier = Modifier
-                                    .size(16.dp)
-                                    .background(Color.Transparent, CircleShape)
-                                    .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
                             )
                         }
                     }

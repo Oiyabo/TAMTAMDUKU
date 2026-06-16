@@ -12,7 +12,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.automirrored.filled.Undo
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,57 +41,58 @@ fun PersonalChat(
         chats.find { it.name == userName }
     }
     
-    val bgColor = MaterialTheme.colorScheme.background
-    val primaryOrange = Color(0xFFFF7B00)
-    val yellowBubble = Color(0xFFFFD600)
-
+    val bgColor = Color(0xFFFAF9F6)
     var messageText by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Surface(
-                            modifier = Modifier.size(40.dp).clip(CircleShape),
-                            color = MaterialTheme.colorScheme.secondaryContainer
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
+            Column {
+                TopAppBar(
+                    title = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Surface(
+                                modifier = Modifier.size(40.dp).clip(CircleShape),
+                                color = Color(0xFFFDE8E0)
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Text(
+                                        text = if (userName.isNotEmpty()) userName.take(1) else "?",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFFFF8C00)
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Column {
                                 Text(
-                                    text = if (userName.isNotEmpty()) userName.take(1) else "?",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.background
+                                    text = userName,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                    color = Color.Black
+                                )
+                                Text(
+                                    text = stringResource(R.string.online),
+                                    color = Color(0xFF4CAF50),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.width(12.dp))
-                        Column {
-                            Text(
-                                text = userName,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground
-                            )
-                            Text(
-                                text = stringResource(R.string.online),
-                                color = Color(0xFF4CAF50),
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
+                                contentDescription = "Back",
+                                tint = Color.Black
                             )
                         }
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.Undo, 
-                            contentDescription = "Back",
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = bgColor)
-            )
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                )
+                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+            }
         },
         containerColor = bgColor,
         bottomBar = {
@@ -110,7 +112,7 @@ fun PersonalChat(
             val isLoading by viewModel.isLoading.collectAsState()
             if (isLoading && chat == null) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = Color(0xFFFF8C00))
                 }
             } else {
                 val messages = chat?.roomId?.let { viewModel.getMessagesForRoom(it) } ?: emptyList()
@@ -131,7 +133,7 @@ fun PersonalChat(
                     contentPadding = PaddingValues(vertical = 16.dp)
                 ) {
                     items(messages) { message ->
-                        MessageBubble(message, primaryOrange, yellowBubble)
+                        MessageBubble(message)
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
@@ -141,10 +143,18 @@ fun PersonalChat(
 }
 
 @Composable
-fun MessageBubble(message: ChatMessage, myColor: Color, otherColor: Color) {
+fun MessageBubble(message: ChatMessage) {
     val isFromMe = message.senderId.startsWith("usr_")
     val alignment = if (isFromMe) Alignment.CenterEnd else Alignment.CenterStart
-    val bgColor = if (isFromMe) myColor else otherColor
+    val bgColor = if (isFromMe) Color(0xFFFF8C00) else Color.White
+    val textColor = if (isFromMe) Color.White else Color(0xFF333333)
+    val timeColor = if (isFromMe) Color.White.copy(alpha = 0.7f) else Color.Gray
+    val border = if (isFromMe) null else BorderStroke(1.dp, Color(0xFFEEEEEE))
+    val bubbleShape = if (isFromMe) {
+        RoundedCornerShape(16.dp, 16.dp, 0.dp, 16.dp)
+    } else {
+        RoundedCornerShape(16.dp, 16.dp, 16.dp, 0.dp)
+    }
 
     // Format time dynamically
     val formattedTime = try {
@@ -165,21 +175,21 @@ fun MessageBubble(message: ChatMessage, myColor: Color, otherColor: Color) {
     ) {
         Surface(
             color = bgColor,
-            // Small rounded corner
-            shape = RoundedCornerShape(4.dp),
+            shape = bubbleShape,
+            border = border,
             modifier = Modifier.widthIn(max = 280.dp)
         ) {
-            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)) {
                 Text(
                     text = message.text,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = textColor,
                     fontSize = 15.sp,
                     lineHeight = 20.sp
                 )
                 Text(
                     text = formattedTime,
                     fontSize = 10.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    color = timeColor,
                     modifier = Modifier.align(Alignment.End).padding(top = 4.dp)
                 )
             }
@@ -193,46 +203,59 @@ fun ChatInput(
     onValueChange: (String) -> Unit,
     onSend: () -> Unit
 ) {
-    Surface(
-        color = Color(0xFFFFE4C4), // pastel orange/peach
-        modifier = Modifier.fillMaxWidth().navigationBarsPadding()
-    ) {
-        Row(
+    Column {
+        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+        Surface(
+            color = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            TextField(
-                value = value,
-                onValueChange = onValueChange,
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 50.dp, max = 100.dp),
-                placeholder = { Text(stringResource(R.string.ketik_pesan), color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    focusedContainerColor = MaterialTheme.colorScheme.background,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background
-                ),
-                shape = RoundedCornerShape(24.dp)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            IconButton(
-                onClick = onSend,
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(Color(0xFFFF7B00), CircleShape)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.Send, 
-                    contentDescription = "Send",
-                    tint = MaterialTheme.colorScheme.background,
-                    modifier = Modifier.size(24.dp)
+                TextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = 48.dp, max = 100.dp),
+                    placeholder = {
+                        Text(
+                            text = stringResource(R.string.ketik_pesan),
+                            color = Color.Gray,
+                            fontSize = 14.sp
+                        )
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        focusedContainerColor = Color(0xFFF5F5F5),
+                        unfocusedContainerColor = Color(0xFFF5F5F5),
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = Color(0xFFFF8C00)
+                    ),
+                    shape = RoundedCornerShape(50)
                 )
+                Spacer(modifier = Modifier.width(12.dp))
+                IconButton(
+                    onClick = onSend,
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(Color(0xFFFF8C00), CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send, 
+                        contentDescription = "Send",
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
         }
     }

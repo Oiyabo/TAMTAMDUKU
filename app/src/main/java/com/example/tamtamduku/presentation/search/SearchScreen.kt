@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Undo
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -57,7 +57,7 @@ fun SearchScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showFilterSheet by remember { mutableStateOf(false) }
 
-    Surface(color = Color(0xFFFFF9F5)) {
+    Surface(color = Color(0xFFFAF9F6)) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 Row(
@@ -65,7 +65,7 @@ fun SearchScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.Undo, "Back", tint = MaterialTheme.colorScheme.onBackground)
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back", tint = MaterialTheme.colorScheme.onBackground)
                     }
                     OutlinedTextField(
                         value = uiState.searchQuery,
@@ -73,30 +73,30 @@ fun SearchScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp),
-                        placeholder = { Text(stringResource(R.string.search), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                        placeholder = { Text(stringResource(R.string.search), color = Color.Gray) },
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.background,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                            focusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                            focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                            cursorColor = MaterialTheme.colorScheme.onBackground
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedBorderColor = Color(0xFFFF8C00),
+                            unfocusedBorderColor = Color(0xFFE0E0E0),
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color(0xFFFF8C00)
                         ),
-                        shape = RoundedCornerShape(24.dp)
+                        shape = RoundedCornerShape(50)
                     )
                     IconButton(
                         onClick = { showFilterSheet = true },
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(8.dp))
-                            .border(2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp))
+                            .background(Color.White, RoundedCornerShape(12.dp))
+                            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
                             .padding(4.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Tune,
                             contentDescription = "Filter",
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = Color(0xFFFF8C00)
                         )
                     }
                 }
@@ -131,10 +131,11 @@ fun SearchScreen(
                         .align(Alignment.BottomEnd)
                         .navigationBarsPadding()
                         .padding(16.dp),
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                    containerColor = Color(0xFFFF4B4B),
+                    contentColor = Color.White,
                     icon = { Icon(Icons.Default.Close, null) },
-                    text = { Text(stringResource(R.string.reset_filter)) }
+                    text = { Text(stringResource(R.string.reset_filter)) },
+                    shape = RoundedCornerShape(50)
                 )
             }
         }
@@ -151,7 +152,7 @@ fun SearchScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFFFF9F5))
+                    .background(Color(0xFFFAF9F6))
             ) {
                 FilterBottomSheetContent(
                     uiState = uiState,

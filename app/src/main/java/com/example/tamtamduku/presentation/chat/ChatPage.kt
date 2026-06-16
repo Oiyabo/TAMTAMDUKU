@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Undo
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,12 +33,13 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChatPage(
     onNavigateToPersonalChat: (String) -> Unit,
+    onBack: () -> Unit = {},
     viewModel: ChatViewModel = viewModel()
 ) {
     val chats by viewModel.chats.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-    val bgColor = MaterialTheme.colorScheme.background
+    val bgColor = Color(0xFFFAF9F6)
     
     val filteredChats = if (searchQuery.isBlank()) {
         chats
@@ -53,14 +55,17 @@ fun ChatPage(
             Column(modifier = Modifier.background(bgColor)) {
                 // Title centered
                 Box(
-                    modifier = Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .statusBarsPadding()
+                        .padding(top = 16.dp, bottom = 8.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = stringResource(R.string.chat),
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.ExtraBold,
                         fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = Color.Black
                     )
                 }
                 
@@ -71,37 +76,46 @@ fun ChatPage(
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.Undo,
-                        contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(28.dp).clickable { /* undo */ }
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.Black,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        modifier = Modifier.weight(1f).height(50.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(50.dp),
                         placeholder = { 
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                Text(stringResource(R.string.nama_chat), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-                                Text(stringResource(R.string.faris_adit), color = MaterialTheme.colorScheme.outlineVariant, fontSize = 14.sp)
-                            }
+                            Text(
+                                text = stringResource(R.string.search),
+                                color = Color.Gray,
+                                fontSize = 14.sp
+                            )
                         },
-                        shape = RoundedCornerShape(8.dp),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        },
+                        shape = RoundedCornerShape(50),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            focusedContainerColor = MaterialTheme.colorScheme.background,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.background
+                            focusedBorderColor = Color(0xFFFF8C00),
+                            unfocusedBorderColor = Color(0xFFE0E0E0),
+                            focusedContainerColor = Color.White,
+                            unfocusedContainerColor = Color.White,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            cursorColor = Color(0xFFFF8C00)
                         )
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        modifier = Modifier.size(28.dp).clickable { /* search */ }
                     )
                 }
             }
@@ -111,7 +125,7 @@ fun ChatPage(
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
             if (isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = Color(0xFFFF8C00))
                 }
             } else {
                 ChatList(
@@ -133,7 +147,7 @@ fun ChatList(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 0.dp)
+        contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 16.dp)
     ) {
         items(chats) { chat ->
             ChatItem(chat) {
@@ -141,7 +155,7 @@ fun ChatList(
             }
             HorizontalDivider(
                 thickness = 1.dp,
-                color = MaterialTheme.colorScheme.onBackground
+                color = Color(0xFFEEEEEE)
             )
         }
     }
@@ -166,20 +180,21 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .padding(vertical = 16.dp),
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Surface(
             modifier = Modifier
-                .size(56.dp)
+                .size(52.dp)
                 .clip(CircleShape),
-            color = MaterialTheme.colorScheme.secondaryContainer
+            color = Color(0xFFFDE8E0)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = if (chat.name.isNotEmpty()) chat.name.take(1) else "?",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.background
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFFF8C00)
                 )
             }
         }
@@ -189,36 +204,49 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
         Column(modifier = Modifier.weight(1f)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = chat.name,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onBackground
+                    color = Color.Black
                 )
                 Text(
                     text = formattedTime,
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer
+                    fontSize = 12.sp,
+                    color = Color.Gray
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = chat.lastMessage,
                     fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    maxLines = 1
+                    color = if (chat.unreadCount > 0) Color.Black else Color.Gray,
+                    fontWeight = if (chat.unreadCount > 0) FontWeight.SemiBold else FontWeight.Normal,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f).padding(end = 8.dp)
                 )
                 if (chat.unreadCount > 0) {
-                    Badge(
-                        containerColor = MaterialTheme.colorScheme.primary
+                    Box(
+                        modifier = Modifier
+                            .background(Color(0xFFFF8C00), CircleShape)
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        Text(chat.unreadCount.toString(), color = MaterialTheme.colorScheme.background)
+                        Text(
+                            text = chat.unreadCount.toString(),
+                            color = Color.White,
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
