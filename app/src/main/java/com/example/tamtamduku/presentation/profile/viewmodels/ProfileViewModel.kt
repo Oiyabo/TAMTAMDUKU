@@ -25,7 +25,8 @@ data class ProfileUiState(
     val addressList: List<UserAddress> = emptyList(),
     val phone: String = "",
     val favoriteWorkers: List<String> = emptyList(),
-    val settings: UserSettings = UserSettings()
+    val settings: UserSettings = UserSettings(),
+    val profileUrl: String = ""
 )
 
 class ProfileViewModel @JvmOverloads constructor(
@@ -56,7 +57,8 @@ class ProfileViewModel @JvmOverloads constructor(
                             addressList = account.addressList,
                             phone = account.phone,
                             favoriteWorkers = account.favoriteWorkers,
-                            settings = account.settings
+                            settings = account.settings,
+                            profileUrl = account.profileUrl
                         ) 
                     }
                 }
@@ -113,8 +115,8 @@ class ProfileViewModel @JvmOverloads constructor(
         saveChangesToFirebase()
     }
 
-    fun updateProfile(name: String, email: String, address: String) {
-        _uiState.update { it.copy(name = name, email = email, address = address) }
+    fun updateProfile(name: String, email: String, address: String, profileUrl: String = _uiState.value.profileUrl) {
+        _uiState.update { it.copy(name = name, email = email, address = address, profileUrl = profileUrl) }
         saveChangesToFirebase()
     }
     
@@ -134,7 +136,8 @@ class ProfileViewModel @JvmOverloads constructor(
             addressList = currentState.addressList,
             phone = currentState.phone,
             favoriteWorkers = currentState.favoriteWorkers,
-            settings = currentState.settings
+            settings = currentState.settings,
+            profileUrl = currentState.profileUrl
         ) ?: User(
             id = uid,
             name = currentState.name,
@@ -143,7 +146,8 @@ class ProfileViewModel @JvmOverloads constructor(
             addressList = currentState.addressList,
             phone = currentState.phone,
             favoriteWorkers = currentState.favoriteWorkers,
-            settings = currentState.settings
+            settings = currentState.settings,
+            profileUrl = currentState.profileUrl
         )
         repository.updateUserProfile(updatedUser) { success ->
             if (success) {

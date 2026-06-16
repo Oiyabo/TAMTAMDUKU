@@ -2,6 +2,8 @@ package com.example.tamtamduku.presentation.profile
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
+import coil.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -85,7 +87,7 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Profile Image placeholder
+                // Profile Image
                 Box(
                     modifier = Modifier
                         .size(80.dp)
@@ -93,12 +95,21 @@ fun ProfileScreen(
                         .background(MaterialTheme.colorScheme.primaryContainer),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp),
-                        tint = orangeMain
-                    )
+                    if (uiState.profileUrl.isNotEmpty()) {
+                        AsyncImage(
+                            model = uiState.profileUrl,
+                            contentDescription = "Profile Picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            modifier = Modifier.size(40.dp),
+                            tint = orangeMain
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(20.dp))
