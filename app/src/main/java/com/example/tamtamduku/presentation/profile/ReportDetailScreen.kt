@@ -18,6 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
 import com.example.tamtamduku.presentation.profile.viewmodels.ReportViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -185,6 +188,34 @@ fun ReportDetailScreen(
                             color = Color.Black,
                             fontWeight = FontWeight.Medium
                         )
+
+                        if (!report.imageUrl.isNullOrEmpty()) {
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(Color(0xFFF5F5F5))
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            Text(
+                                text = "Bukti Gambar",
+                                color = Color.Gray,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            AsyncImage(
+                                model = report.imageUrl,
+                                contentDescription = "Bukti Gambar Laporan",
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(200.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                            )
+                        }
                     }
                 }
             }

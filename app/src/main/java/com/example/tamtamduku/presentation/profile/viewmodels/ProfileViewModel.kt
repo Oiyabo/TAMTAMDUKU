@@ -15,6 +15,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.example.tamtamduku.data.local.SessionManager
 
+import android.net.Uri
 import com.example.tamtamduku.domain.model.UserAddress
 
 data class ProfileUiState(
@@ -26,7 +27,8 @@ data class ProfileUiState(
     val phone: String = "",
     val favoriteWorkers: List<String> = emptyList(),
     val settings: UserSettings = UserSettings(),
-    val profileUrl: String = ""
+    val profileUrl: String = "",
+    val isUploadingImage: Boolean = false
 )
 
 class ProfileViewModel @JvmOverloads constructor(
@@ -120,6 +122,21 @@ class ProfileViewModel @JvmOverloads constructor(
         saveChangesToFirebase()
     }
     
+    fun uploadProfileImage(uri: Uri) {
+        val uid = sessionManager.getUserId() ?: return
+        _uiState.update { it.copy(isUploadingImage = true) }
+        val imagePath = "profile_images/$uid.jpg"
+        
+        repository.uploadImageToStorage(uri, imagePath) { downloadUrl ->
+            if (downloadUrl != null) {
+                _uiState.update { it.copy(profileUrl = downloadUrl, isUploadingImage = false) }
+                saveChangesToFirebase()
+            } else {
+                _uiState.update { it.copy(isUploadingImage = false) }
+            }
+        }
+    }
+
     fun updatePushNotificationSetting(enabled: Boolean) {
         val currentSettings = _uiState.value.settings
         _uiState.update { it.copy(settings = currentSettings.copy(pushNotification = enabled)) }

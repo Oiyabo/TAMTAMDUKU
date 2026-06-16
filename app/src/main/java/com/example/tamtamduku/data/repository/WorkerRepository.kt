@@ -2,8 +2,10 @@ package com.example.tamtamduku.data.repository
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import android.net.Uri
 import com.example.tamtamduku.domain.model.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class WorkerRepository {
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val storage: FirebaseStorage = FirebaseStorage.getInstance()
     private val gson = Gson()
 
     private inline fun <reified T> mapDocument(doc: com.google.firebase.firestore.DocumentSnapshot): T? {
@@ -242,14 +245,31 @@ class WorkerRepository {
     }
 
     fun addReport(report: Report) {
-        val data = mapOf(
+        val data = mutableMapOf<String, Any>(
             "id" to report.id,
             "category" to report.category,
             "description" to report.description,
             "date" to report.date,
             "status" to report.status
         )
+        report.imageUrl?.let { data["imageUrl"] = it }
+        
         firestore.collection("reports").document(report.id).set(data)
+    }
+
+    fun uploadImageToStorage(uri: Uri, path: String, onComplete: (String?) -> Unit) {
+        val storageRef = storage.reference.child(path)
+        storageRef.putFile(uri)
+            .addOnSuccessListener {
+                storageRef.downloadUrl.addOnSuccessListener { downloadUri ->
+                    onComplete(downloadUri.toString())
+                }.addOnFailureListener {
+                    onComplete(null)
+                }
+            }
+            .addOnFailureListener {
+                onComplete(null)
+            }
     }
 
     // Profile & Address
