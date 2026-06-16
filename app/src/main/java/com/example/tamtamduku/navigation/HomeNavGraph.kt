@@ -37,9 +37,6 @@ fun NavGraphBuilder.homeGraph(
             onNavigateToDetail = { workerName ->
                 navCon.navigate("detail/${Uri.encode(workerName)}")
             },
-            onNavigateToPaymentTest = {
-                navCon.navigate("payment/TestWorker/TestLayanan")
-            },
             onNavigateToAddress = { navCon.navigate("address_list") }
         )
     }

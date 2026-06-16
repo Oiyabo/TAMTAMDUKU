@@ -3,20 +3,18 @@ package com.example.tamtamduku.service
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.tamtamduku.MainActivity
 import com.example.tamtamduku.R
+import com.example.tamtamduku.core.util.SessionManager
+import com.example.tamtamduku.data.repository.WorkerRepository
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.example.tamtamduku.data.repository.WorkerRepository
-import com.example.tamtamduku.core.util.SessionManager
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
@@ -79,19 +77,17 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "TamtamDuku Notifications",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "General notifications from TamtamDuku"
-            }
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            channelId,
+            "TamtamDuku Notifications",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            description = "General notifications from TamtamDuku"
         }
+        notificationManager.createNotificationChannel(channel)
 
         notificationManager.notify(System.currentTimeMillis().toInt(), notificationBuilder.build())
     }

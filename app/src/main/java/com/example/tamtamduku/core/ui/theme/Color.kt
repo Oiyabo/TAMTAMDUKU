@@ -5,11 +5,6 @@ import androidx.compose.ui.graphics.Color
 val Purple80 = Color(0xFF000000)
 val PurpleGrey80 = Color(0xFFFF9800)
 val Pink80 = Color(0xFFFAE0C1)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
 // High-Contrast Orange Theme Colors (Truly Dominant Orange)
 val OrangePrimary = Color(0xFFFF7A00) // Original vibrant Orange
 val OrangeOnPrimary = Color(0xFFFFFFFF)

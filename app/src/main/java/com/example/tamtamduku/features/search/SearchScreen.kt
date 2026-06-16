@@ -45,7 +45,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.R
 import com.example.tamtamduku.core.ui.components.WorkerCard
-import com.example.tamtamduku.features.search.WorkerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

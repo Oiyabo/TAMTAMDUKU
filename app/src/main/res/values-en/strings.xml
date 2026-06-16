@@ -35,7 +35,7 @@
     <string name="join">Join</string>
     <string name="already_have_account">Already have an account? </string>
     <string name="my_address">My Address</string>
-    <string name="search_worker_placeholder">Search for workers...</string>
+    <string name="search_worker_placeholder">Search for workers…</string>
     <string name="need_help">Need help?</string>
     <string name="find_best_worker_around_you">Find the best workers\naround you</string>
     <string name="search_now">Search Now</string>
@@ -52,7 +52,7 @@
     <string name="nama_chat">Name / Chat</string>
     <string name="faris_adit">(Faris, Adit)</string>
     <string name="chat">Chat</string>
-    <string name="ketik_pesan">Type a message...</string>
+    <string name="ketik_pesan">Type a message…</string>
     <string name="online">Online</string>
     <string name="pekerja_tidak_ditemukan">Worker not found</string>
     <string name="verif">VERIFY</string>
@@ -110,7 +110,7 @@
     <string name="pilih_kategori_masalah">Select Issue Category</string>
     <string name="pilih_kategori">Select Category</string>
     <string name="deskripsi_masalah">Issue Description</string>
-    <string name="deskripsikan_masalah_anda_disini">Describe your issue here...</string>
+    <string name="deskripsikan_masalah_anda_disini">Describe your issue here…</string>
     <string name="upload_bukti_opsional">Upload Evidence (Optional)</string>
     <string name="upload_file_gambar">Upload Image File</string>
     <string name="kirim_laporan">Submit Report</string>
@@ -170,7 +170,7 @@
     <string name="silakan_tinjau_hasil_pekerjaan_sebelum">Please review the work output before giving a review.</string>
     <string name="hasil_pekerjaan">Work Output</string>
     <string name="status_pekerjaan">Job Status</string>
-    <string name="fe0732001">FE-0732-001</string>
+    <string name="fe0732001">FE–0732–001</string>
     <string name="progress_pekerjaan">Job Progress</string>
     <string name="konfirmasi_pekerjaan_selesai">Confirm Job Finished</string>
     <string name="permintaan_diterima">Request Accepted</string>
@@ -192,7 +192,7 @@
     <string name="ok">OK</string>
     <string name="tutup">CLOSE</string>
     <string name="selesaikan_pembayaran">Finish Payment</string>
-    <string name="tulis_alasan_anda_di_sini">Write your reason here...</string>
+    <string name="tulis_alasan_anda_di_sini">Write your reason here…</string>
     <string name="ya_batalkan">Yes, Cancel</string>
     <string name="pilih_lokasi">Choose Location</string>
     <string name="status_dikerjakan">In Progress</string>

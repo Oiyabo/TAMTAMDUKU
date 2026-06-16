@@ -2,16 +2,17 @@ package com.example.tamtamduku.core.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 class SessionManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("voca_session", Context.MODE_PRIVATE)
 
     fun saveToken(token: String, userId: String) {
-        prefs.edit()
-            .putString("auth_token", token)
-            .putString("user_id", userId)
-            .putLong("login_timestamp", System.currentTimeMillis())
-            .apply()
+        prefs.edit {
+            putString("auth_token", token)
+                .putString("user_id", userId)
+                .putLong("login_timestamp", System.currentTimeMillis())
+        }
     }
 
     fun getToken(): String? {
@@ -29,7 +30,7 @@ class SessionManager(context: Context) {
     }
 
     fun clearSession() {
-        prefs.edit().clear().apply()
+        prefs.edit { clear() }
     }
 
     fun isLoggedIn(): Boolean {

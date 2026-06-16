@@ -34,12 +34,12 @@
     <string name="join">Bergabung</string>
     <string name="already_have_account">Sudah punya akun ? </string>
     <string name="my_address">Alamat Saya</string>
-    <string name="search_worker_placeholder">Cari pekerja...</string>
+    <string name="search_worker_placeholder">Cari pekerja…</string>
     <string name="need_help">Butuh bantuan?</string>
     <string name="find_best_worker_around_you">Temukan pekerja terbaik\ndi sekitar Anda</string>
     <string name="search_now">Cari Sekarang</string>
     <string name="test_midtrans_payment">TEST PEMBAYARAN MIDTRANS</string>
-    <string name="popular_categories">Kategori Populer</string>
+    <string name="popular_categories">Kategori Popular</string>
     <string name="our_best_workers">Pekerja Terbaik Kami</string>
     <string name="see_all">Lihat Semua</string>
     <string name="category_data">Data</string>
@@ -51,7 +51,7 @@
     <string name="nama_chat">Nama / Chat</string>
     <string name="faris_adit">(Faris, Adit)</string>
     <string name="chat">Chat</string>
-    <string name="ketik_pesan">Ketik pesan...</string>
+    <string name="ketik_pesan">Ketik pesan…</string>
     <string name="online">Online</string>
     <string name="pekerja_tidak_ditemukan">Pekerja tidak ditemukan</string>
     <string name="verif">VERIF</string>
@@ -109,7 +109,7 @@
     <string name="pilih_kategori_masalah">Pilih Kategori Masalah</string>
     <string name="pilih_kategori">Pilih Kategori</string>
     <string name="deskripsi_masalah">Deskripsi Masalah</string>
-    <string name="deskripsikan_masalah_anda_disini">Deskripsikan Masalah Anda disini...</string>
+    <string name="deskripsikan_masalah_anda_disini">Deskripsikan Masalah Anda disini…</string>
     <string name="upload_bukti_opsional">Upload Bukti (Opsional)</string>
     <string name="upload_file_gambar">Upload File Gambar</string>
     <string name="kirim_laporan">Kirim Laporan</string>
@@ -169,7 +169,7 @@
     <string name="silakan_tinjau_hasil_pekerjaan_sebelum">Silakan tinjau hasil pekerjaan sebelum memberikan ulasan.</string>
     <string name="hasil_pekerjaan">Hasil Pekerjaan</string>
     <string name="status_pekerjaan">Status Pekerjaan</string>
-    <string name="fe0732001">FE-0732-001</string>
+    <string name="fe0732001">FE–0732–001</string>
     <string name="progress_pekerjaan">Progress Pekerjaan</string>
     <string name="konfirmasi_pekerjaan_selesai">Konfirmasi Pekerjaan Selesai</string>
     <string name="permintaan_diterima">Permintaan Diterima</string>
@@ -191,7 +191,7 @@
     <string name="ok">OK</string>
     <string name="tutup">Tutup</string>
     <string name="selesaikan_pembayaran">Selesaikan Pembayaran</string>
-    <string name="tulis_alasan_anda_di_sini">Tulis alasan Anda di sini...</string>
+    <string name="tulis_alasan_anda_di_sini">Tulis alasan Anda di sini…</string>
     <string name="ya_batalkan">Ya, Batalkan</string>
     <string name="pilih_lokasi">Pilih Lokasi</string>
     <string name="status_dikerjakan">Dikerjakan</string>

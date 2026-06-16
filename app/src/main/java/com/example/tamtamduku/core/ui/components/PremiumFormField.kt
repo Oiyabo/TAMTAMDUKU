@@ -77,7 +77,7 @@ fun PremiumFormField(
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
-                            .menuAnchor()
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true)
                             .fillMaxWidth()
                     )
                     ExposedDropdownMenu(
