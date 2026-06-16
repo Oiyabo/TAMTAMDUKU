@@ -235,27 +235,6 @@ fun UlasanTabContent(worker: VocaWorker) {
             }
         }
 
-        // Filters
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                modifier = Modifier
-                    .background(Color(0xFFF5F5F5), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(stringResource(R.string.semua_layanan), fontSize = 12.sp, color = MaterialTheme.colorScheme.secondaryContainer)
-                Icon(Icons.Default.ArrowDropDown, null, tint = Color(0xFFFF8C00), modifier = Modifier.size(16.dp))
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.terbaru), fontSize = 12.sp, color = MaterialTheme.colorScheme.secondaryContainer)
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(stringResource(R.string.str_empty), color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            }
-        }
 
         // Reviews List
         worker.ulasan.forEach { review ->

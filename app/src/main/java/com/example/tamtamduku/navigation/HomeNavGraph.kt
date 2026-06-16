@@ -94,7 +94,8 @@ fun NavGraphBuilder.homeGraph(
         ChatPage(
             onNavigateToPersonalChat = { userName ->
                 navCon.navigate("personal_chat/$userName")
-            }
+            },
+            onBack = { navCon.popBackStack() }
         )
     }
     composable(

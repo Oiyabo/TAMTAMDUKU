@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
+import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,7 +55,7 @@ fun FilterBottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFFF9F5))
+            .background(Color(0xFFFAF9F6))
             .padding(horizontal = 24.dp)
             .padding(bottom = 24.dp)
             .verticalScroll(rememberScrollState()),
@@ -78,12 +79,19 @@ fun FilterBottomSheetContent(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Button(
                     onClick = viewModel::onResetFilter,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4B4B)),
-                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFECEC),
+                        contentColor = Color(0xFFFF4B4B)
+                    ),
+                    shape = RoundedCornerShape(50),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
-                    modifier = Modifier.height(32.dp)
+                    modifier = Modifier.height(36.dp)
                 ) {
-                    Text(stringResource(R.string.reset_all), color = MaterialTheme.colorScheme.background, fontSize = 12.sp)
+                    Text(
+                        text = stringResource(R.string.reset_all),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp
+                    )
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = onDismiss, modifier = Modifier.size(32.dp)) {
@@ -138,8 +146,24 @@ fun FilterBottomSheetContent(
                     InputChip(
                         selected = true,
                         onClick = { viewModel.onRemoveSkill(skill) },
-                        label = { Text(skill) },
-                        trailingIcon = { Icon(Icons.Default.Close, null, Modifier.size(16.dp)) }
+                        label = { Text(skill, color = Color(0xFFFF8C00), fontWeight = FontWeight.Medium) },
+                        trailingIcon = { 
+                            Icon(
+                                imageVector = Icons.Default.Close, 
+                                contentDescription = null, 
+                                modifier = Modifier.size(14.dp),
+                                tint = Color(0xFFFF8C00)
+                            ) 
+                        },
+                        colors = InputChipDefaults.inputChipColors(
+                            selectedContainerColor = Color(0xFFFDE8E0)
+                        ),
+                        border = InputChipDefaults.inputChipBorder(
+                            selected = true,
+                            enabled = true,
+                            selectedBorderColor = Color(0xFFFF8C00),
+                            selectedBorderWidth = 1.dp
+                        )
                     )
                 }
             }
@@ -179,15 +203,17 @@ fun FilterBottomSheetContent(
         // Apply Button
         Button(
             onClick = onDismiss,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00)),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFFF8C00),
+                contentColor = Color.White
+            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
-            shape = RoundedCornerShape(24.dp)
+                .height(50.dp),
+            shape = RoundedCornerShape(50)
         ) {
             Text(
                 text = stringResource(R.string.terapkan),
-                color = MaterialTheme.colorScheme.background,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )

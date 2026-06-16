@@ -55,31 +55,28 @@ fun CustomFilterDropdown(
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable)
                 .fillMaxWidth(),
             readOnly = false,
-            label = { Text(label, color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Medium) },
-            placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant) },
+            label = { Text(label, color = Color.Gray, fontWeight = FontWeight.Medium) },
+            placeholder = { Text(placeholder, color = Color.Gray) },
             singleLine = true,
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier
-                        .size(16.dp)
-                        .background(Color.Transparent, CircleShape)
-                        .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+                    tint = Color(0xFFFF8C00),
+                    modifier = Modifier.size(20.dp)
                 )
             },
-            shape = RoundedCornerShape(4.dp),
+            shape = RoundedCornerShape(12.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = Color(0xFFEFEFEF),
-                unfocusedContainerColor = Color(0xFFEFEFEF),
-                focusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
-                focusedLabelColor = MaterialTheme.colorScheme.onBackground,
-                unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
-                focusedTextColor = MaterialTheme.colorScheme.onBackground,
-                unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
-                errorContainerColor = Color(0xFFEFEFEF)
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White,
+                focusedBorderColor = Color(0xFFFF8C00),
+                unfocusedBorderColor = Color(0xFFE0E0E0),
+                focusedLabelColor = Color(0xFFFF8C00),
+                unfocusedLabelColor = Color.Gray,
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.Black,
+                errorContainerColor = Color.White
             )
         )
         
@@ -113,8 +110,8 @@ fun CustomKeywordInput(
         value = value,
         onValueChange = onValueChange,
         modifier = Modifier.fillMaxWidth(),
-        label = { Text(stringResource(R.string.keyword), color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Medium) },
-        placeholder = { Text(stringResource(R.string.database_instan_delivery), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+        label = { Text(stringResource(R.string.keyword), color = Color.Gray, fontWeight = FontWeight.Medium) },
+        placeholder = { Text(stringResource(R.string.database_instan_delivery), color = Color.Gray) },
         singleLine = true,
         trailingIcon = {
             IconButton(
@@ -124,23 +121,23 @@ fun CustomKeywordInput(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Add Keyword",
-                    tint = MaterialTheme.colorScheme.onBackground,
+                    tint = Color(0xFFFF8C00),
                     modifier = Modifier.size(24.dp)
                 )
             }
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onAdd() }),
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = OutlinedTextFieldDefaults.colors(
-            focusedContainerColor = Color(0xFFEFEFEF),
-            unfocusedContainerColor = Color(0xFFEFEFEF),
-            focusedBorderColor = MaterialTheme.colorScheme.onBackground,
-            unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
-            focusedLabelColor = MaterialTheme.colorScheme.onBackground,
-            unfocusedLabelColor = MaterialTheme.colorScheme.onBackground,
-            focusedTextColor = MaterialTheme.colorScheme.onBackground,
-            unfocusedTextColor = MaterialTheme.colorScheme.onBackground
+            focusedContainerColor = Color.White,
+            unfocusedContainerColor = Color.White,
+            focusedBorderColor = Color(0xFFFF8C00),
+            unfocusedBorderColor = Color(0xFFE0E0E0),
+            focusedLabelColor = Color(0xFFFF8C00),
+            unfocusedLabelColor = Color.Gray,
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black
         )
     )
 }
@@ -183,7 +180,7 @@ fun CustomRangeSliderSection(
             steps = steps,
             colors = SliderDefaults.colors(
                 activeTrackColor = Color(0xFFFF8C00),
-                inactiveTrackColor = Color(0xFFFFE0C2),
+                inactiveTrackColor = Color(0xFFFDE8E0),
                 thumbColor = Color(0xFFFF8C00),
                 activeTickColor = Color.Transparent,
                 inactiveTickColor = Color.Transparent
@@ -252,15 +249,15 @@ fun CustomNumberInput(
 ) {
     Box(
         modifier = modifier
-            .height(36.dp)
-            .background(Color(0xFFD9D9D9), CircleShape)
-            .border(1.dp, MaterialTheme.colorScheme.onBackground, CircleShape),
+            .height(40.dp)
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
         if (value.isEmpty()) {
             Text(
                 text = placeholder,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = Color.Gray,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
@@ -270,7 +267,7 @@ fun CustomNumberInput(
             onValueChange = onValueChange,
             textStyle = TextStyle(
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = Color.Black,
                 textAlign = TextAlign.Center
             ),
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
