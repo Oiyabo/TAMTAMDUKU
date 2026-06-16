@@ -56,7 +56,7 @@ class WorkerRepository {
     fun updateUserProfile(user: User, onComplete: (Boolean) -> Unit) {
         if (user.id.isNotEmpty()) {
             firestore.collection("users").document(user.id)
-                .set(user)
+                .set(user, com.google.firebase.firestore.SetOptions.merge())
                 .addOnSuccessListener { onComplete(true) }
                 .addOnFailureListener { onComplete(false) }
         } else {
