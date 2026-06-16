@@ -67,7 +67,7 @@ fun ProfilTabContent(worker: VocaWorker) {
             Text(
                 text = worker.deskripsi.ifBlank { "Halo, saya adalah seorang ${worker.pekerjaan} profesional yang siap membantu Anda." },
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 20.sp
             )
         }
@@ -84,11 +84,11 @@ fun ProfilTabContent(worker: VocaWorker) {
                     worker.kategori.forEach { kategori ->
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFFFF0E6), RoundedCornerShape(8.dp))
-                                .border(1.dp, Color(0xFFFFE0CC), RoundedCornerShape(8.dp))
+                                .background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(8.dp))
+                                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(8.dp))
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                         ) {
-                            Text(text = kategori, color = Color(0xFFFF8C00), fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                            Text(text = kategori, color = MaterialTheme.colorScheme.onSecondaryContainer, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
                         }
                     }
                 }
@@ -113,7 +113,7 @@ fun ProfilTabContent(worker: VocaWorker) {
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text(exp.tahun, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                            Text(exp.judul, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                            Text(exp.judul, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             Text(exp.tempat, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
@@ -188,7 +188,7 @@ fun UlasanTabContent(worker: VocaWorker) {
             shape = RoundedCornerShape(12.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
             elevation = CardDefaults.cardElevation(2.dp),
-            border = BorderStroke(1.dp, Color(0xFFF0F0F0))
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
         ) {
             Row(
                 modifier = Modifier.padding(16.dp),
@@ -242,7 +242,7 @@ fun UlasanTabContent(worker: VocaWorker) {
                 modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-                border = BorderStroke(1.dp, Color(0xFFF0F0F0))
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(
@@ -251,7 +251,7 @@ fun UlasanTabContent(worker: VocaWorker) {
                         verticalAlignment = Alignment.Top
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.Person, null, tint = Color(0xFFFF8C00), modifier = Modifier.size(36.dp).background(Color(0xFFFFF0E6), CircleShape).padding(6.dp))
+                            Icon(Icons.Default.Person, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(36.dp).background(MaterialTheme.colorScheme.surfaceVariant, CircleShape).padding(6.dp))
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
                                 Text(review.username, fontWeight = FontWeight.Bold, fontSize = 14.sp)
@@ -263,7 +263,7 @@ fun UlasanTabContent(worker: VocaWorker) {
                         Text(review.date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(review.comment, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondaryContainer)
+                    Text(review.comment, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
         }
@@ -287,7 +287,7 @@ fun PortofolioTabContent(worker: VocaWorker) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
-                    .border(1.dp, Color(0xFFF0F0F0), RoundedCornerShape(12.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
                     .padding(12.dp),
                 verticalAlignment = Alignment.Top
             ) {
@@ -299,7 +299,7 @@ fun PortofolioTabContent(worker: VocaWorker) {
                     modifier = Modifier
                         .size(80.dp, 60.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(Color(0xFFF0F5FF))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
                 )
                 
                 Spacer(modifier = Modifier.width(12.dp))
@@ -309,7 +309,7 @@ fun PortofolioTabContent(worker: VocaWorker) {
                     Text(
                         text = portfolio.description,
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 16.sp,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )

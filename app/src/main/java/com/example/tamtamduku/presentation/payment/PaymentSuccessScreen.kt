@@ -197,7 +197,7 @@ fun PaymentSuccessScreen(
             // Langkah Selanjutnya Info Box (Peach Pastel)
             PremiumInfoBox(
                 icon = Icons.AutoMirrored.Outlined.Assignment,
-                iconColor = Color(0xFF8B4F30),
+                iconColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 title = stringResource(R.string.langkah_selanjutnya),
                 description = "Penyedia jasa akan segera menerima pesanan Anda dan menghubungi Anda melalui chat."
@@ -208,8 +208,8 @@ fun PaymentSuccessScreen(
             // Transaksi Aman Info Box (Green Pastel)
             PremiumInfoBox(
                 icon = Icons.Outlined.Security,
-                iconColor = Color(0xFF2E7D32),
-                containerColor = Color(0xFFE8F5E9),
+                iconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
                 title = stringResource(R.string.transaksi_aman),
                 description = "Pembayaran Anda terlindungi dengan sistem keamanan VOCA."
             )
@@ -263,7 +263,7 @@ fun PremiumInfoBox(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White.copy(alpha = 0.6f)),
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -285,7 +285,7 @@ fun PremiumInfoBox(
                 Text(
                     text = description,
                     fontSize = 12.sp,
-                    color = Color.DarkGray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

@@ -157,16 +157,16 @@ fun ProfileScreen(
             Card(
                 modifier = Modifier.fillMaxWidth().clickable { viewModel.logout(onLogout) },
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF0F0)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = Color(0xFFDC2626))
+                    Icon(Icons.AutoMirrored.Filled.Logout, contentDescription = null, tint = MaterialTheme.colorScheme.onErrorContainer)
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(stringResource(R.string.keluar_akun), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color(0xFFDC2626))
+                    Text(stringResource(R.string.keluar_akun), fontSize = 16.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onErrorContainer)
                 }
             }
         }

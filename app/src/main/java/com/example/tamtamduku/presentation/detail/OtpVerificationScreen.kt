@@ -87,7 +87,7 @@ fun OtpVerificationScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFFFBF7) // Warm premium off-white background
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -97,7 +97,7 @@ fun OtpVerificationScreen(
             // Watermark "VERIF" in background (faint premium font)
             Text(
                 text = stringResource(R.string.verif),
-                color = Color(0xFFECE6DD),
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.08f),
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 32.sp,
                 modifier = Modifier

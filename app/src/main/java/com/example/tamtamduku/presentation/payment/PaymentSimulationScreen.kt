@@ -123,31 +123,31 @@ fun PaymentSimulationScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFECEC)),
-                border = BorderStroke(1.dp, Color(0xFFFFC1C1))
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
             ) {
                 Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                     modifier = Modifier.padding(16.dp),
+                     verticalAlignment = Alignment.CenterVertically,
+                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.AccessTime,
                         contentDescription = "Timer",
-                        tint = Color(0xFFFF4B4B),
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
                         modifier = Modifier.size(24.dp)
                     )
                     Column {
                         Text(
                             text = "Batas Waktu Pembayaran",
                             fontSize = 12.sp,
-                            color = Color(0xFFFF4B4B),
+                            color = MaterialTheme.colorScheme.onErrorContainer,
                             fontWeight = FontWeight.SemiBold
                         )
                         Text(
                             text = "Selesaikan dalam 23 jam 59 menit",
                             fontSize = 14.sp,
-                            color = Color(0xFFFF4B4B),
+                            color = MaterialTheme.colorScheme.onErrorContainer,
                             fontWeight = FontWeight.Bold
                         )
                     }

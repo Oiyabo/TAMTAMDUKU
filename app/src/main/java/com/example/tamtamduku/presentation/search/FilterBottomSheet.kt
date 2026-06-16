@@ -80,8 +80,8 @@ fun FilterBottomSheetContent(
                 Button(
                     onClick = viewModel::onResetFilter,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFFECEC),
-                        contentColor = Color(0xFFFF4B4B)
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer
                     ),
                     shape = RoundedCornerShape(50),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
@@ -146,22 +146,22 @@ fun FilterBottomSheetContent(
                     InputChip(
                         selected = true,
                         onClick = { viewModel.onRemoveSkill(skill) },
-                        label = { Text(skill, color = Color(0xFFFF8C00), fontWeight = FontWeight.Medium) },
+                        label = { Text(skill, color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Medium) },
                         trailingIcon = { 
                             Icon(
                                 imageVector = Icons.Default.Close, 
                                 contentDescription = null, 
                                 modifier = Modifier.size(14.dp),
-                                tint = Color(0xFFFF8C00)
+                                tint = MaterialTheme.colorScheme.primary
                             ) 
                         },
                         colors = InputChipDefaults.inputChipColors(
-                            selectedContainerColor = Color(0xFFFDE8E0)
+                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
                         ),
                         border = InputChipDefaults.inputChipBorder(
                             selected = true,
                             enabled = true,
-                            selectedBorderColor = Color(0xFFFF8C00),
+                            selectedBorderColor = MaterialTheme.colorScheme.primary,
                             selectedBorderWidth = 1.dp
                         )
                     )
