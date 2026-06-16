@@ -32,7 +32,7 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
             combine(repository.getWorkers(), repository.getUsers()) { allWorkers, users ->
                 val user = users.firstOrNull()
                 val favoriteIds = user?.favoriteWorkers ?: emptyList()
-                val workers = allWorkers.take(5)
+                val workers = allWorkers
                 val workTypes = listOf("Semua Pekerjaan") + workers.map { it.pekerjaan }.distinct().sorted()
                 val locations = listOf("Semua Lokasi") + workers.map { it.lokasi }.distinct().sorted()
                 val userLocations = user?.let {
