@@ -1,13 +1,13 @@
 package com.example.tamtamduku.features.chat
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tamtamduku.domain.model.ChatList
-import com.example.tamtamduku.domain.model.ChatMessage
 import com.example.tamtamduku.data.repository.WorkerRepository
-import kotlinx.coroutines.flow.*
+import com.example.tamtamduku.domain.model.ChatMessage
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 data class ChatUiItem(
@@ -20,14 +20,12 @@ data class ChatUiItem(
     val workerId: String
 )
 
-@RequiresApi(Build.VERSION_CODES.O)
 class ChatViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
 
     private val _chats = MutableStateFlow<List<ChatUiItem>>(emptyList())
     val chats: StateFlow<List<ChatUiItem>> = _chats.asStateFlow()
 
     private val _chatMessages = MutableStateFlow<Map<String, List<ChatMessage>>>(emptyMap())
-    val chatMessages: StateFlow<Map<String, List<ChatMessage>>> = _chatMessages.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -67,10 +65,6 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
 
     fun getMessagesForRoom(roomId: String): List<ChatMessage> {
         return _chatMessages.value[roomId] ?: emptyList()
-    }
-
-    fun getChatByName(name: String): ChatUiItem? {
-        return _chats.value.find { it.name == name }
     }
 
     fun markAsRead(workerName: String) {
@@ -113,7 +107,7 @@ class ChatViewModel(private val repository: WorkerRepository = WorkerRepository(
                 time = time,
                 workerId = ""
             )
-            _chats.value = _chats.value + newChat
+            _chats.value += newChat
             
             // Persist to Firebase
             repository.sendMessage(roomId, newChatId, text, time)

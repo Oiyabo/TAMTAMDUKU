@@ -1,7 +1,5 @@
 package com.example.tamtamduku.features.tracking
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.domain.model.Transaction
@@ -36,7 +34,6 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
         fetchTransactionData()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun fetchTransactionData() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -72,22 +69,6 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
     fun addTransaction(transaction: Transaction) {
         _uiState.update { currentState ->
             val updatedTransactions = currentState.transactions + transaction
-            currentState.copy(
-                transactions = updatedTransactions,
-                transactionGroups = deriveTransactionGroups(updatedTransactions)
-            )
-        }
-    }
-
-    fun markAsSelesai(workerName: String) {
-        _uiState.update { currentState ->
-            val updatedTransactions = currentState.transactions.map {
-                if (it.workerName == workerName && it.status == "Dikerjakan") {
-                    it.copy(status = "Selesai")
-                } else {
-                    it
-                }
-            }
             currentState.copy(
                 transactions = updatedTransactions,
                 transactionGroups = deriveTransactionGroups(updatedTransactions)
@@ -134,11 +115,6 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
         }
     }
 
-    fun getTransactionByInvoice(invoiceId: String): Transaction? {
-        return _uiState.value.transactions.find { it.invoiceNumber == invoiceId }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     fun processSuccessfulPayment(workerName: String, layanan: String, paymentMethod: String, price: Double, invoiceNumber: String, tanggal: String, jam: String) {
         viewModelScope.launch {
             val workers = repository.getWorkers().firstOrNull() ?: emptyList()
@@ -146,11 +122,11 @@ class TrackingViewModel(private val repository: WorkerRepository = WorkerReposit
             val workerId = worker?.id ?: ""
 
             val dateStr = if (tanggal.isNotBlank() && tanggal != " ") tanggal else {
-                val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("id", "ID"))
+                val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale.Builder().setLanguage("id").setRegion("ID").build())
                 dateFormat.format(Date())
             }
             val timeStr = if (jam.isNotBlank() && jam != " ") jam else {
-                val timeFormat = SimpleDateFormat("HH:mm", Locale("id", "ID"))
+                val timeFormat = SimpleDateFormat("HH:mm", Locale.Builder().setLanguage("id").setRegion("ID").build())
                 "${timeFormat.format(Date())} WIB"
             }
 

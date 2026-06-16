@@ -4,8 +4,6 @@ import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -31,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.tamtamduku.features.search.WorkerViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReviewScreen(
@@ -40,7 +37,7 @@ fun ReviewScreen(
     workerName: String?
 ) {
     var reviewText by remember { mutableStateOf("") }
-    var rating by remember { mutableStateOf(0) }
+    var rating by remember { mutableIntStateOf(0) }
     val scrollState = rememberScrollState()
 
     val uiState by viewModel.uiState.collectAsState()
@@ -146,7 +143,7 @@ fun ReviewScreen(
                             Spacer(modifier = Modifier.width(4.dp))
                             val ratingValue = worker?.reviewSummary?.averageRating ?: 5.0
                             val totalReviews = worker?.reviewSummary?.totalReviews ?: 1
-                            Text("${ratingValue} (${totalReviews} ulasan)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text("$ratingValue ($totalReviews ulasan)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
