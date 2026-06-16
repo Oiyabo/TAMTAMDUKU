@@ -179,17 +179,15 @@ fun AddressCard(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
             ) {
-                if (!isDefault) {
-                    Text(
-                        text = "Jadikan Utama",
-                        color = MaterialTheme.colorScheme.primary,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .clickable(onClick = onSetDefault)
-                            .padding(end = 16.dp)
-                    )
-                }
+                Text(
+                    text = if (isDefault) "Alamat Utama" else "Jadikan Utama",
+                    color = if (isDefault) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .then(if (!isDefault) Modifier.clickable(onClick = onSetDefault) else Modifier)
+                        .padding(end = 16.dp)
+                )
                 Text(
                     text = "Hapus",
                     color = MaterialTheme.colorScheme.error,
