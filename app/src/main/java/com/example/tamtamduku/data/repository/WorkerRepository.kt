@@ -208,13 +208,19 @@ class WorkerRepository {
             .addOnFailureListener { onFailure(it) }
     }
 
-    fun updateTransactionStatus(transactionId: String, newStatus: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun updateTransactionStatus(transactionId: String, newStatus: String, cancellationReason: String = "", onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         if (transactionId.isEmpty()) {
             onFailure(IllegalArgumentException("Transaction ID is empty"))
             return
         }
+        val updates = mutableMapOf<String, Any>(
+            "status" to newStatus
+        )
+        if (cancellationReason.isNotEmpty()) {
+            updates["cancellationReason"] = cancellationReason
+        }
         firestore.collection("transactions").document(transactionId)
-            .update("status", newStatus)
+            .update(updates)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
     }

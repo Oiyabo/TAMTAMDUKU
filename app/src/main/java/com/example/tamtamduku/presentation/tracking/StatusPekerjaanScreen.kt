@@ -49,23 +49,107 @@ fun StatusPekerjaanScreen(
     val isSelesai = item?.status == "Selesai"
     val isBatal = item?.status == "Batal"
     var showCancelDialog by remember { mutableStateOf(false) }
+    var selectedReasonIndex by remember { mutableStateOf(-1) }
+    var customReasonText by remember { mutableStateOf("") }
+    val cancellationReasons = listOf(
+        "Kesepakatan jadwal tidak dapat dipenuhi",
+        "Menemukan penyedia jasa lain yang lebih cocok",
+        "Pekerja tidak merespon atau tidak datang ke lokasi",
+        "Perubahan rencana / tidak lagi membutuhkan jasa",
+        "Lainnya"
+    )
 
     if (showCancelDialog) {
         AlertDialog(
-            onDismissRequest = { showCancelDialog = false },
-            title = { Text("Konfirmasi Batalkan") },
-            text = { Text("Apakah Anda yakin ingin membatalkan pekerjaan ini?") },
+            onDismissRequest = { 
+                showCancelDialog = false 
+                selectedReasonIndex = -1
+                customReasonText = ""
+            },
+            title = { 
+                Text(
+                    text = "Pilih Alasan Pembatalan",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                ) 
+            },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    cancellationReasons.forEachIndexed { index, reason ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { selectedReasonIndex = index }
+                                .padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (selectedReasonIndex == index),
+                                onClick = { selectedReasonIndex = index },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = primaryOrange
+                                )
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = reason,
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                        }
+                    }
+
+                    if (selectedReasonIndex == 4) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        OutlinedTextField(
+                            value = customReasonText,
+                            onValueChange = { customReasonText = it },
+                            placeholder = { Text("Tulis alasan Anda di sini...", fontSize = 14.sp) },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = primaryOrange,
+                                cursorColor = primaryOrange
+                            ),
+                            maxLines = 3
+                        )
+                    }
+                }
+            },
             confirmButton = {
-                TextButton(onClick = {
-                    item?.id?.let { viewModel.cancelTransaction(it) }
-                    showCancelDialog = false
-                }) {
-                    Text("Ya, Batalkan")
+                Button(
+                    onClick = {
+                        if (selectedReasonIndex != -1) {
+                            val reason = if (selectedReasonIndex == 4) {
+                                customReasonText.trim()
+                            } else {
+                                cancellationReasons[selectedReasonIndex]
+                            }
+                            item?.id?.let { viewModel.cancelTransaction(it, reason) }
+                            showCancelDialog = false
+                            selectedReasonIndex = -1
+                            customReasonText = ""
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    enabled = selectedReasonIndex != -1 && (selectedReasonIndex != 4 || customReasonText.trim().isNotEmpty())
+                ) {
+                    Text("Ya, Batalkan", color = Color.White)
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showCancelDialog = false }) {
-                    Text("Tidak")
+                TextButton(
+                    onClick = { 
+                        showCancelDialog = false 
+                        selectedReasonIndex = -1
+                        customReasonText = ""
+                    }
+                ) {
+                    Text("Batal", color = MaterialTheme.colorScheme.onBackground)
                 }
             }
         )
