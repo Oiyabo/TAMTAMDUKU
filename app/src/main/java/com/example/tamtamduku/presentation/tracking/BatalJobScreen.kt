@@ -201,7 +201,7 @@ fun BatalJobScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = stringResource(R.string.kesepakatan_jadwal_tidak_dapat_dipenuhi),
+                        text = transaction.cancellationReason.ifEmpty { stringResource(R.string.kesepakatan_jadwal_tidak_dapat_dipenuhi) },
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onBackground,
                         lineHeight = 18.sp

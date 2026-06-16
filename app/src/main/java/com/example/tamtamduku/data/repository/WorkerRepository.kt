@@ -208,13 +208,19 @@ class WorkerRepository {
             .addOnFailureListener { onFailure(it) }
     }
 
-    fun updateTransactionStatus(transactionId: String, newStatus: String, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+    fun updateTransactionStatus(transactionId: String, newStatus: String, cancellationReason: String = "", onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         if (transactionId.isEmpty()) {
             onFailure(IllegalArgumentException("Transaction ID is empty"))
             return
         }
+        val updates = mutableMapOf<String, Any>(
+            "status" to newStatus
+        )
+        if (cancellationReason.isNotEmpty()) {
+            updates["cancellationReason"] = cancellationReason
+        }
         firestore.collection("transactions").document(transactionId)
-            .update("status", newStatus)
+            .update(updates)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener { onFailure(it) }
     }
@@ -255,6 +261,12 @@ class WorkerRepository {
             "address" to address
         )
         firestore.collection("users").document(userId).update(updateData)
+    }
+
+    fun updateUserFcmToken(userId: String, token: String) {
+        if (userId.isEmpty()) return
+        firestore.collection("users").document(userId)
+            .set(mapOf("fcmToken" to token), com.google.firebase.firestore.SetOptions.merge())
     }
 
     fun updateAddress(userId: String, address: String) {

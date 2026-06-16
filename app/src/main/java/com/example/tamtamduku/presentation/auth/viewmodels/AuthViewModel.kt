@@ -5,9 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.data.local.SessionManager
 import com.example.tamtamduku.domain.model.User
+import com.example.tamtamduku.domain.model.UserSettings
 import com.example.tamtamduku.data.network.ApiClient
 import com.example.tamtamduku.data.network.LoginRequest
 import com.example.tamtamduku.data.repository.WorkerRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -88,6 +90,15 @@ class AuthViewModel @JvmOverloads constructor(
                 ) }
                 // Re-trigger fetchAccount to get Firestore data
                 fetchAccount()
+                
+                // Sync FCM Token
+                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val token = task.result
+                        repository.updateUserFcmToken(response.id.toString(), token)
+                    }
+                }
+
                 onSuccess()
             } catch (e: Exception) {
                 _uiState.update { it.copy(
@@ -116,7 +127,7 @@ class AuthViewModel @JvmOverloads constructor(
                 phone = phone,
                 address = "",
                 favoriteWorkers = emptyList(),
-                settings = com.example.tamtamduku.domain.model.UserSettings()
+                settings = UserSettings()
             )
             repository.updateUserProfile(newUser) { success ->
                 _uiState.update { it.copy(
