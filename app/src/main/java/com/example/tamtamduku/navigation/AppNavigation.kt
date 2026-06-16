@@ -36,6 +36,8 @@ fun AppNavigation(
     onThemeChange: (AppTheme) -> Unit,
     onLanguageChange: (String) -> Unit,
     currentLanguage: String,
+    targetRoute: String? = null,
+    onTargetRouteHandled: () -> Unit = {},
     navCon: NavHostController = rememberNavController(),
     authViewModel: AuthViewModel = viewModel(),
     workerViewModel: WorkerViewModel = viewModel(),
@@ -46,6 +48,20 @@ fun AppNavigation(
 ) {
     val navBackStackEntry by navCon.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val authUiState by authViewModel.uiState.collectAsState()
+    val isLoggedIn = authUiState.isLoggedIn
+
+    LaunchedEffect(targetRoute, isLoggedIn) {
+        if (targetRoute != null && isLoggedIn) {
+            navCon.navigate(targetRoute) {
+                popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                launchSingleTop = true
+                restoreState = true
+            }
+            onTargetRouteHandled()
+        }
+    }
 
     Scaffold(
         contentWindowInsets = WindowInsets(0.dp),
