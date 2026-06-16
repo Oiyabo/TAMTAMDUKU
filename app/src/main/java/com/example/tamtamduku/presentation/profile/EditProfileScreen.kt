@@ -37,9 +37,7 @@ fun EditProfileScreen(
 
     var name by remember(uiState.name) { mutableStateOf(uiState.name) }
     var email by remember(uiState.email) { mutableStateOf(uiState.email) }
-    var address by remember(uiState.address) { mutableStateOf(uiState.address) }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    // Removed address, password, confirmPassword since we use DummyJSON and another screen for address
 
     Scaffold(
         topBar = {
@@ -105,42 +103,16 @@ fun EditProfileScreen(
             ProfileTextField(
                 label = stringResource(R.string.email),
                 value = email,
-                onValueChange = { email = it },
-                placeholder = ""
+                onValueChange = {},
+                placeholder = "",
+                readOnly = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            ProfileTextField(
-                label = stringResource(R.string.alamat),
-                value = address,
-                onValueChange = { address = it },
-                placeholder = ""
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ProfileTextField(
-                label = stringResource(R.string.ubah_password),
-                value = password,
-                onValueChange = { password = it },
-                placeholder = "Masukkan Password Baru..."
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ProfileTextField(
-                label = stringResource(R.string.konfirmasi_password),
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                placeholder = "Konfirmasi Password Baru..."
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = { 
-                    viewModel.updateProfile(name, email, address)
+                    viewModel.updateProfile(name, email, uiState.address) // Keep old address and email, only name is editable
                     onBack()
                 },
                 modifier = Modifier
@@ -170,7 +142,8 @@ fun ProfileTextField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String
+    placeholder: String,
+    readOnly: Boolean = false
 ) {
     Column {
         Text(
@@ -195,7 +168,8 @@ fun ProfileTextField(
                 unfocusedContainerColor = MaterialTheme.colorScheme.background,
                 focusedContainerColor = MaterialTheme.colorScheme.background
             ),
-            singleLine = true
+            singleLine = true,
+            readOnly = readOnly
         )
     }
 }

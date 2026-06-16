@@ -118,6 +118,12 @@ class ProfileViewModel @JvmOverloads constructor(
         saveChangesToFirebase()
     }
     
+    fun updatePushNotificationSetting(enabled: Boolean) {
+        val currentSettings = _uiState.value.settings
+        _uiState.update { it.copy(settings = currentSettings.copy(pushNotification = enabled)) }
+        saveChangesToFirebase()
+    }
+    
     private fun saveChangesToFirebase() {
         val uid = sessionManager.getUserId() ?: return
         val currentState = _uiState.value

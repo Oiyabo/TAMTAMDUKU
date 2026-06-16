@@ -98,8 +98,11 @@ fun SettingsScreen(
                             Text(stringResource(R.string.notifications), fontWeight = FontWeight.SemiBold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onBackground)
                         }
                         Switch(
-                            checked = notificationsEnabled,
-                            onCheckedChange = { notificationsEnabled = it },
+                            checked = uiState.settings.pushNotification,
+                            onCheckedChange = { isChecked ->
+                                notificationsEnabled = isChecked
+                                viewModel.updatePushNotificationSetting(isChecked)
+                            },
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = MaterialTheme.colorScheme.background,
                                 checkedTrackColor = orangeMain,
