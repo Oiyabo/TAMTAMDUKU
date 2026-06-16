@@ -1,12 +1,17 @@
 package com.example.tamtamduku.domain.model
 
 import java.util.UUID
+import com.google.firebase.firestore.PropertyName
+import com.google.gson.annotations.SerializedName
 
 data class UserAddress(
     val id: String = UUID.randomUUID().toString(),
     val name: String = "",
     val fullAddress: String = "",
-    val isDefault: Boolean = false
+    @get:PropertyName("isDefault")
+    @set:PropertyName("isDefault")
+    @SerializedName("isDefault", alternate = ["default"])
+    var isDefault: Boolean = false
 )
 
 data class User(
