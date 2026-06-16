@@ -17,5 +17,26 @@ local.properties
 serviceAccountKey.json
 node_modules/
 .firebase/
-node_modules/
+
 functions/
+
+# IDE
+.idea/
+
+# Logs
+*.log
+
+# Node
+package.json
+package-lock.json
+
+# Firebase config
+
+# Dumps & Temp
+*.py
+/scripts/
+extracted_strings.json
+firestore_export.json
+main_database.json
+mock_data_extracted.json
+app/src/main/assets/firestore_export.json
