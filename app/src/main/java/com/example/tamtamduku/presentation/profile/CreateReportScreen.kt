@@ -43,6 +43,7 @@ fun CreateReportScreen(
     viewModel: ReportViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    val isLoading by viewModel.isLoading.collectAsState()
     var description by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     val categories = listOf("Pekerja", "Bug Aplikasi", "Transaksi & Pembayaran", "Lainnya")
@@ -237,11 +238,17 @@ fun CreateReportScreen(
                     if (selectedCategory.isBlank() || description.isBlank()) {
                         Toast.makeText(context, "Kategori dan deskripsi harus diisi", Toast.LENGTH_SHORT).show()
                     } else {
-                        viewModel.addReport(category = selectedCategory, description = description)
-                        Toast.makeText(context, "Laporan berhasil dikirim!", Toast.LENGTH_SHORT).show()
-                        onBack()
+                        viewModel.addReport(
+                            category = selectedCategory,
+                            description = description,
+                            imageUri = selectedImageUri
+                        ) {
+                            Toast.makeText(context, "Laporan berhasil dikirim!", Toast.LENGTH_SHORT).show()
+                            onBack()
+                        }
                     }
                 },
+                enabled = !isLoading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -252,12 +259,27 @@ fun CreateReportScreen(
                 ),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.kirim_laporan),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        modifier = Modifier.size(24.dp),
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Mengirim...",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.kirim_laporan),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.height(32.dp))

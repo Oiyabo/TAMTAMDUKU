@@ -36,25 +36,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.tamtamduku.R
 import com.example.tamtamduku.presentation.profile.viewmodels.ProfileViewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-
-fun saveImageToInternalStorage(context: Context, uri: Uri): String? {
-    return try {
-        val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-        val file = File(context.filesDir, "profile_picture.jpg")
-        val outputStream = FileOutputStream(file)
-        inputStream?.copyTo(outputStream)
-        inputStream?.close()
-        outputStream.close()
-        file.absolutePath
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
+// File saves removed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
@@ -74,11 +56,8 @@ fun EditProfileScreen(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri != null) {
-            val localPath = saveImageToInternalStorage(context, uri)
-            if (localPath != null) {
-                profileUrl = localPath
-                Toast.makeText(context, "Foto berhasil dipilih!", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.uploadProfileImage(uri)
+            Toast.makeText(context, "Mengupload foto...", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -176,7 +155,13 @@ fun EditProfileScreen(
                                 .background(MaterialTheme.colorScheme.surfaceVariant),
                             contentAlignment = Alignment.Center
                         ) {
-                            if (profileUrl.isNotEmpty()) {
+                            if (uiState.isUploadingImage) {
+                                CircularProgressIndicator(
+                                    color = Color(0xFFFF8C00),
+                                    modifier = Modifier.size(32.dp),
+                                    strokeWidth = 3.dp
+                                )
+                            } else if (profileUrl.isNotEmpty()) {
                                 AsyncImage(
                                     model = profileUrl,
                                     contentDescription = "Foto Profil",
