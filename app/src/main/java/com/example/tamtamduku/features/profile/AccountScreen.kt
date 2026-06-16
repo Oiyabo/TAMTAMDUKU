@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -46,6 +47,10 @@ fun ProfileScreen(
     val uiState by viewModel.uiState.collectAsState()
     val bgColor = MaterialTheme.colorScheme.background
     val orangeMain = MaterialTheme.colorScheme.primary
+
+    LaunchedEffect(Unit) {
+        viewModel.loadUserProfile()
+    }
 
     Scaffold(
         topBar = {

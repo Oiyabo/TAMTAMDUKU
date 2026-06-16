@@ -40,14 +40,16 @@ class ProfileViewModel @JvmOverloads constructor(
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
     private var currentUserProfile: User? = null
+    private var profileJob: kotlinx.coroutines.Job? = null
 
     init {
         loadUserProfile()
     }
 
-    private fun loadUserProfile() {
+    fun loadUserProfile() {
         val uid = sessionManager.getUserId() ?: return
-        viewModelScope.launch {
+        profileJob?.cancel()
+        profileJob = viewModelScope.launch {
             repository.getUserProfile(uid).collect { account ->
                 if (account != null) {
                     currentUserProfile = account
