@@ -32,9 +32,8 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
             combine(repository.getWorkers(), repository.getUsers()) { allWorkers, users ->
                 val user = users.firstOrNull()
                 val favoriteIds = user?.favoriteWorkers ?: emptyList()
-                val workers = allWorkers
-                val workTypes = listOf("Semua Pekerjaan") + workers.map { it.pekerjaan }.distinct().sorted()
-                val locations = listOf("Semua Lokasi") + workers.map { it.lokasi }.distinct().sorted()
+                val workTypes = listOf("Semua Pekerjaan") + allWorkers.map { it.pekerjaan }.distinct().sorted()
+                val locations = listOf("Semua Lokasi") + allWorkers.map { it.lokasi }.distinct().sorted()
                 val userLocations = user?.let {
                     val list = mutableListOf<String>()
                     if (it.address.isNotBlank()) list.add(it.address)
@@ -44,8 +43,8 @@ class WorkerViewModel(private val repository: WorkerRepository = WorkerRepositor
 
                 _uiState.update { it.copy(
                     isLoading = false,
-                    workers = workers,
-                    filteredWorkers = workers,
+                    workers = allWorkers,
+                    filteredWorkers = allWorkers,
                     workTypes = workTypes,
                     locations = locations,
                     favoriteWorkerIds = favoriteIds,

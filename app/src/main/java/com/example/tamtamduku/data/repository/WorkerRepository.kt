@@ -1,7 +1,5 @@
 package com.example.tamtamduku.data.repository
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import android.net.Uri
 import com.example.tamtamduku.domain.model.*
 import com.google.firebase.firestore.FirebaseFirestore
@@ -67,7 +65,6 @@ class WorkerRepository {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getWorkers(): Flow<List<VocaWorker>> = callbackFlow {
         val listener = firestore.collection("workers")
             .addSnapshotListener { snapshot, error ->
@@ -107,13 +104,14 @@ class WorkerRepository {
                 }
                 val map = mutableMapOf<String, List<ChatMessage>>()
                 snapshot?.documents?.forEach { doc ->
+                    @Suppress("UNCHECKED_CAST")
                     val messagesList = doc.get("messages") as? List<Map<String, Any>>
                     if (messagesList != null) {
                         val messages = messagesList.mapNotNull { msgMap ->
                             try {
                                 val json = gson.toJson(msgMap)
                                 gson.fromJson(json, ChatMessage::class.java)
-                            } catch (e: Exception) { null }
+                            } catch (_: Exception) { null }
                         }
                         map[doc.id] = messages
                     }
@@ -273,25 +271,10 @@ class WorkerRepository {
     }
 
     // Profile & Address
-    fun updateUserProfile(userId: String, name: String, email: String, address: String) {
-        if (userId.isEmpty()) return
-        val updateData = mapOf(
-            "name" to name,
-            "email" to email,
-            "address" to address
-        )
-        firestore.collection("users").document(userId).update(updateData)
-    }
-
     fun updateUserFcmToken(userId: String, token: String) {
         if (userId.isEmpty()) return
         firestore.collection("users").document(userId)
             .set(mapOf("fcmToken" to token), com.google.firebase.firestore.SetOptions.merge())
-    }
-
-    fun updateAddress(userId: String, address: String) {
-        if (userId.isEmpty()) return
-        firestore.collection("users").document(userId).update("address", address)
     }
 
     // Favorites

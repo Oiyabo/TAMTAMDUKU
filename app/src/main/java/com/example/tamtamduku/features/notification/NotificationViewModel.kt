@@ -2,12 +2,11 @@ package com.example.tamtamduku.features.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tamtamduku.domain.model.Notification
 import com.example.tamtamduku.data.repository.WorkerRepository
+import com.example.tamtamduku.domain.model.Notification
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {

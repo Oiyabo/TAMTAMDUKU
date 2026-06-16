@@ -31,6 +31,7 @@ import com.example.tamtamduku.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.features.search.WorkerViewModel
 import com.example.tamtamduku.features.notification.NotificationViewModel
+import com.example.tamtamduku.domain.model.VocaWorker
 import coil.compose.AsyncImage
 import androidx.compose.ui.layout.ContentScale
 
@@ -41,7 +42,6 @@ fun HomeScreen(
     onNavigateToSearch: (String) -> Unit = {},
     onNavigateToNotifications: () -> Unit = {},
     onNavigateToDetail: (String) -> Unit = {},
-    onNavigateToPaymentTest: () -> Unit = {},
     onNavigateToAddress: () -> Unit = {},
     notificationViewModel: NotificationViewModel = viewModel()
 ) {
@@ -222,7 +222,7 @@ fun HomeScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .height(120.dp),
-                            contentScale = androidx.compose.ui.layout.ContentScale.Fit
+                            contentScale = ContentScale.Fit
                         )
                     }
                 }
@@ -381,7 +381,7 @@ fun CategoryItem(icon: ImageVector, label: String, tintColor: Color, onClick: ()
 
 @Composable
 fun HomeWorkerCard(
-    worker: com.example.tamtamduku.domain.model.VocaWorker,
+    worker: VocaWorker,
     onClick: () -> Unit,
     isFavorite: Boolean = false,
     onFavoriteToggle: (Boolean) -> Unit = {}
@@ -515,7 +515,7 @@ fun HomeWorkerCard(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                val formattedPrice = String.format("Rp. %,d", worker.baseSalary.toInt()).replace(',', '.')
+                val formattedPrice = String.format(java.util.Locale.US, "Rp. %,d", worker.baseSalary.toInt()).replace(',', '.')
                 Surface(
                     onClick = onClick,
                     color = MaterialTheme.colorScheme.primary,

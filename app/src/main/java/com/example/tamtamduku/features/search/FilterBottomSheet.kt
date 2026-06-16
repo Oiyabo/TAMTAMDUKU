@@ -42,8 +42,6 @@ import com.example.tamtamduku.R
 import com.example.tamtamduku.features.search.components.CustomFilterDropdown
 import com.example.tamtamduku.features.search.components.CustomKeywordInput
 import com.example.tamtamduku.features.search.components.CustomRangeSliderSection
-import com.example.tamtamduku.features.search.SearchUiState
-import com.example.tamtamduku.features.search.WorkerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

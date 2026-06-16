@@ -1,26 +1,29 @@
 package com.example.tamtamduku
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import android.content.res.Configuration
-import java.util.Locale
-import com.example.tamtamduku.navigation.AppNavigation
 import com.example.tamtamduku.core.ui.theme.AppTheme
 import com.example.tamtamduku.core.ui.theme.TAMTAMDUKUTheme
+import com.example.tamtamduku.navigation.AppNavigation
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -67,7 +70,7 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val newConfiguration = remember(currentLanguage, configuration) {
                 Configuration(configuration).apply {
-                    setLocale(Locale(currentLanguage))
+                    setLocale(Locale.Builder().setLanguage(currentLanguage).build())
                 }
             }
             val newContext = remember(newConfiguration) {
