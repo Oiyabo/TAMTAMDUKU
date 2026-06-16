@@ -3,19 +3,7 @@ package com.example.tamtamduku.presentation.payment
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,27 +12,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.tamtamduku.R
+import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,57 +35,67 @@ fun PaymentScreen(
     workerName: String,
     layanan: String,
     harga: String,
-    workerViewModel: com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
+    workerViewModel: WorkerViewModel
 ) {
     val uiState by workerViewModel.uiState.collectAsState()
     val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
     val profileUrl = worker?.profileUrl ?: ""
     var selectedPaymentMethod by remember { mutableStateOf("Qris") }
-    
+
+    val bgColor = Color(0xFFFAF9F6)
+    val primaryOrange = Color(0xFFFF8C00)
+
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        "Pembayaran",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.White
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
+            Column {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = "Pembayaran",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            fontSize = 20.sp
                         )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFFF7A00),
-                    scrolledContainerColor = Color.Unspecified,
-                    navigationIconContentColor = Color.Unspecified,
-                    titleContentColor = Color.Unspecified,
-                    actionIconContentColor = Color.Unspecified
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = Color.Black
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.White
+                    )
                 )
-            )
+                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+            }
         },
-        containerColor = Color(0xFFFFFDF8),
+        containerColor = bgColor,
         bottomBar = {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
+                    .background(Color.White)
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
                     onClick = { onNavigateToSimulation(selectedPaymentMethod) },
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryOrange),
                 ) {
-                    Text(stringResource(R.string.bayar_sekarang), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
+                    Text(
+                        text = stringResource(R.string.bayar_sekarang),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -125,45 +105,43 @@ fun PaymentScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp)
         ) {
-            // Orange Background extension
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp)
-                    .background(Color(0xFFFF7A00))
-            )
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Detail Pesanan Card
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .offset(y = (-40).dp),
-                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Document Icon
                     Box(
                         modifier = Modifier
-                            .size(50.dp)
-                            .background(Color(0xFFFFF0E5), RoundedCornerShape(8.dp)),
+                            .size(48.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFFFFF2EC)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(Icons.AutoMirrored.Outlined.ReceiptLong, contentDescription = null, tint = Color(0xFFFF7A00), modifier = Modifier.size(30.dp))
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Outlined.ReceiptLong,
+                            contentDescription = null,
+                            tint = Color(0xFF4A3B32),
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
-                    
+
                     Spacer(modifier = Modifier.width(16.dp))
-                    
+
                     Column {
-                        Text("Detail Pesanan", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text("Detail Pesanan", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(layanan, fontSize = 14.sp, color = Color.DarkGray)
+                        Text(layanan, fontSize = 14.sp, color = Color.Gray)
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AsyncImage(
@@ -182,66 +160,66 @@ fun PaymentScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+
             // Rincian Pembayaran Card
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .offset(y = (-24).dp),
-                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Rincian Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text("Rincian Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
                     Spacer(modifier = Modifier.height(16.dp))
-                    
+
                     val baseHarga = harga.toDoubleOrNull() ?: 0.0
                     val adminFee = 5000.0
                     val total = baseHarga + adminFee
-                    
+
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Harga Layanan", fontSize = 14.sp, color = Color.DarkGray)
+                        Text("Harga Layanan", fontSize = 14.sp, color = Color.Gray)
                         Text("Rp${harga}", fontSize = 14.sp, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Biaya Admin", fontSize = 14.sp, color = Color.DarkGray)
-                        Text("Rp5000", fontSize = 14.sp, color = Color.Black)
+                        Text("Biaya Admin", fontSize = 14.sp, color = Color.Gray)
+                        Text("Rp5.000", fontSize = 14.sp, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Diskon", fontSize = 14.sp, color = Color.DarkGray)
+                        Text("Diskon", fontSize = 14.sp, color = Color.Gray)
                         Text("-Rp0", fontSize = 14.sp, color = Color.Black)
                     }
-                    
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), thickness = 0.5.dp, color = Color.LightGray)
-                    
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), thickness = 1.dp, color = Color(0xFFEEEEEE))
+
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Total Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text("Rp${total.toLong()}", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color(0xFFFF7A00))
+                        Text("Total Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                        Text("Rp${total.toLong()}", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = primaryOrange)
                     }
                 }
             }
 
+            Spacer(modifier = Modifier.height(24.dp))
+
             // Metode Pembayaran Title
             Text(
-                "Metode Pembayaran",
+                text = "Metode Pembayaran",
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .offset(y = (-8).dp)
+                color = Color.Black
             )
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Metode Pembayaran Card
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color.LightGray)
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
                     // Qris Option
@@ -255,17 +233,17 @@ fun PaymentScreen(
                         RadioButton(
                             selected = selectedPaymentMethod == "Qris",
                             onClick = { selectedPaymentMethod = "Qris" },
-                            colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFFF7A00))
+                            colors = RadioButtonDefaults.colors(selectedColor = primaryOrange)
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text("Qris", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Text("Qris", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
                             Text("Bayar dengan Scan Qris", fontSize = 12.sp, color = Color.Gray)
                         }
                     }
-                    
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 0.5.dp, color = Color.LightGray)
-                    
+
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 1.dp, color = Color(0xFFEEEEEE))
+
                     // Lainnya Option
                     Row(
                         modifier = Modifier
@@ -279,18 +257,20 @@ fun PaymentScreen(
                             RadioButton(
                                 selected = selectedPaymentMethod == "Lainnya",
                                 onClick = { selectedPaymentMethod = "Lainnya" },
-                                colors = RadioButtonDefaults.colors(selectedColor = Color(0xFFFF7A00))
+                                colors = RadioButtonDefaults.colors(selectedColor = primaryOrange)
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
-                                Text("Lainnya", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text("Lainnya", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
                                 Text("Lihat Pembayaran Lainmu", fontSize = 12.sp, color = Color.Gray)
                             }
                         }
-                        Icon(Icons.Default.MoreHoriz, contentDescription = "More")
+                        Icon(Icons.Default.MoreHoriz, contentDescription = "More", tint = Color.Gray)
                     }
                 }
             }
+
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

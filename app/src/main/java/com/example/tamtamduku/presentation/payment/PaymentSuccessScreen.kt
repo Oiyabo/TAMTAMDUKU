@@ -2,18 +2,7 @@ package com.example.tamtamduku.presentation.payment
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,17 +11,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Assignment
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.outlined.Security
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,158 +60,161 @@ fun PaymentSuccessScreen(
             jam = jam
         )
     }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary) // Base orange color
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 80.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(60.dp))
-            
-            Text(stringResource(R.string.pembayaran_berhasil),
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp,
-                color = MaterialTheme.colorScheme.background
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(stringResource(R.string.terima_kasih_pembayaran_anda_telah),
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.background.copy(alpha = 0.9f),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 32.dp)
-            )
-            
-            Spacer(modifier = Modifier.height(32.dp))
-            
-            // Checkmark Icon
-            Box(
-                modifier = Modifier
-                    .size(120.dp)
-                    .background(MaterialTheme.colorScheme.background, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "Success",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(80.dp)
-                )
-            }
-            
-            Spacer(modifier = Modifier.height(40.dp))
-            
-            // White Container for Details
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                shape = RoundedCornerShape(24.dp),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Column(
-                    modifier = Modifier.padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(stringResource(R.string.pembayaran_berhasil),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(stringResource(R.string.transaksi_anda_telah_berhasilndan_pesanan),
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        textAlign = TextAlign.Center
-                    )
-                    
-                    Spacer(modifier = Modifier.height(24.dp))
-                    
-                    // Details Table
-                    Surface(
-                        shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-                        color = Color.Transparent,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            DetailRow("ID Transaksi", invoiceStr, MaterialTheme.colorScheme.primary)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            
-                            DetailRow("Pekerja", workerName, MaterialTheme.colorScheme.onBackground)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
-                            Spacer(modifier = Modifier.height(12.dp))
 
-                            DetailRow("Layanan", layanan, MaterialTheme.colorScheme.onBackground)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            
-                            DetailRow("Tanggal & Waktu", dateStr, MaterialTheme.colorScheme.primary)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            
-                            DetailRow("Metode Pembayaran", paymentMethod, MaterialTheme.colorScheme.primary)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            
-                            DetailRow("Total Pembayaran", "Rp${total.toLong()}", MaterialTheme.colorScheme.primary, isBold = true)
-                        }
-                    }
-                    
-                    Spacer(modifier = Modifier.height(24.dp))
-                    
-                    // Langkah Selanjutnya Info Box
-                    InfoBox(
-                        icon = { Icon(Icons.AutoMirrored.Outlined.Assignment, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp)) },
-                        title = stringResource(R.string.langkah_selanjutnya),
-                        description = "Penyedia jasa akan segera menerima pesanan Anda dan menghubungi Anda melalui chat."
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    // Transaksi Aman Info Box
-                    InfoBox(
-                        icon = { Icon(Icons.Outlined.Security, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(32.dp)) },
-                        title = stringResource(R.string.transaksi_aman),
-                        description = "Pembayaran Anda terlindungi dengan sistem keamanan VOCA."
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(24.dp))
-            
-            // Bottom Button
-            Box(
+    val bgColor = Color(0xFFFAF9F6)
+    val primaryOrange = Color(0xFFFF8C00)
+
+    Scaffold(
+        containerColor = bgColor,
+        bottomBar = {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 24.dp)
+                    .background(Color.White)
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
                     onClick = onNavigateHome,
-                    modifier = Modifier.fillMaxWidth().height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.background)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    shape = RoundedCornerShape(50),
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryOrange)
                 ) {
-                    Text(stringResource(R.string.selesai),
+                    Text(
+                        text = stringResource(R.string.selesai),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.primary
+                        color = Color.White
                     )
                 }
             }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(40.dp))
+
+            // Success Checkmark Icon
+            Box(
+                modifier = Modifier
+                    .size(90.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFFE8F5E9)),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF4CAF50)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Success",
+                        tint = Color.White,
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = "Pembayaran Berhasil!",
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.terima_kasih_pembayaran_anda_telah),
+                fontSize = 14.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Details Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Text(
+                        text = "Rincian Transaksi",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    DetailRow("ID Transaksi", invoiceStr, Color.Black)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Pekerja", workerName, Color.Black)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Layanan", layanan, Color.Black)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Tanggal & Waktu", dateStr, Color.Black)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Metode Pembayaran", paymentMethod, Color.Black)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Total Pembayaran", "Rp${total.toLong()}", primaryOrange, isBold = true)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Langkah Selanjutnya Info Box (Peach Pastel)
+            PremiumInfoBox(
+                icon = Icons.AutoMirrored.Outlined.Assignment,
+                iconColor = Color(0xFF8B4F30),
+                containerColor = Color(0xFFFFF2EC),
+                title = stringResource(R.string.langkah_selanjutnya),
+                description = "Penyedia jasa akan segera menerima pesanan Anda dan menghubungi Anda melalui chat."
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Transaksi Aman Info Box (Green Pastel)
+            PremiumInfoBox(
+                icon = Icons.Outlined.Security,
+                iconColor = Color(0xFF2E7D32),
+                containerColor = Color(0xFFE8F5E9),
+                title = stringResource(R.string.transaksi_aman),
+                description = "Pembayaran Anda terlindungi dengan sistem keamanan VOCA."
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
@@ -237,44 +224,69 @@ fun DetailRow(label: String, value: String, valueColor: Color, isBold: Boolean =
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = label, 
-            color = MaterialTheme.colorScheme.onSurfaceVariant, 
-            fontSize = 14.sp,
-            modifier = Modifier.weight(1f)
+            text = label,
+            color = Color.Gray,
+            fontSize = 14.sp
         )
-        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = value,
             color = valueColor,
             fontSize = 14.sp,
             fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
-            textAlign = TextAlign.End,
-            modifier = Modifier.weight(1.8f)
+            textAlign = TextAlign.End
         )
     }
 }
 
 @Composable
-fun InfoBox(icon: @Composable () -> Unit, title: String, description: String) {
-    Surface(
+fun PremiumInfoBox(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    iconColor: Color,
+    containerColor: Color,
+    title: String,
+    description: String
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        color = Color.Transparent,
-        modifier = Modifier.fillMaxWidth()
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        border = BorderStroke(1.dp, Color.Transparent)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            icon()
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(Color.White.copy(alpha = 0.6f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(title, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.primary)
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(description, fontSize = 12.sp, color = MaterialTheme.colorScheme.primary)
+                Text(
+                    text = description,
+                    fontSize = 12.sp,
+                    color = Color.DarkGray
+                )
             }
         }
     }
