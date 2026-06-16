@@ -1,10 +1,12 @@
 package com.example.tamtamduku.presentation.detail
+
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -21,10 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -36,7 +40,7 @@ fun ReviewScreen(
     workerName: String?
 ) {
     var reviewText by remember { mutableStateOf("") }
-    var rating by remember { mutableIntStateOf(0) }
+    var rating by remember { mutableStateOf(0) }
     val scrollState = rememberScrollState()
 
     val uiState by viewModel.uiState.collectAsState()
@@ -44,8 +48,8 @@ fun ReviewScreen(
         uiState.workers.find { it.nama == workerName }
     }
     
-    val bgColor = MaterialTheme.colorScheme.background
-    val primaryOrange = MaterialTheme.colorScheme.primary
+    val bgColor = Color(0xFFFAF9F6)
+    val primaryOrange = Color(0xFFFF8C00)
 
     val ratingDescription = when (rating) {
         1 -> "Sangat Buruk"
@@ -58,21 +62,31 @@ fun ReviewScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(stringResource(R.string.beri_rating_ulasan),
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.background,
-                        fontSize = 18.sp
+            Column {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.beri_rating_ulasan),
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            fontSize = 20.sp
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
+                                contentDescription = "Back", 
+                                tint = Color.Black
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.White
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = MaterialTheme.colorScheme.background)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = primaryOrange)
-            )
+                )
+                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+            }
         },
         containerColor = bgColor
     ) { padding ->
@@ -85,40 +99,55 @@ fun ReviewScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Worker Info
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+            // Worker Info Card
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
-                Box(
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Text(
-                        text = worker?.nama?.uppercase() ?: "JENO",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    AsyncImage(
+                        model = worker?.profileUrl?.ifEmpty { "https://i.pravatar.cc/150?u=${worker.nama}" } ?: "https://i.pravatar.cc/150?u=${workerName ?: "Jeno"}",
+                        contentDescription = "Profile Picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(CircleShape)
+                            .background(Color(0xFFFDE8E0))
                     )
-                    Text(
-                        text = worker?.pekerjaan ?: "Design Analyst",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 14.sp
-                    )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        repeat(5) {
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text(
+                            text = worker?.nama ?: "JENO",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = worker?.pekerjaan ?: "Design Analyst",
+                            color = Color.Gray,
+                            fontSize = 14.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = null,
                                 tint = Color(0xFFFFD700),
-                                modifier = Modifier.size(14.dp)
+                                modifier = Modifier.size(16.dp)
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            val ratingValue = worker?.reviewSummary?.averageRating ?: 5.0
+                            val totalReviews = worker?.reviewSummary?.totalReviews ?: 1
+                            Text("${ratingValue} (${totalReviews} ulasan)", fontSize = 12.sp, color = Color.Gray)
                         }
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(stringResource(R.string.rating_50_328), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }
@@ -126,12 +155,12 @@ fun ReviewScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Rating
-            Text(stringResource(R.string.berikan_rating), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.berikan_rating), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 "Seberapa puas Anda dengan layanan dari ${worker?.nama?.split(" ")?.get(0) ?: "Jeno"}?",
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.secondaryContainer
+                color = Color.Gray
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -146,7 +175,7 @@ fun ReviewScreen(
                         Icon(
                             imageVector = if (index < rating) Icons.Default.Star else Icons.Outlined.Star,
                             contentDescription = null,
-                            tint = if (index < rating) Color(0xFFFFD700) else Color.Gray,
+                            tint = if (index < rating) Color(0xFFFFA000) else Color(0xFFE0E0E0),
                             modifier = Modifier.size(48.dp)
                         )
                     }
@@ -159,19 +188,20 @@ fun ReviewScreen(
                 text = ratingDescription,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                color = Color(0xFFFF8C00),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Tulis Review
-            Text(stringResource(R.string.tulis_ulasan), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.tulis_ulasan), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(stringResource(R.string.ceritakan_pengalaman_anda_dengan_layanan),
+            Text(
+                stringResource(R.string.ceritakan_pengalaman_anda_dengan_layanan),
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.secondaryContainer
+                color = Color.Gray
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -179,16 +209,18 @@ fun ReviewScreen(
             OutlinedTextField(
                 value = reviewText,
                 onValueChange = { if (it.length <= 500) reviewText = it },
-                placeholder = { Text(stringResource(R.string.pekerja_sangat_profesinalnsangat_recommended), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                placeholder = { Text(stringResource(R.string.pekerja_sangat_profesinalnsangat_recommended), color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                    focusedContainerColor = MaterialTheme.colorScheme.background,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                    focusedBorderColor = primaryOrange
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White,
+                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                    focusedBorderColor = primaryOrange,
+                    focusedTextColor = Color.Black,
+                    unfocusedTextColor = Color.Black
                 )
             )
 
@@ -204,7 +236,6 @@ fun ReviewScreen(
                             }
                         }
                     } else if (rating > 0 && worker != null) {
-                        // Option to submit without text
                         viewModel.submitReview(worker.id, rating, reviewText) { success ->
                             if (success) {
                                 onBack()
@@ -214,11 +245,16 @@ fun ReviewScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
+                    .height(52.dp),
+                shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(containerColor = primaryOrange)
             ) {
-                Text(stringResource(R.string.kirim_ulasan), color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(
+                    text = stringResource(R.string.kirim_ulasan), 
+                    color = Color.White, 
+                    fontWeight = FontWeight.Bold, 
+                    fontSize = 16.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(40.dp))
