@@ -263,6 +263,12 @@ class WorkerRepository {
         firestore.collection("users").document(userId).update(updateData)
     }
 
+    fun updateUserFcmToken(userId: String, token: String) {
+        if (userId.isEmpty()) return
+        firestore.collection("users").document(userId)
+            .set(mapOf("fcmToken" to token), com.google.firebase.firestore.SetOptions.merge())
+    }
+
     fun updateAddress(userId: String, address: String) {
         if (userId.isEmpty()) return
         firestore.collection("users").document(userId).update("address", address)
