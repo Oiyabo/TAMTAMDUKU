@@ -105,14 +105,14 @@ fun ProfileScreen(
 
                 Column {
                     Text(
-                        text = uiState.name.ifEmpty { "Emily Johnson" },
+                        text = uiState.name,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = uiState.email.ifEmpty { "emily.johnson@x.dummyjson.com" },
+                        text = uiState.email,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

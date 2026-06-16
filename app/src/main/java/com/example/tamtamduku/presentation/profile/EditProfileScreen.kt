@@ -35,9 +35,9 @@ fun EditProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    var name by remember(uiState.name) { mutableStateOf(if(uiState.name.isEmpty()) "Emily Johnson" else uiState.name) }
-    var email by remember(uiState.email) { mutableStateOf(if(uiState.email.isEmpty()) "emily.johnson@x.dummyjson.com" else uiState.email) }
-    var address by remember(uiState.address) { mutableStateOf(if(uiState.address.isEmpty()) "Jl. Merdeka No 10, Jakarta" else uiState.address) }
+    var name by remember(uiState.name) { mutableStateOf(uiState.name) }
+    var email by remember(uiState.email) { mutableStateOf(uiState.email) }
+    var address by remember(uiState.address) { mutableStateOf(uiState.address) }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
