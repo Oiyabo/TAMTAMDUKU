@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.BusinessCenter
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
@@ -131,7 +130,7 @@ fun ProfilTabContent(worker: VocaWorker) {
             Text(stringResource(R.string.tarif), fontWeight = FontWeight.Bold, fontSize = 16.sp, modifier = Modifier.padding(bottom = 8.dp))
             
             if (worker.layanan.isNotEmpty() && selectedLayanan != null) {
-                val formattedSalary = String.format(Locale("id", "ID"), "%,d", selectedLayanan!!.harga.toInt()).replace(',', '.')
+                val formattedSalary = String.format(Locale.Builder().setLanguage("id").setRegion("ID").build(), "%,d", selectedLayanan!!.harga.toInt()).replace(',', '.')
                 
                 ExposedDropdownMenuBox(
                     expanded = expanded,
@@ -143,7 +142,7 @@ fun ProfilTabContent(worker: VocaWorker) {
                         readOnly = true,
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                         colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
-                        modifier = Modifier.fillMaxWidth().menuAnchor()
+                        modifier = Modifier.fillMaxWidth().menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, enabled = true)
                     )
                     
                     ExposedDropdownMenu(
@@ -151,7 +150,7 @@ fun ProfilTabContent(worker: VocaWorker) {
                         onDismissRequest = { expanded = false }
                     ) {
                         worker.layanan.forEach { layanan ->
-                            val formattedHarga = String.format(Locale("id", "ID"), "%,d", layanan.harga.toInt()).replace(',', '.')
+                            val formattedHarga = String.format(Locale.Builder().setLanguage("id").setRegion("ID").build(), "%,d", layanan.harga.toInt()).replace(',', '.')
                             DropdownMenuItem(
                                 text = { Text("Rp $formattedHarga / ${layanan.namaLayanan}") },
                                 onClick = { 
@@ -163,7 +162,7 @@ fun ProfilTabContent(worker: VocaWorker) {
                     }
                 }
             } else {
-                val formattedSalary = String.format(Locale("id", "ID"), "%,d", worker.baseSalary.toInt()).replace(',', '.')
+                val formattedSalary = String.format(Locale.Builder().setLanguage("id").setRegion("ID").build(), "%,d", worker.baseSalary.toInt()).replace(',', '.')
                 Text("RP $formattedSalary / jam", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
             Text(stringResource(R.string.minimal_pemesanan_2_jam), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp))

@@ -1,7 +1,6 @@
 package com.example.tamtamduku.features.chat
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
-import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,8 +23,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tamtamduku.features.chat.ChatUiItem
-import com.example.tamtamduku.features.chat.ChatViewModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -172,7 +169,7 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
         } else {
             dt.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         chat.time
     }
 

@@ -1,7 +1,6 @@
 package com.example.tamtamduku.features.chat
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
-import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -25,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.domain.model.ChatMessage
-import com.example.tamtamduku.features.chat.ChatViewModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -165,7 +163,7 @@ fun MessageBubble(message: ChatMessage) {
         } else {
             dt.format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"))
         }
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         message.time
     }
 

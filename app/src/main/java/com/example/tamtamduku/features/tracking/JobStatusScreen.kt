@@ -15,14 +15,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.tamtamduku.features.tracking.TrackingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,9 +47,9 @@ fun JobStatusScreen(
     val item = uiState.transactions.find { it.workerName == workerName && it.status == "Dikerjakan" } ?: uiState.transactions.find { it.workerName == workerName }
     val isSelesai = item?.status == "Selesai"
     val isBatal = item?.status == stringResource(R.string.batal)
-    var showCancelDialog by remember { mutableStateOf(false) }
-    var selectedReasonIndex by remember { mutableStateOf(-1) }
-    var customReasonText by remember { mutableStateOf("") }
+    val showCancelDialog = remember { mutableStateOf(false) }
+    val selectedReasonIndex = remember { mutableIntStateOf(-1) }
+    val customReasonText = remember { mutableStateOf("") }
     val cancellationReasons = listOf(
         "Kesepakatan jadwal tidak dapat dipenuhi",
         "Menemukan penyedia jasa lain yang lebih cocok",
@@ -60,12 +58,12 @@ fun JobStatusScreen(
         stringResource(R.string.lainnya)
     )
 
-    if (showCancelDialog) {
+    if (showCancelDialog.value) {
         AlertDialog(
             onDismissRequest = { 
-                showCancelDialog = false 
-                selectedReasonIndex = -1
-                customReasonText = ""
+                showCancelDialog.value = false 
+                selectedReasonIndex.intValue = -1
+                customReasonText.value = ""
             },
             title = { 
                 Text(
@@ -86,13 +84,13 @@ fun JobStatusScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { selectedReasonIndex = index }
+                                .clickable { selectedReasonIndex.intValue = index }
                                 .padding(vertical = 4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             RadioButton(
-                                selected = (selectedReasonIndex == index),
-                                onClick = { selectedReasonIndex = index },
+                                selected = (selectedReasonIndex.intValue == index),
+                                onClick = { selectedReasonIndex.intValue = index },
                                 colors = RadioButtonDefaults.colors(
                                     selectedColor = primaryOrange
                                 )
@@ -106,11 +104,11 @@ fun JobStatusScreen(
                         }
                     }
 
-                    if (selectedReasonIndex == 4) {
+                    if (selectedReasonIndex.intValue == 4) {
                         Spacer(modifier = Modifier.height(4.dp))
                         OutlinedTextField(
-                            value = customReasonText,
-                            onValueChange = { customReasonText = it },
+                            value = customReasonText.value,
+                            onValueChange = { customReasonText.value = it },
                             placeholder = { Text(stringResource(R.string.tulis_alasan_anda_di_sini), fontSize = 14.sp) },
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -128,21 +126,21 @@ fun JobStatusScreen(
             confirmButton = {
                 Button(
                     onClick = {
-                        if (selectedReasonIndex != -1) {
-                            val reason = if (selectedReasonIndex == 4) {
-                                customReasonText.trim()
+                        if (selectedReasonIndex.intValue != -1) {
+                            val reason = if (selectedReasonIndex.intValue == 4) {
+                                customReasonText.value.trim()
                             } else {
-                                cancellationReasons[selectedReasonIndex]
+                                cancellationReasons[selectedReasonIndex.intValue]
                             }
                             item?.id?.let { viewModel.cancelTransaction(it, reason) }
-                            showCancelDialog = false
-                            selectedReasonIndex = -1
-                            customReasonText = ""
+                            showCancelDialog.value = false
+                            selectedReasonIndex.intValue = -1
+                            customReasonText.value = ""
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4B4B)),
                     shape = RoundedCornerShape(50),
-                    enabled = selectedReasonIndex != -1 && (selectedReasonIndex != 4 || customReasonText.trim().isNotEmpty())
+                    enabled = selectedReasonIndex.intValue != -1 && (selectedReasonIndex.intValue != 4 || customReasonText.value.trim().isNotEmpty())
                 ) {
                     Text(stringResource(R.string.ya_batalkan), color = MaterialTheme.colorScheme.onPrimary)
                 }
@@ -150,9 +148,9 @@ fun JobStatusScreen(
             dismissButton = {
                 TextButton(
                     onClick = { 
-                        showCancelDialog = false 
-                        selectedReasonIndex = -1
-                        customReasonText = ""
+                        showCancelDialog.value = false 
+                        selectedReasonIndex.intValue = -1
+                        customReasonText.value = ""
                     }
                 ) {
                     Text(stringResource(R.string.batal), color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -184,7 +182,7 @@ fun JobStatusScreen(
                             )
                         }
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
@@ -241,8 +239,8 @@ fun JobStatusScreen(
             Column(modifier = Modifier.fillMaxWidth()) {
                 TimelineItem(
                     title = "Menunggu Konfirmasi",
-                    time = if (statusLevel >= 1) item?.date ?: "-" else "-",
-                    isCompleted = statusLevel >= 1,
+                    time = item?.date ?: "-",
+                    isCompleted = true,
                     isLast = false
                 )
                 TimelineItem(
@@ -366,7 +364,7 @@ fun JobStatusScreen(
             Button(
                 onClick = { 
                     if (!isSelesai && !isBatal) {
-                        showCancelDialog = true
+                        showCancelDialog.value = true
                     } else {
                         navCon.popBackStack()
                     }

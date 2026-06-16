@@ -19,11 +19,12 @@ import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,6 @@ fun PaymentSimulationScreen(
 ) {
     var isProcessing by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 
     val baseHarga = harga.toDoubleOrNull() ?: 0.0
@@ -71,7 +71,7 @@ fun PaymentSimulationScreen(
                             )
                         }
                     },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
@@ -242,7 +242,9 @@ fun PaymentSimulationScreen(
                             )
                             IconButton(
                                 onClick = {
-                                    clipboardManager.setText(AnnotatedString(vaNumber.replace(" ", "")))
+                                    val androidClipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText("VA", vaNumber.replace(" ", ""))
+                                    androidClipboard.setPrimaryClip(clip)
                                     Toast.makeText(context, "Nomor VA berhasil disalin", Toast.LENGTH_SHORT).show()
                                 },
                                 modifier = Modifier.size(24.dp)

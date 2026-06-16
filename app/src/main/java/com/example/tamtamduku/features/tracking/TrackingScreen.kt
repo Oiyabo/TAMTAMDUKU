@@ -13,7 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.tamtamduku.domain.model.Transaction
-import com.example.tamtamduku.features.tracking.TrackingViewModel
 
 @Composable
 fun TrackingScreen(
@@ -61,7 +60,7 @@ fun TrackingScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back",
                 modifier = Modifier
                     .size(24.dp)
@@ -115,7 +114,7 @@ fun TrackingScreen(
             }
         }
 
-        Divider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant, thickness = 1.dp)
 
         if (uiState.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -189,7 +188,7 @@ fun TransactionHistoryCard(item: Transaction, onClick: () -> Unit) {
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onBackground
                     )
-                    val formattedPrice = String.format("%,d", item.price.toInt()).replace(',', '.')
+                    val formattedPrice = String.format(java.util.Locale.US, "%,d", item.price.toInt()).replace(',', '.')
                     Text(
                         text = "Rp$formattedPrice",
                         fontWeight = FontWeight.Bold,

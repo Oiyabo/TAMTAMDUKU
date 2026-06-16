@@ -70,7 +70,7 @@ class AuthViewModel @JvmOverloads constructor(
                         } else {
                             emailInput // Fallback to raw input if no user is found
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         emailInput // Fallback to raw input on API failure
                     }
                 } else {
@@ -100,7 +100,7 @@ class AuthViewModel @JvmOverloads constructor(
                 }
 
                 onSuccess()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update { it.copy(
                     isLoading = false,
                     loginError = "Email/Username atau Password Salah! (Gagal login ke server)"
@@ -115,7 +115,7 @@ class AuthViewModel @JvmOverloads constructor(
         onLogout()
     }
 
-    fun register(name: String, email: String, phone: String, password: String, onSuccess: () -> Unit) {
+    fun register(name: String, email: String, phone: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             // Simulating API call for registration
@@ -129,7 +129,7 @@ class AuthViewModel @JvmOverloads constructor(
                 favoriteWorkers = emptyList(),
                 settings = UserSettings()
             )
-            repository.updateUserProfile(newUser) { success ->
+            repository.updateUserProfile(newUser) { _ ->
                 _uiState.update { it.copy(
                     isLoading = false,
                     registrationSuccess = true,
