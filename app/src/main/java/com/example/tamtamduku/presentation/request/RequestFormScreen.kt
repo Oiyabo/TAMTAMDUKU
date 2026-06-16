@@ -1,6 +1,7 @@
 package com.example.tamtamduku.presentation.request
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -83,6 +85,7 @@ fun RequestFormScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val worker = uiState.workers.find { it.nama.equals(workerName, ignoreCase = true) }
+    val context = LocalContext.current
 
     val (kategori, setKategori) = remember { mutableStateOf("") }
     val (layanan, setLayanan) = remember { mutableStateOf("") }
@@ -229,6 +232,11 @@ fun RequestFormScreen(
             ) {
                 Button(
                     onClick = {
+                        if (kategori.isBlank() || layanan.isBlank() || tanggal.isBlank() || jam.isBlank()) {
+                            Toast.makeText(context, "Kategori, Layanan, Tanggal, dan Jam wajib diisi", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        
                         val encodedWorkerName = Uri.encode(worker.nama)
                         val encodedLayanan = Uri.encode(layanan.ifEmpty { " " })
                         val encodedLokasi = Uri.encode(lokasi.ifEmpty { " " })
@@ -330,7 +338,7 @@ fun RequestFormScreen(
             Row(modifier = Modifier.fillMaxWidth()) {
                 FormClickableField(
                     icon = Icons.Outlined.CalendarMonth,
-                    placeholder = "Tanggal",
+                    placeholder = "Tenggat Waktu (Tgl)",
                     value = tanggal,
                     onClick = { setShowDatePicker(true) },
                     modifier = Modifier.weight(1.5f)
@@ -338,7 +346,7 @@ fun RequestFormScreen(
                 Spacer(modifier = Modifier.width(12.dp))
                 FormClickableField(
                     icon = Icons.Outlined.Schedule,
-                    placeholder = "Jam",
+                    placeholder = "Tenggat Waktu (Jam)",
                     value = jam,
                     onClick = { setShowTimePicker(true) },
                     modifier = Modifier.weight(1f),

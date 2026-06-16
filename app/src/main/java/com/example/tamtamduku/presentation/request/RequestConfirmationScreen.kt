@@ -77,8 +77,8 @@ fun RequestConfirmationScreen(
                 Button(
                     onClick = {
                         val encodedWorkerName = Uri.encode(workerName ?: "")
-                        val encodedLayanan = Uri.encode(layanan.ifBlank { "Pembuatan SIAKAD" })
-                        val encodedHarga = Uri.encode(harga.ifBlank { "300000" })
+                        val encodedLayanan = Uri.encode(layanan.ifBlank { " " })
+                        val encodedHarga = Uri.encode(harga.ifBlank { "0" })
                         val encodedTanggal = Uri.encode(tanggal.ifBlank { " " })
                         val encodedJam = Uri.encode(jam.ifBlank { " " })
                         navCon.navigate("payment/$encodedWorkerName/$encodedLayanan/$encodedHarga/$encodedTanggal/$encodedJam")
@@ -121,22 +121,22 @@ fun RequestConfirmationScreen(
                 }
             }
 
-            SummaryItem(icon = Icons.Outlined.WorkOutline, label = "Kategori", value = kategori.ifBlank { "Layanan Umum" })
+            SummaryItem(icon = Icons.Outlined.WorkOutline, label = "Kategori", value = kategori.trim())
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.WorkOutline, label = stringResource(R.string.layanan), value = layanan.ifBlank { "Pembuatan SIAKAD" })
+            SummaryItem(icon = Icons.Outlined.WorkOutline, label = stringResource(R.string.layanan), value = layanan.trim())
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
             
-            SummaryItem(icon = Icons.Outlined.LocationOn, label = stringResource(R.string.lokasi), value = lokasi.ifBlank { "Jl Bhayangkara No 10, Bandar Lampung" })
+            SummaryItem(icon = Icons.Outlined.LocationOn, label = stringResource(R.string.lokasi), value = lokasi.trim())
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.CalendarMonth, label = stringResource(R.string.tanggal), value = tanggal.ifBlank { "20 Mei 2025" })
+            SummaryItem(icon = Icons.Outlined.CalendarMonth, label = stringResource(R.string.tanggal), value = tanggal.trim())
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.Schedule, label = stringResource(R.string.waktu), value = jam.ifBlank { "10.00 -12.00" })
+            SummaryItem(icon = Icons.Outlined.Schedule, label = stringResource(R.string.waktu), value = jam.trim())
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
-            SummaryItem(icon = Icons.Outlined.NoteAlt, label = stringResource(R.string.catatan), value = catatan.ifBlank { "Analisis dan perancangan (SIAKAD) untuk kebutuhan pengelolaan data mahasiswa, jadwal, nilai, dan administrasi kampus." })
+            SummaryItem(icon = Icons.Outlined.NoteAlt, label = stringResource(R.string.catatan), value = catatan.trim())
             HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), color = MaterialTheme.colorScheme.outline)
 
             SummaryItem(icon = Icons.Outlined.LocalOffer, label = stringResource(R.string.estimasi_harga), value = "Rp$harga")
