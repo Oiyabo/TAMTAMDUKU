@@ -237,14 +237,22 @@ fun DetailRow(label: String, value: String, valueColor: Color, isBold: Boolean =
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
-        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
         Text(
-            value,
+            text = label, 
+            color = MaterialTheme.colorScheme.onSurfaceVariant, 
+            fontSize = 14.sp,
+            modifier = Modifier.weight(1f)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = value,
             color = valueColor,
             fontSize = 14.sp,
-            fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal
+            fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(1.8f)
         )
     }
 }
