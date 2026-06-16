@@ -23,7 +23,8 @@ data class User(
     val locations: List<String> = emptyList(),
     val addressList: List<UserAddress> = emptyList(),
     val favoriteWorkers: List<String> = emptyList(),
-    val settings: UserSettings = UserSettings()
+    val settings: UserSettings = UserSettings(),
+    val profileUrl: String = ""
 )
 
 data class UserSettings(
