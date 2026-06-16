@@ -2,8 +2,6 @@ package com.example.tamtamduku.features.booking
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -39,7 +37,6 @@ import com.example.tamtamduku.features.booking.components.ProfilTabContent
 import com.example.tamtamduku.features.booking.components.UlasanTabContent
 import com.example.tamtamduku.features.search.WorkerViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkerDetailScreen(

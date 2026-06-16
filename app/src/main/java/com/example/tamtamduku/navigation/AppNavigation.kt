@@ -1,21 +1,18 @@
 package com.example.tamtamduku.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FactCheck
+import androidx.compose.material.icons.automirrored.outlined.FactCheck
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material.icons.outlined.Sms
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -30,7 +27,6 @@ import com.example.tamtamduku.features.profile.ReportViewModel
 import com.example.tamtamduku.features.search.WorkerViewModel
 import com.example.tamtamduku.features.tracking.TrackingViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
     onThemeChange: (AppTheme) -> Unit,
@@ -93,7 +89,7 @@ fun AppNavigation(
                         )
                     )
                     NavigationBarItem(
-                        icon = { Icon(Icons.Outlined.FactCheck, contentDescription = "Tracking") },
+                        icon = { Icon(Icons.AutoMirrored.Outlined.FactCheck, contentDescription = "Tracking") },
                         label = null,
                         selected = currentRoute == "tracking",
                         onClick = {
@@ -153,7 +149,6 @@ fun AppNavigation(
             }
         }
     ) { innerPadding ->
-        val authUiState by authViewModel.uiState.collectAsState()
         val startDestination = remember { if (authViewModel.uiState.value.isLoggedIn) "home" else "login" }
 
         NavHost(
