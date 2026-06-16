@@ -40,6 +40,7 @@ import java.time.format.DateTimeParseException
 @Composable
 fun NotificationsScreen(
     onBack: () -> Unit,
+    onNavigate: (String) -> Unit = {},
     viewModel: NotificationViewModel = viewModel()
 ) {
     val notifications by viewModel.notifications.collectAsState()
@@ -93,7 +94,15 @@ fun NotificationsScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(notifications) { item ->
-                    NotificationRow(item = item)
+                    NotificationRow(
+                        item = item,
+                        onClick = {
+                            viewModel.markAsRead(item.id)
+                            if (!item.targetRoute.isNullOrEmpty()) {
+                                onNavigate(item.targetRoute)
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -101,7 +110,7 @@ fun NotificationsScreen(
 }
 
 @Composable
-fun NotificationRow(item: Notification) {
+fun NotificationRow(item: Notification, onClick: () -> Unit = {}) {
     val (icon, color) = when (item.type.lowercase()) {
         "payment" -> Pair(Icons.Default.Paid, Color(0xFF4CAF50)) // Green
         "transaction" -> Pair(Icons.Default.Check, Color(0xFF2196F3)) // Green
@@ -127,6 +136,7 @@ fun NotificationRow(item: Notification) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
+            .clickable { onClick() }
             .background(if (item.isRead) Color(0xFFF5F5F5) else MaterialTheme.colorScheme.background)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically

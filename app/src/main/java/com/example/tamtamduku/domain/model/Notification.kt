@@ -7,5 +7,6 @@ data class Notification(
     val body: String = "",
     val type: String = "", // "promo", "transaction", dll.
     val isRead: Boolean = false,
+    val targetRoute: String? = null,
     val createdAt: String = ""
 )

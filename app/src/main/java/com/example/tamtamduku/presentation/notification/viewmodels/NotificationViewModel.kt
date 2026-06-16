@@ -32,4 +32,10 @@ class NotificationViewModel(private val repository: WorkerRepository = WorkerRep
             }
         }
     }
+
+    fun markAsRead(notificationId: String) {
+        viewModelScope.launch {
+            repository.markNotificationAsRead(notificationId)
+        }
+    }
 }

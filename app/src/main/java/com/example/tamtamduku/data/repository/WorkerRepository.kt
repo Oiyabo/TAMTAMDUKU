@@ -143,11 +143,16 @@ class WorkerRepository {
                     return@addSnapshotListener
                 }
                 val items = snapshot?.documents?.mapNotNull { doc ->
-                    mapDocument<Notification>(doc)
+                    mapDocument<Notification>(doc)?.copy(id = doc.id)
                 } ?: emptyList()
                 trySend(items)
             }
         awaitClose { listener.remove() }
+    }
+
+    fun markNotificationAsRead(notificationId: String) {
+        if (notificationId.isEmpty()) return
+        firestore.collection("notifications").document(notificationId).update("isRead", true)
     }
 
     fun sendMessage(roomId: String, chatListId: String, text: String, time: String) {

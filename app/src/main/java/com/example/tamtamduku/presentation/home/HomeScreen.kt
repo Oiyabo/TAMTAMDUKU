@@ -27,6 +27,7 @@ import com.example.tamtamduku.R
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tamtamduku.core.components.WorkerCard
 import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
+import com.example.tamtamduku.presentation.notification.viewmodels.NotificationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,9 +37,13 @@ fun HomeScreen(
     onNavigateToNotifications: () -> Unit = {},
     onNavigateToDetail: (String) -> Unit = {},
     onNavigateToPaymentTest: () -> Unit = {},
-    onNavigateToAddress: () -> Unit = {}
+    onNavigateToAddress: () -> Unit = {},
+    notificationViewModel: NotificationViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val notifications by notificationViewModel.notifications.collectAsState()
+    val hasUnread = notifications.any { !it.isRead }
+    
     val randomWorker = remember(uiState.workers) {
         if (uiState.workers.isNotEmpty()) uiState.workers.random() else null
     }
@@ -72,12 +77,23 @@ fun HomeScreen(
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
-                Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = "Notifications",
-                    modifier = Modifier.size(28.dp).clickable { onNavigateToNotifications() },
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
+                BadgedBox(
+                    badge = {
+                        if (hasUnread) {
+                            Badge(
+                                containerColor = Color.Red,
+                                modifier = Modifier.size(10.dp)
+                            )
+                        }
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Notifications,
+                        contentDescription = "Notifications",
+                        modifier = Modifier.size(28.dp).clickable { onNavigateToNotifications() },
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             }
         }
     ) { innerPadding ->

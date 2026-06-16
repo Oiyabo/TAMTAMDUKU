@@ -45,7 +45,49 @@ fun NavGraphBuilder.homeGraph(
     }
     composable("notifications") {
         NotificationsScreen(
-            onBack = { navCon.popBackStack() }
+            onBack = { navCon.popBackStack() },
+            onNavigate = { route ->
+                // Pop the notifications screen off the backstack first so it doesn't get saved in the home state
+                navCon.popBackStack()
+                
+                if (route == "home" || route == "tracking" || route == "chat" || route == "profile") {
+                    navCon.navigate(route) {
+                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                } else if (route.startsWith("personal_chat/")) {
+                    navCon.navigate("chat") {
+                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    navCon.navigate(route)
+                } else if (route.startsWith("status_pekerjaan/") || route.startsWith("hasil_kerja/")) {
+                    navCon.navigate("tracking") {
+                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    navCon.navigate(route)
+                } else if (route.startsWith("detail/") || route.startsWith("review/") || route.startsWith("search")) {
+                    navCon.navigate("home") {
+                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    navCon.navigate(route)
+                } else if (route.startsWith("report_list")) {
+                    navCon.navigate("profile") {
+                        popUpTo(navCon.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    navCon.navigate(route)
+                } else {
+                    navCon.navigate(route)
+                }
+            }
         )
     }
     composable("chat") {
