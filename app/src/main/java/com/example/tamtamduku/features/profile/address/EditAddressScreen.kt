@@ -27,12 +27,12 @@ fun EditAddressScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var name by remember(uiState.name) { mutableStateOf(if (uiState.name.isEmpty()) "Emily Johnson" else uiState.name) }
+    var name by remember(uiState.name) { mutableStateOf(uiState.name.ifEmpty { "Emily Johnson" }) }
     var province by remember { mutableStateOf("DKI Jakarta") }
     var city by remember { mutableStateOf("Jakarta Pusat") }
     var district by remember { mutableStateOf("Gambir") }
     var postalCode by remember { mutableStateOf("10110") }
-    var addressDetail by remember(uiState.address) { mutableStateOf(if (uiState.address.isEmpty()) "Jl. Merdeka No 10, Jakarta" else uiState.address) }
+    var addressDetail by remember(uiState.address) { mutableStateOf(uiState.address.ifEmpty { "Jl. Merdeka No 10, Jakarta" }) }
     var additionalDetail by remember { mutableStateOf("Depan Parkiran") }
     var isDefault by remember { mutableStateOf(false) }
 
@@ -53,7 +53,7 @@ fun EditAddressScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
             )

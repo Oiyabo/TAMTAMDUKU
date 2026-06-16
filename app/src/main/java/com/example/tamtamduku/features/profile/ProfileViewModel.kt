@@ -1,6 +1,5 @@
 package com.example.tamtamduku.features.profile
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.domain.model.UserSettings
 import com.example.tamtamduku.domain.model.User

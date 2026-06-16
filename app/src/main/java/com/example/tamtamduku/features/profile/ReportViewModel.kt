@@ -30,7 +30,7 @@ class ReportViewModel(private val repository: WorkerRepository = WorkerRepositor
 
     fun addReport(category: String, description: String, imageUri: Uri?, onComplete: () -> Unit) {
         _isLoading.value = true
-        val currentDate = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID")).format(Date())
+        val currentDate = SimpleDateFormat("dd MMMM yyyy", Locale.Builder().setLanguage("id").setRegion("ID").build()).format(Date())
         val newId = "ID RE #${System.currentTimeMillis().toString().takeLast(4)}"
         
         if (imageUri != null) {

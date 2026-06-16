@@ -1,7 +1,5 @@
 package com.example.tamtamduku.features.profile
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tamtamduku.domain.model.VocaWorker
@@ -12,7 +10,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.O)
 class FavoriteWorkersViewModel(private val repository: WorkerRepository = WorkerRepository()) : ViewModel() {
     private val _favoriteWorkers = MutableStateFlow<List<VocaWorker>>(emptyList())
     val favoriteWorkers: StateFlow<List<VocaWorker>> = _favoriteWorkers.asStateFlow()
