@@ -27,12 +27,12 @@ fun EditAddressScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var name by remember { mutableStateOf(if (uiState.name.isEmpty()) "Bang Lijen" else uiState.name) }
-    var province by remember { mutableStateOf("Lampung") }
-    var city by remember { mutableStateOf("Bandar Lampung") }
-    var district by remember { mutableStateOf("Rajabasa") }
-    var postalCode by remember { mutableStateOf("35141") }
-    var addressDetail by remember { mutableStateOf(if (uiState.address.isEmpty()) "Gedung Ilmu Komputer Universitas Lampung (GIK UNILA)\nJl. Prof. Dr. Ir. Sumantri Brojonegoro No.1, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141." else uiState.address) }
+    var name by remember(uiState.name) { mutableStateOf(if (uiState.name.isEmpty()) "Emily Johnson" else uiState.name) }
+    var province by remember { mutableStateOf("DKI Jakarta") }
+    var city by remember { mutableStateOf("Jakarta Pusat") }
+    var district by remember { mutableStateOf("Gambir") }
+    var postalCode by remember { mutableStateOf("10110") }
+    var addressDetail by remember(uiState.address) { mutableStateOf(if (uiState.address.isEmpty()) "Jl. Merdeka No 10, Jakarta" else uiState.address) }
     var additionalDetail by remember { mutableStateOf("Depan Parkiran") }
     var isDefault by remember { mutableStateOf(false) }
 
