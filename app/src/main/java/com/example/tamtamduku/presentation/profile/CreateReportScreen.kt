@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -34,6 +35,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.border
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateReportScreen(
@@ -45,6 +47,7 @@ fun CreateReportScreen(
     var expanded by remember { mutableStateOf(false) }
     val categories = listOf("Pekerja", "Bug Aplikasi", "Transaksi & Pembayaran", "Lainnya")
     var selectedCategory by remember { mutableStateOf("") }
+    val primaryOrange = Color(0xFFFF8C00)
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val imagePickerLauncher = rememberLauncherForActivityResult(
@@ -59,12 +62,12 @@ fun CreateReportScreen(
                 title = {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(stringResource(R.string.laporan_masalah),
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.ExtraBold,
                             fontSize = 20.sp
                         )
                         Text(stringResource(R.string.id_re_0001),
-                            color = MaterialTheme.colorScheme.outlineVariant,
-                            fontSize = 14.sp
+                            color = Color.Gray,
+                            fontSize = 13.sp
                         )
                     }
                 },
@@ -77,11 +80,11 @@ fun CreateReportScreen(
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color(0xFFFAF9F6)
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -93,7 +96,7 @@ fun CreateReportScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(stringResource(R.string.pilih_kategori_masalah), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.pilih_kategori_masalah), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -104,15 +107,15 @@ fun CreateReportScreen(
                     value = selectedCategory,
                     onValueChange = {},
                     readOnly = true,
-                    placeholder = { Text(stringResource(R.string.pilih_kategori), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                    placeholder = { Text(stringResource(R.string.pilih_kategori), color = Color.Gray) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = Color.Transparent,
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedContainerColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                        focusedContainerColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+                        unfocusedBorderColor = Color(0xFFE0E0E0),
+                        focusedBorderColor = primaryOrange,
+                        unfocusedContainerColor = Color.White,
+                        focusedContainerColor = Color.White
                     ),
-                    shape = RoundedCornerShape(8.dp),
+                    shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth()
@@ -121,11 +124,11 @@ fun CreateReportScreen(
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
-                    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                    modifier = Modifier.background(Color.White)
                 ) {
                     categories.forEach { category ->
                         DropdownMenuItem(
-                            text = { Text(category) },
+                            text = { Text(category, fontWeight = FontWeight.Medium) },
                             onClick = {
                                 selectedCategory = category
                                 expanded = false
@@ -137,40 +140,61 @@ fun CreateReportScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(stringResource(R.string.deskripsi_masalah), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.deskripsi_masalah), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                placeholder = { Text(stringResource(R.string.deskripsikan_masalah_anda_disini), color = MaterialTheme.colorScheme.onSurfaceVariant) },
+                placeholder = { Text(stringResource(R.string.deskripsikan_masalah_anda_disini), color = Color.Gray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                    focusedContainerColor = MaterialTheme.colorScheme.background
+                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                    focusedBorderColor = primaryOrange,
+                    unfocusedContainerColor = Color.White,
+                    focusedContainerColor = Color.White
                 )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(stringResource(R.string.upload_bukti_opsional), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(stringResource(R.string.upload_bukti_opsional), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
             if (selectedImageUri == null) {
                 Surface(
                     onClick = { imagePickerLauncher.launch("image/*") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.background,
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                        .height(120.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    color = primaryOrange.copy(alpha = 0.05f),
+                    border = BorderStroke(1.dp, primaryOrange.copy(alpha = 0.3f))
                 ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.upload_file_gambar), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxSize().padding(16.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Image,
+                            contentDescription = "Upload Icon",
+                            tint = primaryOrange,
+                            modifier = Modifier.size(36.dp)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = stringResource(R.string.upload_file_gambar),
+                            color = primaryOrange,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                        Text(
+                            text = "Format PNG, JPG atau JPEG hingga 5MB",
+                            color = Color.Gray,
+                            fontSize = 11.sp
+                        )
                     }
                 }
             } else {
@@ -185,8 +209,8 @@ fun CreateReportScreen(
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp))
-                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
+                            .clip(RoundedCornerShape(16.dp))
+                            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(16.dp))
                     )
                     IconButton(
                         onClick = { selectedImageUri = null },
@@ -194,12 +218,12 @@ fun CreateReportScreen(
                             .align(Alignment.TopEnd)
                             .padding(8.dp)
                             .size(32.dp)
-                            .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f), CircleShape)
+                            .background(Color.Black.copy(alpha = 0.6f), CircleShape)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Hapus Gambar",
-                            tint = MaterialTheme.colorScheme.background,
+                            tint = Color.White,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -220,17 +244,19 @@ fun CreateReportScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(12.dp),
+                    .height(56.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                    containerColor = primaryOrange,
+                    contentColor = Color.White
+                ),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
             ) {
                 Text(
                     text = stringResource(R.string.kirim_laporan),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.background
+                    color = Color.White
                 )
             }
             

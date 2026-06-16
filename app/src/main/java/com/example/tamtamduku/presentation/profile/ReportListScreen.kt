@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -32,6 +33,7 @@ fun ReportListScreen(
     viewModel: ReportViewModel = viewModel()
 ) {
     val reports by viewModel.reports.collectAsState()
+    val primaryOrange = Color(0xFFFF8C00)
 
     Scaffold(
         topBar = {
@@ -39,7 +41,7 @@ fun ReportListScreen(
                 title = {
                     Text(
                         "Daftar Laporan Masalah",
-                        fontWeight = FontWeight.Bold,
+                        fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp
                     )
                 },
@@ -52,11 +54,11 @@ fun ReportListScreen(
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
         },
-        containerColor = Color(0xFFFFFDF8),
+        containerColor = Color(0xFFFAF9F6),
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -68,11 +70,12 @@ fun ReportListScreen(
                     onClick = onNavigateToCreateReport,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
+                        .height(56.dp),
+                    shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFFF7A00)
-                    )
+                        containerColor = primaryOrange
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
                 ) {
                     Text(
                         text = "+ Tambah Laporan",
@@ -96,17 +99,24 @@ fun ReportListScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Report,
-                        contentDescription = null,
-                        modifier = Modifier.size(72.dp),
-                        tint = Color(0xFFFF7A00).copy(alpha = 0.6f)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Box(
+                        modifier = Modifier
+                            .size(120.dp)
+                            .background(Color(0xFFFFF4E5), CircleShape),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Report,
+                            contentDescription = null,
+                            modifier = Modifier.size(56.dp),
+                            tint = primaryOrange
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
                     Text(
                         text = "Belum Ada Laporan Masalah",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 20.sp,
                         color = Color.Black
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -114,7 +124,9 @@ fun ReportListScreen(
                         text = "Semua masalah yang Anda laporkan akan muncul di sini.",
                         fontSize = 14.sp,
                         color = Color.Gray,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        lineHeight = 20.sp,
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
                 }
             }
@@ -151,78 +163,98 @@ fun ReportCard(
         "menunggu" -> Color(0xFFEF6C00)
         else -> Color(0xFF616161)
     }
+    val indicatorColor = when (report.status.lowercase()) {
+        "selesai" -> Color(0xFF4CAF50)
+        "menunggu" -> Color(0xFFFF9800)
+        else -> Color(0xFF9E9E9E)
+    }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        border = BorderStroke(1.dp, Color(0xFFEEEEEE))
+        border = BorderStroke(1.dp, Color(0xFFF0F0F0))
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .height(IntrinsicSize.Min)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .width(6.dp)
+                    .fillMaxHeight()
+                    .background(indicatorColor)
+            )
+            
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp)
             ) {
-                Text(
-                    text = report.id,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    color = Color(0xFF888888)
-                )
-                Box(
-                    modifier = Modifier
-                        .background(statusColor, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = report.status,
+                        text = report.id,
                         fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        color = Color(0xFF9E9E9E)
+                    )
+                    Surface(
+                        color = statusColor,
+                        shape = RoundedCornerShape(6.dp)
+                    ) {
+                        Text(
+                            text = report.status,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 11.sp,
+                            color = statusTextColor
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = report.category,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = report.description,
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    maxLines = 2,
+                    overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
+                    lineHeight = 20.sp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = report.date,
                         fontSize = 12.sp,
-                        color = statusTextColor
+                        color = Color.Gray
+                    )
+                    Icon(
+                        imageVector = Icons.Default.ChevronRight,
+                        contentDescription = null,
+                        tint = Color(0xFFBDBDBD),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = report.category,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = report.description,
-                fontSize = 14.sp,
-                color = Color.Gray,
-                maxLines = 2,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = report.date,
-                    fontSize = 14.sp,
-                    color = Color.Gray
-                )
-                Icon(
-                    imageVector = Icons.Default.ChevronRight,
-                    contentDescription = null,
-                    tint = Color(0xFF888888)
-                )
             }
         }
     }

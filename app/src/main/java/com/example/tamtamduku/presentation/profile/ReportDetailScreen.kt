@@ -3,6 +3,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,7 +35,7 @@ fun ReportDetailScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.detail_laporan), fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                    Text(stringResource(R.string.detail_laporan), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
@@ -42,57 +43,150 @@ fun ReportDetailScreen(
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.background
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color(0xFFFAF9F6)
     ) { innerPadding ->
         if (report != null) {
+            val statusColor = when (report.status.lowercase()) {
+                "selesai" -> Color(0xFFE8F5E9)
+                "menunggu" -> Color(0xFFFFF3E0)
+                else -> Color(0xFFF5F5F5)
+            }
+            val statusTextColor = when (report.status.lowercase()) {
+                "selesai" -> Color(0xFF2E7D32)
+                "menunggu" -> Color(0xFFEF6C00)
+                else -> Color(0xFF616161)
+            }
+            val indicatorColor = when (report.status.lowercase()) {
+                "selesai" -> Color(0xFF4CAF50)
+                "menunggu" -> Color(0xFFFF9800)
+                else -> Color(0xFF9E9E9E)
+            }
+
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
                     .fillMaxSize()
                     .padding(24.dp)
             ) {
-                Row(
+                Card(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    border = BorderStroke(1.dp, Color(0xFFF0F0F0))
                 ) {
-                    Text(
-                        text = report.id,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
+                            .fillMaxWidth()
+                            .padding(20.dp)
                     ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = report.id,
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 18.sp,
+                                color = Color.Black
+                            )
+                            Surface(
+                                color = statusColor,
+                                shape = RoundedCornerShape(6.dp)
+                            ) {
+                                Text(
+                                    text = report.status,
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 12.sp,
+                                    color = statusTextColor
+                                )
+                            }
+                        }
+                        
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Color(0xFFF5F5F5))
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        
                         Text(
-                            text = report.status,
+                            text = stringResource(R.string.kategori_masalah),
+                            color = Color.Gray,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = report.category,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                        
+                        Spacer(modifier = Modifier.height(20.dp))
+                        
+                        Text(
+                            text = stringResource(R.string.deskripsi),
+                            color = Color.Gray,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(IntrinsicSize.Min)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .width(3.dp)
+                                    .fillMaxHeight()
+                                    .background(indicatorColor, RoundedCornerShape(2.dp))
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = report.description,
+                                fontSize = 15.sp,
+                                lineHeight = 22.sp,
+                                color = Color.Black,
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Color(0xFFF5F5F5))
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        
+                        Text(
+                            text = stringResource(R.string.tanggal),
+                            color = Color.Gray,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = report.date,
+                            fontSize = 15.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Medium
                         )
                     }
                 }
-                
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                Text(stringResource(R.string.kategori_masalah), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-                Text(text = report.category, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Text(stringResource(R.string.deskripsi), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-                Text(text = report.description, fontSize = 16.sp, lineHeight = 24.sp)
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Text(stringResource(R.string.tanggal), color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-                Text(text = report.date, fontSize = 16.sp)
             }
         } else {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
