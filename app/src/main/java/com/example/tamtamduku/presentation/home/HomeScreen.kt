@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,13 +54,13 @@ fun HomeScreen(
     }
 
     Scaffold(
-        containerColor = Color(0xFFFAF9F6),
+        containerColor = MaterialTheme.colorScheme.background,
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFFFAF9F6))
+                    .background(MaterialTheme.colorScheme.background)
                     .statusBarsPadding()
                     .padding(horizontal = 24.dp, vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -73,7 +74,7 @@ fun HomeScreen(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = "Location",
                         modifier = Modifier.size(32.dp),
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     Column {
@@ -81,13 +82,13 @@ fun HomeScreen(
                             text = stringResource(R.string.my_address),
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = "Temukan pekerjaan terbaik di sekitar Anda",
                             fontSize = 11.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -106,7 +107,7 @@ fun HomeScreen(
                         imageVector = Icons.Outlined.Notifications,
                         contentDescription = "Notifications",
                         modifier = Modifier.size(28.dp),
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
@@ -126,7 +127,7 @@ fun HomeScreen(
                 placeholder = {
                     Text(
                         stringResource(R.string.search_worker_placeholder),
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp
                     )
                 },
@@ -134,7 +135,7 @@ fun HomeScreen(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -145,8 +146,8 @@ fun HomeScreen(
                 enabled = false,
                 shape = RoundedCornerShape(50),
                 colors = OutlinedTextFieldDefaults.colors(
-                    disabledBorderColor = Color(0xFFE0E0E0),
-                    disabledContainerColor = Color.White,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledContainerColor = MaterialTheme.colorScheme.surface,
                 )
             )
 
@@ -158,14 +159,14 @@ fun HomeScreen(
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.Transparent),
-                border = BorderStroke(1.dp, Color(0xFFFFE5D0))
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
                             brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                colors = listOf(Color(0xFFFFFAF7), Color(0xFFFFE5D0))
+                                colors = listOf(MaterialTheme.colorScheme.surface, MaterialTheme.colorScheme.primaryContainer)
                             )
                         )
                         .padding(20.dp)
@@ -180,13 +181,13 @@ fun HomeScreen(
                                 text = stringResource(R.string.need_help),
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 22.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
                                 text = stringResource(R.string.find_best_worker_around_you),
                                 fontSize = 13.sp,
-                                color = Color.Gray,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 lineHeight = 18.sp
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -202,13 +203,13 @@ fun HomeScreen(
                                         text = stringResource(R.string.search_now),
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 13.sp,
-                                        color = Color.White
+                                        color = MaterialTheme.colorScheme.onPrimary
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Icon(
                                         imageVector = Icons.Default.ChevronRight,
                                         contentDescription = null,
-                                        tint = Color.White,
+                                        tint = MaterialTheme.colorScheme.onPrimary,
                                         modifier = Modifier.size(16.dp)
                                     )
                                 }
@@ -239,7 +240,7 @@ fun HomeScreen(
                     text = stringResource(R.string.popular_categories),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(R.string.see_all),
@@ -273,7 +274,7 @@ fun HomeScreen(
                     text = stringResource(R.string.our_best_workers),
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 18.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = stringResource(R.string.see_all),
@@ -301,8 +302,8 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .padding(bottom = 24.dp),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE))
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Row(
                     modifier = Modifier
@@ -321,7 +322,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(1.dp)
                             .height(40.dp)
-                            .background(Color(0xFFEEEEEE))
+                            .background(MaterialTheme.colorScheme.outlineVariant)
                     )
                     FeatureItem(
                         icon = Icons.Default.Headphones,
@@ -333,7 +334,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .width(1.dp)
                             .height(40.dp)
-                            .background(Color(0xFFEEEEEE))
+                            .background(MaterialTheme.colorScheme.outlineVariant)
                     )
                     FeatureItem(
                         icon = Icons.Default.Stars,
@@ -357,8 +358,8 @@ fun CategoryItem(icon: ImageVector, label: String, tintColor: Color, onClick: ()
             modifier = Modifier
                 .size(60.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .border(1.dp, Color(0xFFEEEEEE), RoundedCornerShape(16.dp))
-                .background(Color.White),
+                .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -373,7 +374,7 @@ fun CategoryItem(icon: ImageVector, label: String, tintColor: Color, onClick: ()
             text = label,
             fontWeight = FontWeight.Bold,
             fontSize = 12.sp,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
@@ -394,8 +395,8 @@ fun HomeWorkerCard(
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
             modifier = Modifier
@@ -426,14 +427,14 @@ fun HomeWorkerCard(
                         text = worker.nama,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 18.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f)
                     )
                     
                     Box(
                         modifier = Modifier
                             .size(36.dp)
-                            .background(Color(0xFFFFF0E5), RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.primaryContainer, RoundedCornerShape(8.dp))
                             .clickable {
                                 isFavoriteState = !isFavoriteState
                                 onFavoriteToggle(isFavoriteState)
@@ -471,27 +472,27 @@ fun HomeWorkerCard(
                     Text(
                         text = "${worker.reviewSummary.averageRating} (${worker.reviewSummary.totalReviews})",
                         fontSize = 11.sp,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "|",
                         fontSize = 11.sp,
-                        color = Color.LightGray
+                        color = MaterialTheme.colorScheme.surfaceVariant
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = null,
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(14.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = "3.2 KM",
                         fontSize = 11.sp,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium
                     )
                 }
@@ -499,13 +500,13 @@ fun HomeWorkerCard(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFFF7F7F9), RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Text(
                         text = worker.deskripsi,
                         fontSize = 11.sp,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                         lineHeight = 15.sp
@@ -517,7 +518,7 @@ fun HomeWorkerCard(
                 val formattedPrice = String.format("Rp. %,d", worker.baseSalary.toInt()).replace(',', '.')
                 Surface(
                     onClick = onClick,
-                    color = Color(0xFFFF6B00),
+                    color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(50)
                 ) {
                     Row(
@@ -529,20 +530,20 @@ fun HomeWorkerCard(
                     ) {
                         Text(
                             text = "$formattedPrice (Basic)",
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold,
                             fontSize = 13.sp
                         )
                         Box(
                             modifier = Modifier
                                 .size(24.dp)
-                                .background(Color.White, CircleShape),
+                                .background(MaterialTheme.colorScheme.onPrimary, CircleShape),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.ChevronRight,
                                 contentDescription = null,
-                                tint = Color(0xFFFF6B00),
+                                tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -576,7 +577,7 @@ fun FeatureItem(
                 text = title,
                 fontWeight = FontWeight.Bold,
                 fontSize = 9.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -584,7 +585,7 @@ fun FeatureItem(
             Text(
                 text = subtitle,
                 fontSize = 7.sp,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 lineHeight = 9.sp,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis

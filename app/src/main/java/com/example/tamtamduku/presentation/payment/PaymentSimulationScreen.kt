@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +46,7 @@ fun PaymentSimulationScreen(
     val adminFee = 5000.0
     val total = baseHarga + adminFee
 
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
 
     Scaffold(
         topBar = {
@@ -56,7 +57,7 @@ fun PaymentSimulationScreen(
                             text = "Simulasi Pembayaran",
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     },
                     navigationIcon = {
@@ -64,22 +65,22 @@ fun PaymentSimulationScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
         bottomBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
                     .navigationBarsPadding()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
@@ -159,7 +160,7 @@ fun PaymentSimulationScreen(
                     text = "Scan QRIS ini dengan aplikasi M-Banking atau E-Wallet Anda.",
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
@@ -167,8 +168,8 @@ fun PaymentSimulationScreen(
                 Card(
                     modifier = Modifier.size(280.dp),
                     shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Box(
@@ -183,7 +184,7 @@ fun PaymentSimulationScreen(
                             imageVector = Icons.Default.QrCode2,
                             contentDescription = "Fake QR Code",
                             modifier = Modifier.fillMaxSize(),
-                            tint = Color.Black
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -193,7 +194,7 @@ fun PaymentSimulationScreen(
                     text = "Silakan transfer ke Virtual Account berikut:",
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
@@ -201,8 +202,8 @@ fun PaymentSimulationScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                 ) {
                     Column(
@@ -235,7 +236,7 @@ fun PaymentSimulationScreen(
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 24.sp,
                                 letterSpacing = 1.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             IconButton(
                                 onClick = {
@@ -255,7 +256,7 @@ fun PaymentSimulationScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "a.n. VOCA Escrow",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 14.sp
                         )
                     }
@@ -266,8 +267,8 @@ fun PaymentSimulationScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(
@@ -278,7 +279,7 @@ fun PaymentSimulationScreen(
                         text = "Rincian Pembayaran",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     HorizontalDivider(thickness = 1.dp, color = Color(0xFFF1F1F1))
 
@@ -286,16 +287,16 @@ fun PaymentSimulationScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Harga Layanan", color = Color.Gray, fontSize = 14.sp)
-                        Text(text = "Rp${baseHarga.toLong()}", color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text(text = "Harga Layanan", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                        Text(text = "Rp${baseHarga.toLong()}", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Biaya Admin", color = Color.Gray, fontSize = 14.sp)
-                        Text(text = "Rp${adminFee.toLong()}", color = Color.Black, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                        Text(text = "Biaya Admin", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                        Text(text = "Rp${adminFee.toLong()}", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp, fontWeight = FontWeight.Medium)
                     }
 
                     HorizontalDivider(thickness = 1.dp, color = Color(0xFFF1F1F1))
@@ -305,7 +306,7 @@ fun PaymentSimulationScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(text = "Total Pembayaran", color = Color.Black, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "Total Pembayaran", color = MaterialTheme.colorScheme.onSurface, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                         Text(
                             text = "Rp${total.toLong()}",
                             color = Color(0xFFFF7A00),

@@ -55,7 +55,7 @@ fun FilterBottomSheetContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFFAF9F6))
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 24.dp)
             .padding(bottom = 24.dp)
             .verticalScroll(rememberScrollState()),
@@ -205,7 +205,7 @@ fun FilterBottomSheetContent(
             onClick = onDismiss,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFF8C00),
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             modifier = Modifier
                 .fillMaxWidth()

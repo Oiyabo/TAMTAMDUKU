@@ -53,7 +53,7 @@ fun BatalJobScreen(
                             text = stringResource(R.string.detail_pembatalan), 
                             fontWeight = FontWeight.Bold, 
                             fontSize = 20.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         ) 
                     },
                     navigationIcon = {
@@ -61,18 +61,18 @@ fun BatalJobScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
-        containerColor = Color(0xFFFAF9F6)
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -86,8 +86,8 @@ fun BatalJobScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -101,7 +101,7 @@ fun BatalJobScreen(
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(Color(0xFFFDE8E0))
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
@@ -111,19 +111,19 @@ fun BatalJobScreen(
                             text = transaction.workerName,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = transaction.workerProfession,
                             fontSize = 12.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = transaction.invoiceNumber,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -136,7 +136,7 @@ fun BatalJobScreen(
 
                     Column(horizontalAlignment = Alignment.End) {
                         Surface(
-                            color = Color(0xFFFFEBEE),
+                            color = MaterialTheme.colorScheme.errorContainer,
                             shape = RoundedCornerShape(50)
                         ) {
                             Text(
@@ -144,14 +144,14 @@ fun BatalJobScreen(
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color(0xFFC62828)
+                                color = MaterialTheme.colorScheme.onErrorContainer
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Dibatalkan pada\n${transaction.date}",
                             fontSize = 10.sp,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.End
                         )
                     }
@@ -163,8 +163,8 @@ fun BatalJobScreen(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = Color(0xFFFFEBEE),
-                border = BorderStroke(1.dp, Color(0xFFFFCDD2))
+                color = MaterialTheme.colorScheme.errorContainer,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -173,7 +173,7 @@ fun BatalJobScreen(
                     Icon(
                         imageVector = Icons.Default.Cancel,
                         contentDescription = "Canceled",
-                        tint = Color(0xFFD32F2F),
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -182,13 +182,13 @@ fun BatalJobScreen(
                             text = stringResource(R.string.pekerjaan_dibatalkan),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onErrorContainer
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = stringResource(R.string.pekerjaan_ini_telah_dibatalkan_lihat),
                             fontSize = 12.sp,
-                            color = Color(0xFF7E2A2A)
+                            color = MaterialTheme.colorScheme.onErrorContainer
                         )
                     }
                 }
@@ -200,7 +200,7 @@ fun BatalJobScreen(
                 text = stringResource(R.string.alasan_pembatalan),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -208,15 +208,15 @@ fun BatalJobScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = transaction.cancellationReason.ifEmpty { stringResource(R.string.kesepakatan_jadwal_tidak_dapat_dipenuhi) },
                         fontSize = 13.sp,
-                        color = Color(0xFF333333),
+                        color = MaterialTheme.colorScheme.onSurface,
                         lineHeight = 20.sp
                     )
                 }
@@ -227,8 +227,8 @@ fun BatalJobScreen(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = Color(0xFFF5F5F5),
-                border = BorderStroke(1.dp, Color(0xFFE0E0E0))
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -237,7 +237,7 @@ fun BatalJobScreen(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = "Info",
-                        tint = Color.Gray,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -246,13 +246,13 @@ fun BatalJobScreen(
                             text = stringResource(R.string.informasi_tambahan),
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = stringResource(R.string.jika_anda_memiliki_pertanyaan_lebih),
                             fontSize = 12.sp,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             lineHeight = 18.sp
                         )
                     }

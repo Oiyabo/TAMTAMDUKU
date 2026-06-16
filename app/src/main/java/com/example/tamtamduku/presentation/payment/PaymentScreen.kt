@@ -14,6 +14,7 @@ import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,7 +43,7 @@ fun PaymentScreen(
     val profileUrl = worker?.profileUrl ?: ""
     var selectedPaymentMethod by remember { mutableStateOf("Qris") }
 
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = Color(0xFFFF8C00)
 
     Scaffold(
@@ -53,7 +54,7 @@ fun PaymentScreen(
                         Text(
                             text = "Pembayaran",
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp
                         )
                     },
@@ -62,15 +63,15 @@ fun PaymentScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
         containerColor = bgColor,
@@ -79,7 +80,7 @@ fun PaymentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
@@ -94,7 +95,7 @@ fun PaymentScreen(
                         text = stringResource(R.string.bayar_sekarang),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -113,8 +114,8 @@ fun PaymentScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -125,13 +126,13 @@ fun PaymentScreen(
                         modifier = Modifier
                             .size(48.dp)
                             .clip(RoundedCornerShape(12.dp))
-                            .background(Color(0xFFFFF2EC)),
+                            .background(MaterialTheme.colorScheme.primaryContainer),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Outlined.ReceiptLong,
                             contentDescription = null,
-                            tint = Color(0xFF4A3B32),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -139,9 +140,9 @@ fun PaymentScreen(
                     Spacer(modifier = Modifier.width(16.dp))
 
                     Column {
-                        Text("Detail Pesanan", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                        Text("Detail Pesanan", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(layanan, fontSize = 14.sp, color = Color.Gray)
+                        Text(layanan, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.height(8.dp))
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             AsyncImage(
@@ -151,10 +152,10 @@ fun PaymentScreen(
                                 modifier = Modifier
                                     .size(24.dp)
                                     .clip(CircleShape)
-                                    .background(Color.LightGray)
+                                    .background(MaterialTheme.colorScheme.surfaceVariant)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text(workerName, fontSize = 14.sp, color = Color.Black)
+                            Text(workerName, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                         }
                     }
                 }
@@ -166,12 +167,12 @@ fun PaymentScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Rincian Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                    Text("Rincian Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(16.dp))
 
                     val baseHarga = harga.toDoubleOrNull() ?: 0.0
@@ -179,24 +180,24 @@ fun PaymentScreen(
                     val total = baseHarga + adminFee
 
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Harga Layanan", fontSize = 14.sp, color = Color.Gray)
-                        Text("Rp${harga}", fontSize = 14.sp, color = Color.Black)
+                        Text("Harga Layanan", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Rp${harga}", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Biaya Admin", fontSize = 14.sp, color = Color.Gray)
-                        Text("Rp5.000", fontSize = 14.sp, color = Color.Black)
+                        Text("Biaya Admin", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("Rp5.000", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Diskon", fontSize = 14.sp, color = Color.Gray)
-                        Text("-Rp0", fontSize = 14.sp, color = Color.Black)
+                        Text("Diskon", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text("-Rp0", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
                     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Total Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+                        Text("Total Pembayaran", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
                         Text("Rp${total.toLong()}", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = primaryOrange)
                     }
                 }
@@ -209,7 +210,7 @@ fun PaymentScreen(
                 text = "Metode Pembayaran",
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -217,8 +218,8 @@ fun PaymentScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(vertical = 8.dp)) {
@@ -237,12 +238,12 @@ fun PaymentScreen(
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
-                            Text("Qris", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
-                            Text("Bayar dengan Scan Qris", fontSize = 12.sp, color = Color.Gray)
+                            Text("Qris", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
+                            Text("Bayar dengan Scan Qris", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
 
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp), thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
 
                     // Lainnya Option
                     Row(
@@ -261,11 +262,11 @@ fun PaymentScreen(
                             )
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
-                                Text("Lainnya", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
-                                Text("Lihat Pembayaran Lainmu", fontSize = 12.sp, color = Color.Gray)
+                                Text("Lainnya", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
+                                Text("Lihat Pembayaran Lainmu", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
-                        Icon(Icons.Default.MoreHoriz, contentDescription = "More", tint = Color.Gray)
+                        Icon(Icons.Default.MoreHoriz, contentDescription = "More", tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
             }

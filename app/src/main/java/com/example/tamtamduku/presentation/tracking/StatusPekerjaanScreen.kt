@@ -42,7 +42,7 @@ fun StatusPekerjaanScreen(
     workerName: String,
     viewModel: TrackingViewModel
 ) {
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = Color(0xFFFF8C00)
 
     val uiState by viewModel.uiState.collectAsState()
@@ -72,7 +72,7 @@ fun StatusPekerjaanScreen(
                     text = "Pilih Alasan Pembatalan",
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 ) 
             },
             text = {
@@ -101,7 +101,7 @@ fun StatusPekerjaanScreen(
                             Text(
                                 text = reason,
                                 fontSize = 14.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     }
@@ -116,8 +116,8 @@ fun StatusPekerjaanScreen(
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = primaryOrange,
                                 cursorColor = primaryOrange,
-                                focusedContainerColor = Color.White,
-                                unfocusedContainerColor = Color.White
+                                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.surface
                             ),
                             shape = RoundedCornerShape(12.dp),
                             maxLines = 3
@@ -144,7 +144,7 @@ fun StatusPekerjaanScreen(
                     shape = RoundedCornerShape(50),
                     enabled = selectedReasonIndex != -1 && (selectedReasonIndex != 4 || customReasonText.trim().isNotEmpty())
                 ) {
-                    Text("Ya, Batalkan", color = Color.White)
+                    Text("Ya, Batalkan", color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
             dismissButton = {
@@ -155,11 +155,11 @@ fun StatusPekerjaanScreen(
                         customReasonText = ""
                     }
                 ) {
-                    Text("Batal", color = Color.Gray)
+                    Text("Batal", color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             },
             shape = RoundedCornerShape(16.dp),
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     }
 
@@ -172,7 +172,7 @@ fun StatusPekerjaanScreen(
                             text = stringResource(R.string.status_pekerjaan), 
                             fontWeight = FontWeight.ExtraBold, 
                             fontSize = 20.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     },
                     navigationIcon = {
@@ -180,15 +180,15 @@ fun StatusPekerjaanScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
         containerColor = bgColor
@@ -207,7 +207,7 @@ fun StatusPekerjaanScreen(
                 text = item?.invoiceNumber ?: "-",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
             
             Spacer(modifier = Modifier.height(16.dp))
@@ -284,7 +284,7 @@ fun StatusPekerjaanScreen(
                     text = stringResource(R.string.progress_pekerjaan),
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -292,7 +292,7 @@ fun StatusPekerjaanScreen(
                         modifier = Modifier
                             .weight(1f)
                             .height(10.dp)
-                            .background(Color(0xFFE0E0E0), RoundedCornerShape(50))
+                            .background(MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(50))
                     ) {
                         Box(
                             modifier = Modifier
@@ -316,8 +316,8 @@ fun StatusPekerjaanScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -341,12 +341,12 @@ fun StatusPekerjaanScreen(
                             text = workerName,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = item?.workerProfession ?: "",
                             fontSize = 12.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     Text(
@@ -383,7 +383,7 @@ fun StatusPekerjaanScreen(
             ) {
                 Text(
                     text = if (isSelesai || isBatal) "Tutup" else "Batalkan Jasa",
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
@@ -400,7 +400,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
             Box(
                 modifier = Modifier
                     .size(24.dp)
-                    .background(if (isCompleted) Color(0xFFFF8C00) else Color(0xFFE0E0E0), CircleShape),
+                    .background(if (isCompleted) Color(0xFFFF8C00) else MaterialTheme.colorScheme.outlineVariant, CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 if (isCompleted) {
@@ -423,7 +423,7 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
                     modifier = Modifier
                         .width(2.dp)
                         .height(36.dp)
-                        .background(if (isCompleted) Color(0xFFFF8C00) else Color(0xFFE0E0E0))
+                        .background(if (isCompleted) Color(0xFFFF8C00) else MaterialTheme.colorScheme.outlineVariant)
                 )
             }
         }
@@ -433,10 +433,10 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
                 text = title, 
                 fontWeight = FontWeight.Bold, 
                 fontSize = 14.sp,
-                color = if (isCompleted) Color.Black else Color.Gray
+                color = if (isCompleted) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (time != "-") {
-                Text(text = time, color = Color.Gray, fontSize = 12.sp)
+                Text(text = time, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
             }
         }
     }

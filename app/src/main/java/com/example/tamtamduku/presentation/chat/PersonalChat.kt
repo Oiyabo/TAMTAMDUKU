@@ -41,7 +41,7 @@ fun PersonalChat(
         chats.find { it.name == userName }
     }
     
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     var messageText by remember { mutableStateOf("") }
 
     Scaffold(
@@ -69,7 +69,7 @@ fun PersonalChat(
                                     text = userName,
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp,
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Text(
                                     text = stringResource(R.string.online),
@@ -85,13 +85,13 @@ fun PersonalChat(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             }
         },
         containerColor = bgColor,
@@ -146,10 +146,10 @@ fun PersonalChat(
 fun MessageBubble(message: ChatMessage) {
     val isFromMe = message.senderId.startsWith("usr_")
     val alignment = if (isFromMe) Alignment.CenterEnd else Alignment.CenterStart
-    val bgColor = if (isFromMe) Color(0xFFFF8C00) else Color.White
-    val textColor = if (isFromMe) Color.White else Color(0xFF333333)
-    val timeColor = if (isFromMe) Color.White.copy(alpha = 0.7f) else Color.Gray
-    val border = if (isFromMe) null else BorderStroke(1.dp, Color(0xFFEEEEEE))
+    val bgColor = if (isFromMe) Color(0xFFFF8C00) else MaterialTheme.colorScheme.surface
+    val textColor = if (isFromMe) Color.White else MaterialTheme.colorScheme.onSurface
+    val timeColor = if (isFromMe) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant
+    val border = if (isFromMe) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     val bubbleShape = if (isFromMe) {
         RoundedCornerShape(16.dp, 16.dp, 0.dp, 16.dp)
     } else {
@@ -204,9 +204,9 @@ fun ChatInput(
     onSend: () -> Unit
 ) {
     Column {
-        HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         Surface(
-            color = Color.White,
+            color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
@@ -226,7 +226,7 @@ fun ChatInput(
                     placeholder = {
                         Text(
                             text = stringResource(R.string.ketik_pesan),
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 14.sp
                         )
                     },
@@ -234,10 +234,10 @@ fun ChatInput(
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
-                        focusedContainerColor = Color(0xFFF5F5F5),
-                        unfocusedContainerColor = Color(0xFFF5F5F5),
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
+                        focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                         cursorColor = Color(0xFFFF8C00)
                     ),
                     shape = RoundedCornerShape(50)

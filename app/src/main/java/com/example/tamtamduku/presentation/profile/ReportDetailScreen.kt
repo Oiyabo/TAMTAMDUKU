@@ -47,13 +47,13 @@ fun ReportDetailScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFAF9F6)
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         if (report != null) {
             val statusColor = when (report.status.lowercase()) {
                 "selesai" -> Color(0xFFE8F5E9)
                 "menunggu" -> Color(0xFFFFF3E0)
-                else -> Color(0xFFF5F5F5)
+                else -> MaterialTheme.colorScheme.surfaceVariant
             }
             val statusTextColor = when (report.status.lowercase()) {
                 "selesai" -> Color(0xFF2E7D32)
@@ -75,9 +75,9 @@ fun ReportDetailScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                    border = BorderStroke(1.dp, Color(0xFFF0F0F0))
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                 ) {
                     Column(
                         modifier = Modifier
@@ -93,7 +93,7 @@ fun ReportDetailScreen(
                                 text = report.id,
                                 fontWeight = FontWeight.ExtraBold,
                                 fontSize = 18.sp,
-                                color = Color.Black
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                             Surface(
                                 color = statusColor,
@@ -114,13 +114,13 @@ fun ReportDetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(1.dp)
-                                .background(Color(0xFFF5F5F5))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         
                         Text(
                             text = stringResource(R.string.kategori_masalah),
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -129,14 +129,14 @@ fun ReportDetailScreen(
                             text = report.category,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         
                         Spacer(modifier = Modifier.height(20.dp))
                         
                         Text(
                             text = stringResource(R.string.deskripsi),
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -158,7 +158,7 @@ fun ReportDetailScreen(
                                 text = report.description,
                                 fontSize = 15.sp,
                                 lineHeight = 22.sp,
-                                color = Color.Black,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.weight(1f)
                             )
                         }
@@ -168,13 +168,13 @@ fun ReportDetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(1.dp)
-                                .background(Color(0xFFF5F5F5))
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         
                         Text(
                             text = stringResource(R.string.tanggal),
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -182,7 +182,7 @@ fun ReportDetailScreen(
                         Text(
                             text = report.date,
                             fontSize = 15.sp,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontWeight = FontWeight.Medium
                         )
                     }

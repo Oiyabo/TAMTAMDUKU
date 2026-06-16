@@ -57,7 +57,7 @@ fun SearchScreen(
     val uiState by viewModel.uiState.collectAsState()
     var showFilterSheet by remember { mutableStateOf(false) }
 
-    Surface(color = Color(0xFFFAF9F6)) {
+    Surface(color = MaterialTheme.colorScheme.background) {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(Modifier.fillMaxSize()) {
                 Row(
@@ -73,15 +73,15 @@ fun SearchScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(horizontal = 8.dp),
-                        placeholder = { Text(stringResource(R.string.search), color = Color.Gray) },
+                        placeholder = { Text(stringResource(R.string.search), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                         singleLine = true,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                             focusedBorderColor = Color(0xFFFF8C00),
-                            unfocusedBorderColor = Color(0xFFE0E0E0),
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                             cursorColor = Color(0xFFFF8C00)
                         ),
                         shape = RoundedCornerShape(50)
@@ -89,8 +89,8 @@ fun SearchScreen(
                     IconButton(
                         onClick = { showFilterSheet = true },
                         modifier = Modifier
-                            .background(Color.White, RoundedCornerShape(12.dp))
-                            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(12.dp))
+                            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(12.dp))
+                            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp))
                             .padding(4.dp)
                     ) {
                         Icon(
@@ -152,7 +152,7 @@ fun SearchScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFFAF9F6))
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 FilterBottomSheetContent(
                     uiState = uiState,

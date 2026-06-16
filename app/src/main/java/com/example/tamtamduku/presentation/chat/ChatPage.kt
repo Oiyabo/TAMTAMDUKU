@@ -39,7 +39,7 @@ fun ChatPage(
     val chats by viewModel.chats.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     
     val filteredChats = if (searchQuery.isBlank()) {
         chats
@@ -65,7 +65,7 @@ fun ChatPage(
                         text = stringResource(R.string.chat),
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 24.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onBackground
                     )
                 }
                 
@@ -80,7 +80,7 @@ fun ChatPage(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -94,7 +94,7 @@ fun ChatPage(
                         placeholder = { 
                             Text(
                                 text = stringResource(R.string.search),
-                                color = Color.Gray,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontSize = 14.sp
                             )
                         },
@@ -102,18 +102,18 @@ fun ChatPage(
                             Icon(
                                 imageVector = Icons.Default.Search,
                                 contentDescription = "Search",
-                                tint = Color.Gray,
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.size(20.dp)
                             )
                         },
                         shape = RoundedCornerShape(50),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color(0xFFFF8C00),
-                            unfocusedBorderColor = Color(0xFFE0E0E0),
-                            focusedContainerColor = Color.White,
-                            unfocusedContainerColor = Color.White,
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
                             cursorColor = Color(0xFFFF8C00)
                         )
                     )
@@ -155,7 +155,7 @@ fun ChatList(
             }
             HorizontalDivider(
                 thickness = 1.dp,
-                color = Color(0xFFEEEEEE)
+                color = MaterialTheme.colorScheme.outline
             )
         }
     }
@@ -211,12 +211,12 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
                     text = chat.name,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = formattedTime,
                     fontSize = 12.sp,
-                    color = Color.Gray
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))
@@ -228,7 +228,7 @@ fun ChatItem(chat: ChatUiItem, onClick: () -> Unit) {
                 Text(
                     text = chat.lastMessage,
                     fontSize = 14.sp,
-                    color = if (chat.unreadCount > 0) Color.Black else Color.Gray,
+                    color = if (chat.unreadCount > 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = if (chat.unreadCount > 0) FontWeight.SemiBold else FontWeight.Normal,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

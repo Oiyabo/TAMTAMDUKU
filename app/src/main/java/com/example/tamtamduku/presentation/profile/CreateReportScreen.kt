@@ -66,7 +66,7 @@ fun CreateReportScreen(
                             fontSize = 20.sp
                         )
                         Text(stringResource(R.string.id_re_0001),
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 13.sp
                         )
                     }
@@ -84,7 +84,7 @@ fun CreateReportScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFAF9F6)
+        containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -96,7 +96,7 @@ fun CreateReportScreen(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(stringResource(R.string.pilih_kategori_masalah), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
+            Text(stringResource(R.string.pilih_kategori_masalah), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(8.dp))
             ExposedDropdownMenuBox(
                 expanded = expanded,
@@ -107,13 +107,13 @@ fun CreateReportScreen(
                     value = selectedCategory,
                     onValueChange = {},
                     readOnly = true,
-                    placeholder = { Text(stringResource(R.string.pilih_kategori), color = Color.Gray) },
+                    placeholder = { Text(stringResource(R.string.pilih_kategori), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedBorderColor = Color(0xFFE0E0E0),
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                         focusedBorderColor = primaryOrange,
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface
                     ),
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier
@@ -124,7 +124,7 @@ fun CreateReportScreen(
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
-                    modifier = Modifier.background(Color.White)
+                    modifier = Modifier.background(MaterialTheme.colorScheme.surface)
                 ) {
                     categories.forEach { category ->
                         DropdownMenuItem(
@@ -140,27 +140,27 @@ fun CreateReportScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(stringResource(R.string.deskripsi_masalah), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
+            Text(stringResource(R.string.deskripsi_masalah), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
-                placeholder = { Text(stringResource(R.string.deskripsikan_masalah_anda_disini), color = Color.Gray) },
+                placeholder = { Text(stringResource(R.string.deskripsikan_masalah_anda_disini), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                     focusedBorderColor = primaryOrange,
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface
                 )
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(stringResource(R.string.upload_bukti_opsional), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
+            Text(stringResource(R.string.upload_bukti_opsional), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(8.dp))
             if (selectedImageUri == null) {
                 Surface(
@@ -192,7 +192,7 @@ fun CreateReportScreen(
                         )
                         Text(
                             text = "Format PNG, JPG atau JPEG hingga 5MB",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 11.sp
                         )
                     }
@@ -210,7 +210,7 @@ fun CreateReportScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .clip(RoundedCornerShape(16.dp))
-                            .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(16.dp))
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp))
                     )
                     IconButton(
                         onClick = { selectedImageUri = null },
@@ -248,7 +248,7 @@ fun CreateReportScreen(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = primaryOrange,
-                    contentColor = Color.White
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
             ) {
@@ -256,7 +256,7 @@ fun CreateReportScreen(
                     text = stringResource(R.string.kirim_laporan),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
             
