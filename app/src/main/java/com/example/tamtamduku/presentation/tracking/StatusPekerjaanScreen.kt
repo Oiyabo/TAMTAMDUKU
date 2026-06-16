@@ -1,9 +1,9 @@
 package com.example.tamtamduku.presentation.tracking
+
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
 
-import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.*
@@ -27,10 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.tamtamduku.presentation.tracking.viewmodels.TrackingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,9 +42,8 @@ fun StatusPekerjaanScreen(
     workerName: String,
     viewModel: TrackingViewModel
 ) {
-    val bgColor = MaterialTheme.colorScheme.background
-    val primaryOrange = MaterialTheme.colorScheme.primary
-    val yellowBadge = Color(0xFFFFC107)
+    val bgColor = Color(0xFFFAF9F6)
+    val primaryOrange = Color(0xFFFF8C00)
 
     val uiState by viewModel.uiState.collectAsState()
     val item = uiState.transactions.find { it.workerName == workerName && it.status == "Dikerjakan" } ?: uiState.transactions.find { it.workerName == workerName }
@@ -70,7 +71,8 @@ fun StatusPekerjaanScreen(
                 Text(
                     text = "Pilih Alasan Pembatalan",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
+                    color = Color.Black
                 ) 
             },
             text = {
@@ -99,7 +101,7 @@ fun StatusPekerjaanScreen(
                             Text(
                                 text = reason,
                                 fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = Color.Black
                             )
                         }
                     }
@@ -113,8 +115,11 @@ fun StatusPekerjaanScreen(
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedBorderColor = primaryOrange,
-                                cursorColor = primaryOrange
+                                cursorColor = primaryOrange,
+                                focusedContainerColor = Color.White,
+                                unfocusedContainerColor = Color.White
                             ),
+                            shape = RoundedCornerShape(12.dp),
                             maxLines = 3
                         )
                     }
@@ -135,7 +140,8 @@ fun StatusPekerjaanScreen(
                             customReasonText = ""
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF4B4B)),
+                    shape = RoundedCornerShape(50),
                     enabled = selectedReasonIndex != -1 && (selectedReasonIndex != 4 || customReasonText.trim().isNotEmpty())
                 ) {
                     Text("Ya, Batalkan", color = Color.White)
@@ -149,30 +155,41 @@ fun StatusPekerjaanScreen(
                         customReasonText = ""
                     }
                 ) {
-                    Text("Batal", color = MaterialTheme.colorScheme.onBackground)
+                    Text("Batal", color = Color.Gray)
                 }
-            }
+            },
+            shape = RoundedCornerShape(16.dp),
+            containerColor = Color.White
         )
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.status_pekerjaan), fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
-                    }
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navCon.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                actions = {
-                    Box(modifier = Modifier.size(48.dp))
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = bgColor)
-            )
+            Column {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.status_pekerjaan), 
+                            fontWeight = FontWeight.ExtraBold, 
+                            fontSize = 20.sp,
+                            color = Color.Black
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { navCon.popBackStack() }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
+                                contentDescription = "Back",
+                                tint = Color.Black
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.White
+                    )
+                )
+                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+            }
         },
         containerColor = bgColor
     ) { paddingValues ->
@@ -189,20 +206,21 @@ fun StatusPekerjaanScreen(
             Text(
                 text = item?.invoiceNumber ?: "-",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
             )
             
             Spacer(modifier = Modifier.height(16.dp))
 
             Surface(
-                color = if (isSelesai) Color(0xFFE8F5E9) else if (item?.status == "Batal") Color(0xFFFFEBEE) else yellowBadge,
-                shape = RoundedCornerShape(8.dp)
+                color = if (isSelesai) Color(0xFFE8F5E9) else if (isBatal) Color(0xFFFFEBEE) else Color(0xFFFFF3E0),
+                shape = RoundedCornerShape(50)
             ) {
                 Text(
-                    text = if (isSelesai) "Selesai" else if (item?.status == "Batal") "Dibatalkan" else item?.tracking?.posisiSaatIni ?: "Sedang Dikerjakan",
+                    text = if (isSelesai) "Selesai" else if (isBatal) "Dibatalkan" else item?.tracking?.posisiSaatIni ?: "Sedang Dikerjakan",
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                     fontWeight = FontWeight.Bold,
-                    color = if (isSelesai) Color(0xFF4CAF50) else if (item?.status == "Batal") Color(0xFFF44336) else MaterialTheme.colorScheme.onBackground
+                    color = if (isSelesai) Color(0xFF2E7D32) else if (isBatal) Color(0xFFC62828) else Color(0xFFE65100)
                 )
             }
 
@@ -265,27 +283,28 @@ fun StatusPekerjaanScreen(
                 Text(
                     text = stringResource(R.string.progress_pekerjaan),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
+                    fontSize = 14.sp,
+                    color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
                         modifier = Modifier
                             .weight(1f)
-                            .height(12.dp)
-                            .background(MaterialTheme.colorScheme.outline, RoundedCornerShape(50))
+                            .height(10.dp)
+                            .background(Color(0xFFE0E0E0), RoundedCornerShape(50))
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(if (isSelesai || isBatal) 1f else (statusLevel / 6f))
-                                .height(12.dp)
-                                .background(if (isBatal) Color.Red else primaryOrange, RoundedCornerShape(50))
+                                .height(10.dp)
+                                .background(if (isBatal) Color(0xFFFF4B4B) else primaryOrange, RoundedCornerShape(50))
                         )
                     }
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(
                         text = if (isSelesai || isBatal) "100%" else "${(statusLevel * 100) / 6}%",
-                        color = if (isBatal) Color.Red else primaryOrange,
+                        color = if (isBatal) Color(0xFFFF4B4B) else primaryOrange,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -297,7 +316,8 @@ fun StatusPekerjaanScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -306,20 +326,29 @@ fun StatusPekerjaanScreen(
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Fake Avatar
-                    Box(
+                    AsyncImage(
+                        model = item?.profileUrl?.ifEmpty { "https://i.pravatar.cc/150?u=${item.workerName}" } ?: "https://i.pravatar.cc/150?u=$workerName",
+                        contentDescription = "Worker Image",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.secondaryContainer)
+                            .background(Color(0xFFFDE8E0))
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Text(
-                        text = workerName,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = workerName,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                        Text(
+                            text = item?.workerProfession ?: "",
+                            fontSize = 12.sp,
+                            color = Color.Gray
+                        )
+                    }
                     Text(
                         text = stringResource(R.string.chat),
                         color = primaryOrange,
@@ -344,21 +373,22 @@ fun StatusPekerjaanScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp)
-                    .padding(bottom = 24.dp),
-                shape = RoundedCornerShape(12.dp),
+                    .height(52.dp)
+                    .padding(bottom = 0.dp),
+                shape = RoundedCornerShape(50),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isSelesai || isBatal) primaryOrange else Color.Red
+                    containerColor = if (isSelesai || isBatal) primaryOrange else Color(0xFFFF4B4B)
                 ),
                 enabled = true
             ) {
                 Text(
-                    text = if (isSelesai || isBatal) "Tutup" else "Batalkan",
-                    color = MaterialTheme.colorScheme.background,
+                    text = if (isSelesai || isBatal) "Tutup" else "Batalkan Jasa",
+                    color = Color.White,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
@@ -369,30 +399,45 @@ fun TimelineItem(title: String, time: String, isCompleted: Boolean, isLast: Bool
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Box(
                 modifier = Modifier
-                    .size(32.dp)
-                    .background(if (isCompleted) Color(0xFF22C55E) else Color(0xFFE5E7EB), CircleShape),
+                    .size(24.dp)
+                    .background(if (isCompleted) Color(0xFFFF8C00) else Color(0xFFE0E0E0), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = if (isCompleted) Icons.Default.Check else Icons.Default.Remove,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.size(20.dp)
-                )
+                if (isCompleted) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .size(6.dp)
+                            .background(Color.White, CircleShape)
+                    )
+                }
             }
             if (!isLast) {
                 Box(
                     modifier = Modifier
                         .width(2.dp)
-                        .height(32.dp)
-                        .background(Color(0xFFE5E7EB))
+                        .height(36.dp)
+                        .background(if (isCompleted) Color(0xFFFF8C00) else Color(0xFFE0E0E0))
                 )
             }
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Column(modifier = Modifier.padding(bottom = if (isLast) 0.dp else 24.dp)) {
-            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            Text(text = time, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+        Column(modifier = Modifier.padding(bottom = if (isLast) 0.dp else 16.dp)) {
+            Text(
+                text = title, 
+                fontWeight = FontWeight.Bold, 
+                fontSize = 14.sp,
+                color = if (isCompleted) Color.Black else Color.Gray
+            )
+            if (time != "-") {
+                Text(text = time, color = Color.Gray, fontSize = 12.sp)
+            }
         }
     }
 }

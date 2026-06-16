@@ -1,4 +1,5 @@
 package com.example.tamtamduku.presentation.tracking
+
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
 import androidx.compose.material3.MaterialTheme
@@ -82,23 +83,39 @@ fun HasilKerjaScreen(
     Scaffold(
         contentWindowInsets = WindowInsets(0.dp),
         topBar = {
-            TopAppBar(
-                windowInsets = WindowInsets(0.dp),
-                title = { Text(stringResource(R.string.hasil_kerja_pekerja), fontWeight = FontWeight.Bold, fontSize = 18.sp) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    titleContentColor = MaterialTheme.colorScheme.onBackground
+            Column {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            text = stringResource(R.string.hasil_kerja_pekerja), 
+                            fontWeight = FontWeight.Bold, 
+                            fontSize = 20.sp,
+                            color = Color.Black
+                        )
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = onBack) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
+                                contentDescription = "Back",
+                                tint = Color.Black
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = Color.White
+                    )
                 )
-            )
+                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+            }
         },
         bottomBar = {
             Surface(
-                modifier = Modifier.fillMaxWidth().navigationBarsPadding().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .navigationBarsPadding()
+                    .padding(16.dp),
                 color = Color.Transparent
             ) {
                 Button(
@@ -107,11 +124,16 @@ fun HasilKerjaScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(12.dp),
+                        .height(52.dp),
+                    shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00))
                 ) {
-                    Text(stringResource(R.string.beri_ulasan), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.background)
+                    Text(
+                        text = stringResource(R.string.beri_ulasan), 
+                        fontWeight = FontWeight.Bold, 
+                        fontSize = 16.sp, 
+                        color = Color.White
+                    )
                 }
             }
         },
@@ -128,10 +150,10 @@ fun HasilKerjaScreen(
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE))
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -144,7 +166,7 @@ fun HasilKerjaScreen(
                         modifier = Modifier
                             .size(72.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.outlineVariant)
+                            .background(Color(0xFFFDE8E0))
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
@@ -154,19 +176,19 @@ fun HasilKerjaScreen(
                             text = transaction.workerName,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = Color.Black
                         )
                         Text(
                             text = transaction.workerProfession,
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = Color.Gray
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = transaction.invoiceNumber,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
@@ -179,22 +201,22 @@ fun HasilKerjaScreen(
 
                     Column(horizontalAlignment = Alignment.End) {
                         Surface(
-                            color = Color(0xFF81C784),
-                            shape = RoundedCornerShape(4.dp)
+                            color = Color(0xFFE8F5E9),
+                            shape = RoundedCornerShape(50)
                         ) {
                             Text(
                                 text = stringResource(R.string.selesai),
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onBackground
+                                color = Color(0xFF2E7D32)
                             )
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Selesai pada\n${transaction.date}",
                             fontSize = 10.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = Color.Gray,
                             textAlign = androidx.compose.ui.text.style.TextAlign.End
                         )
                     }
@@ -205,9 +227,9 @@ fun HasilKerjaScreen(
 
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                color = Color(0xFFF1F8E9),
-                border = BorderStroke(1.dp, Color(0xFFDCEDC8))
+                shape = RoundedCornerShape(16.dp),
+                color = Color(0xFFE8F5E9),
+                border = BorderStroke(1.dp, Color(0xFFC8E6C9))
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -216,7 +238,7 @@ fun HasilKerjaScreen(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = "Success",
-                        tint = Color(0xFF4CAF50),
+                        tint = Color(0xFF2E7D32),
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -225,13 +247,13 @@ fun HasilKerjaScreen(
                             text = stringResource(R.string.pekerja_telah_selesai),
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = stringResource(R.string.silakan_tinjau_hasil_pekerjaan_sebelum),
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.secondaryContainer
+                            color = Color(0xFF4E5D4E)
                         )
                     }
                 }
@@ -243,24 +265,24 @@ fun HasilKerjaScreen(
                 text = stringResource(R.string.hasil_pekerjaan),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onBackground
+                color = Color.Black
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE))
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = descText,
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        lineHeight = 18.sp
+                        fontSize = 13.sp,
+                        color = Color(0xFF333333),
+                        lineHeight = 20.sp
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -282,9 +304,9 @@ fun HasilKerjaScreen(
 
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 color = Color(0xFFF5F5F5),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                border = BorderStroke(1.dp, Color(0xFFE0E0E0))
             ) {
                 Row(
                     modifier = Modifier.padding(16.dp),
@@ -293,7 +315,7 @@ fun HasilKerjaScreen(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = "Info",
-                        tint = MaterialTheme.colorScheme.onBackground,
+                        tint = Color.Gray,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -302,13 +324,13 @@ fun HasilKerjaScreen(
                             text = stringResource(R.string.catatan),
                             fontWeight = FontWeight.Bold,
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onBackground
+                            color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = noteText,
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            color = Color.Gray,
                             lineHeight = 18.sp
                         )
                     }
@@ -323,25 +345,26 @@ fun HasilKerjaScreen(
 @Composable
 fun TagPill(text: String) {
     Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = Color(0xFFF1F8E9),
-        border = BorderStroke(1.dp, Color(0xFFDCEDC8))
+        shape = RoundedCornerShape(50),
+        color = Color(0xFFE8F5E9),
+        border = BorderStroke(1.dp, Color(0xFFC8E6C9))
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.CheckCircle,
                 contentDescription = null,
-                tint = Color(0xFF4CAF50),
+                tint = Color(0xFF2E7D32),
                 modifier = Modifier.size(12.dp)
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = text,
                 fontSize = 10.sp,
-                color = MaterialTheme.colorScheme.secondaryContainer
+                color = Color(0xFF2E7D32),
+                fontWeight = FontWeight.Medium
             )
         }
     }
