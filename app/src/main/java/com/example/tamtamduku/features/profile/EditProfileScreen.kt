@@ -1,7 +1,6 @@
 package com.example.tamtamduku.features.profile
 import androidx.compose.material3.MaterialTheme
 
-import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -35,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.example.tamtamduku.R
-import com.example.tamtamduku.features.profile.ProfileViewModel
 // File saves removed
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

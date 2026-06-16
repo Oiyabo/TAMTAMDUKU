@@ -16,13 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.tamtamduku.features.profile.ProfileViewModel
 import com.example.tamtamduku.core.ui.theme.AppTheme
 import androidx.compose.ui.res.stringResource
 import com.example.tamtamduku.R
@@ -39,9 +37,6 @@ fun SettingsScreen(
     val uiState by viewModel.uiState.collectAsState()
     val bgColor = MaterialTheme.colorScheme.background
     val orangeMain = MaterialTheme.colorScheme.primary
-    var notificationsEnabled by remember(uiState.settings.pushNotification) {
-        mutableStateOf(uiState.settings.pushNotification)
-    }
 
     var themeExpanded by remember { mutableStateOf(false) }
     var currentThemeLabel by remember { mutableStateOf(if (currentLanguage == "id") "Mode Terang" else "Light Mode") }
@@ -100,7 +95,6 @@ fun SettingsScreen(
                         Switch(
                             checked = uiState.settings.pushNotification,
                             onCheckedChange = { isChecked ->
-                                notificationsEnabled = isChecked
                                 viewModel.updatePushNotificationSetting(isChecked)
                             },
                             colors = SwitchDefaults.colors(
@@ -211,6 +205,7 @@ fun PremiumSettingRow(
 }
 
 // keep old SettingItem for backward compat
+@Suppress("unused")
 @Composable
 fun SettingItem(
     title: String,
