@@ -189,5 +189,11 @@
     <string name="terbaru">Newest</string>
     <string name="semua_status">All</string>
     <string name="dibatalkan">Cancelled</string>
+    <string name="ok">OK</string>
+    <string name="tutup">CLOSE</string>
+    <string name="selesaikan_pembayaran">Finish Payment</string>
+    <string name="tulis_alasan_anda_di_sini">Write your reason here...</string>
+    <string name="ya_batalkan">Yes, Cancel</string>
+    <string name="pilih_lokasi">Choose Location</string>
     <string name="status_dikerjakan">In Progress</string>
 </resources>

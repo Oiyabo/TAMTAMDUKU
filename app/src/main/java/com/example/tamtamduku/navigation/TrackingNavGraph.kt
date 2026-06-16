@@ -7,11 +7,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.tamtamduku.presentation.tracking.TrackingScreen
-import com.example.tamtamduku.presentation.tracking.StatusPekerjaanScreen
-import com.example.tamtamduku.presentation.tracking.HasilKerjaScreen
-import com.example.tamtamduku.presentation.tracking.BatalJobScreen
-import com.example.tamtamduku.presentation.tracking.viewmodels.TrackingViewModel
+import com.example.tamtamduku.features.tracking.TrackingScreen
+import com.example.tamtamduku.features.tracking.JobStatusScreen
+import com.example.tamtamduku.features.tracking.JobResultScreen
+import com.example.tamtamduku.features.tracking.CancelJobScreen
+import com.example.tamtamduku.features.tracking.TrackingViewModel
 
 import androidx.navigation.NavHostController
 
@@ -26,7 +26,7 @@ fun NavGraphBuilder.trackingGraph(
         "status_pekerjaan/{workerName}",
         arguments = listOf(navArgument("workerName") { type = NavType.StringType })
     ) { backStackEntry ->
-        StatusPekerjaanScreen(
+        JobStatusScreen(
             navCon = navCon,
             viewModel = trackingViewModel,
             workerName = backStackEntry.arguments?.getString("workerName") ?: ""
@@ -39,7 +39,7 @@ fun NavGraphBuilder.trackingGraph(
         val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
         val uiState by trackingViewModel.uiState.collectAsState()
         val transaction = uiState.transactions.find { it.workerName == workerName }
-        HasilKerjaScreen(
+        JobResultScreen(
             transaction = transaction,
             onBack = { navCon.popBackStack() },
             onReview = { wName ->
@@ -54,7 +54,7 @@ fun NavGraphBuilder.trackingGraph(
         val workerName = backStackEntry.arguments?.getString("workerName") ?: ""
         val uiState by trackingViewModel.uiState.collectAsState()
         val transaction = uiState.transactions.find { it.workerName == workerName }
-        BatalJobScreen(
+        CancelJobScreen(
             transaction = transaction,
             onBack = { navCon.popBackStack() }
         )

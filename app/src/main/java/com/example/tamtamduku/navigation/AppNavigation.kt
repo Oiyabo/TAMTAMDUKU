@@ -22,13 +22,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.tamtamduku.core.theme.AppTheme
-import com.example.tamtamduku.presentation.auth.viewmodels.AuthViewModel
-import com.example.tamtamduku.presentation.profile.viewmodels.FavoriteWorkersViewModel
-import com.example.tamtamduku.presentation.profile.viewmodels.ProfileViewModel
-import com.example.tamtamduku.presentation.profile.viewmodels.ReportViewModel
-import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
-import com.example.tamtamduku.presentation.tracking.viewmodels.TrackingViewModel
+import com.example.tamtamduku.core.ui.theme.AppTheme
+import com.example.tamtamduku.features.auth.AuthViewModel
+import com.example.tamtamduku.features.profile.FavoriteWorkersViewModel
+import com.example.tamtamduku.features.profile.ProfileViewModel
+import com.example.tamtamduku.features.profile.ReportViewModel
+import com.example.tamtamduku.features.search.WorkerViewModel
+import com.example.tamtamduku.features.tracking.TrackingViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

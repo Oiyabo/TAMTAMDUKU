@@ -5,20 +5,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.tamtamduku.core.theme.AppTheme
-import com.example.tamtamduku.presentation.profile.ProfileScreen
-import com.example.tamtamduku.presentation.profile.FavoriteWorkersScreen
-import com.example.tamtamduku.presentation.profile.EditProfileScreen
-import com.example.tamtamduku.presentation.profile.AddressListScreen
-import com.example.tamtamduku.presentation.profile.EditAddressScreen
-import com.example.tamtamduku.presentation.profile.ReportListScreen
-import com.example.tamtamduku.presentation.profile.CreateReportScreen
-import com.example.tamtamduku.presentation.profile.ReportDetailScreen
-import com.example.tamtamduku.presentation.profile.SettingsScreen
-import com.example.tamtamduku.presentation.auth.viewmodels.AuthViewModel
-import com.example.tamtamduku.presentation.profile.viewmodels.ProfileViewModel
-import com.example.tamtamduku.presentation.profile.viewmodels.ReportViewModel
-import com.example.tamtamduku.presentation.profile.viewmodels.FavoriteWorkersViewModel
+import com.example.tamtamduku.core.ui.theme.AppTheme
+import com.example.tamtamduku.features.profile.ProfileScreen
+import com.example.tamtamduku.features.profile.FavoriteWorkersScreen
+import com.example.tamtamduku.features.profile.EditProfileScreen
+import com.example.tamtamduku.features.profile.address.AddressListScreen
+import com.example.tamtamduku.features.profile.address.EditAddressScreen
+import com.example.tamtamduku.features.profile.reports.ReportListScreen
+import com.example.tamtamduku.features.profile.reports.CreateReportScreen
+import com.example.tamtamduku.features.profile.reports.ReportDetailScreen
+import com.example.tamtamduku.features.profile.SettingsScreen
+import com.example.tamtamduku.features.auth.AuthViewModel
+import com.example.tamtamduku.features.profile.ProfileViewModel
+import com.example.tamtamduku.features.profile.ReportViewModel
+import com.example.tamtamduku.features.profile.FavoriteWorkersViewModel
 
 import androidx.navigation.NavHostController
 

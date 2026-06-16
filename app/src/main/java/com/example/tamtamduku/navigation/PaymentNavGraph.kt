@@ -6,13 +6,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.tamtamduku.presentation.request.RequestFormScreen
-import com.example.tamtamduku.presentation.request.RequestConfirmationScreen
-import com.example.tamtamduku.presentation.payment.PaymentScreen
-import com.example.tamtamduku.presentation.payment.PaymentSimulationScreen
-import com.example.tamtamduku.presentation.payment.PaymentSuccessScreen
-import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
-import com.example.tamtamduku.presentation.tracking.viewmodels.TrackingViewModel
+import com.example.tamtamduku.features.booking.RequestFormScreen
+import com.example.tamtamduku.features.booking.RequestConfirmationScreen
+import com.example.tamtamduku.features.payment.PaymentScreen
+import com.example.tamtamduku.features.payment.PaymentSimulationScreen
+import com.example.tamtamduku.features.payment.PaymentSuccessScreen
+import com.example.tamtamduku.features.search.WorkerViewModel
+import com.example.tamtamduku.features.tracking.TrackingViewModel
 
 import androidx.navigation.NavHostController
 

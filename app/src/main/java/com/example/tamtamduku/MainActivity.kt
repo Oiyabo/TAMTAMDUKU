@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import android.content.res.Configuration
 import java.util.Locale
 import com.example.tamtamduku.navigation.AppNavigation
-import com.example.tamtamduku.core.theme.AppTheme
-import com.example.tamtamduku.core.theme.TAMTAMDUKUTheme
+import com.example.tamtamduku.core.ui.theme.AppTheme
+import com.example.tamtamduku.core.ui.theme.TAMTAMDUKUTheme
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)

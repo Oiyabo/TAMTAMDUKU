@@ -7,14 +7,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.example.tamtamduku.presentation.home.HomeScreen
-import com.example.tamtamduku.presentation.search.SearchScreen
-import com.example.tamtamduku.presentation.detail.ServiceDetailScreen
-import com.example.tamtamduku.presentation.detail.ReviewScreen
-import com.example.tamtamduku.presentation.notification.NotificationsScreen
-import com.example.tamtamduku.presentation.chat.ChatPage
-import com.example.tamtamduku.presentation.chat.PersonalChat
-import com.example.tamtamduku.presentation.search.viewmodels.WorkerViewModel
+import com.example.tamtamduku.features.home.HomeScreen
+import com.example.tamtamduku.features.search.SearchScreen
+import com.example.tamtamduku.features.booking.WorkerDetailScreen
+import com.example.tamtamduku.features.tracking.ReviewScreen
+import com.example.tamtamduku.features.notification.NotificationsScreen
+import com.example.tamtamduku.features.chat.ChatListScreen
+import com.example.tamtamduku.features.chat.PersonalChatScreen
+import com.example.tamtamduku.features.search.WorkerViewModel
 
 import androidx.navigation.NavHostController
 
@@ -91,8 +91,8 @@ fun NavGraphBuilder.homeGraph(
         )
     }
     composable("chat") {
-        ChatPage(
-            onNavigateToPersonalChat = { userName ->
+        ChatListScreen(
+            onNavigateToPersonalChatScreen = { userName ->
                 navCon.navigate("personal_chat/$userName")
             },
             onBack = { navCon.popBackStack() }
@@ -102,7 +102,7 @@ fun NavGraphBuilder.homeGraph(
         "personal_chat/{userName}",
         arguments = listOf(navArgument("userName") { type = NavType.StringType })
     ) { backStackEntry ->
-        PersonalChat(
+        PersonalChatScreen(
             userName = backStackEntry.arguments?.getString("userName") ?: "",
             onBack = { navCon.popBackStack() }
         )
@@ -124,7 +124,7 @@ fun NavGraphBuilder.homeGraph(
             navDeepLink { uriPattern = "tamtamduku://worker/{workerName}" }
         )
     ) { backStackEntry ->
-        ServiceDetailScreen(
+        WorkerDetailScreen(
             navCon = navCon,
             viewModel = workerViewModel,
             workerName = backStackEntry.arguments?.getString("workerName")
