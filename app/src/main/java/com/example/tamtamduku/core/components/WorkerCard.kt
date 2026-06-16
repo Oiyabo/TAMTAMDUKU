@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.example.tamtamduku.core.util.formatShortPrice
 import com.example.tamtamduku.domain.model.VocaWorker
 
 @Composable
@@ -163,6 +164,9 @@ fun WorkerCard(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 var expanded by remember { mutableStateOf(false) }
+                var selectedLayanan by remember(worker.layanan) { 
+                    mutableStateOf(worker.layanan.firstOrNull()) 
+                }
 
                 Box(
                     modifier = Modifier.fillMaxWidth()
@@ -179,9 +183,13 @@ fun WorkerCard(
                             horizontalArrangement = Arrangement.SpaceBetween,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            val formattedPrice = String.format("Rp. %,d", worker.baseSalary.toInt()).replace(',', '.')
+                            val displayText = if (selectedLayanan != null) {
+                                "${formatShortPrice(selectedLayanan!!.harga)} (${selectedLayanan!!.namaLayanan})"
+                            } else {
+                                "${formatShortPrice(worker.baseSalary)} (Basic)"
+                            }
                             Text(
-                                text = "$formattedPrice (Basic)",
+                                text = displayText,
                                 fontSize = 11.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.onBackground
@@ -203,17 +211,35 @@ fun WorkerCard(
                         onDismissRequest = { expanded = false },
                         modifier = Modifier.background(MaterialTheme.colorScheme.background)
                     ) {
-                        val premiumPrice = String.format("Rp. %,d", (worker.baseSalary * 1.5).toInt()).replace(',', '.')
-                        val vipPrice = String.format("Rp. %,d", (worker.baseSalary * 2.0).toInt()).replace(',', '.')
-                        
-                        DropdownMenuItem(
-                            text = { Text("Layanan Premium - $premiumPrice", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp) },
-                            onClick = { expanded = false }
-                        )
-                        DropdownMenuItem(
-                            text = { Text("Layanan VIP - $vipPrice", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp) },
-                            onClick = { expanded = false }
-                        )
+                        if (worker.layanan.isNotEmpty()) {
+                            worker.layanan.forEach { layanan ->
+                                DropdownMenuItem(
+                                    text = { 
+                                        Text(
+                                            "${layanan.namaLayanan} - ${formatShortPrice(layanan.harga)}", 
+                                            color = MaterialTheme.colorScheme.onBackground, 
+                                            fontSize = 12.sp
+                                        ) 
+                                    },
+                                    onClick = { 
+                                        selectedLayanan = layanan
+                                        expanded = false 
+                                    }
+                                )
+                            }
+                        } else {
+                            val premiumPrice = formatShortPrice(worker.baseSalary * 1.5)
+                            val vipPrice = formatShortPrice(worker.baseSalary * 2.0)
+                            
+                            DropdownMenuItem(
+                                text = { Text("Layanan Premium - $premiumPrice", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp) },
+                                onClick = { expanded = false }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Layanan VIP - $vipPrice", color = MaterialTheme.colorScheme.onBackground, fontSize = 12.sp) },
+                                onClick = { expanded = false }
+                            )
+                        }
                     }
                 }
             }

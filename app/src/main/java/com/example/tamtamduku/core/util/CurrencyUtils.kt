@@ -7,3 +7,13 @@ fun formatRupiah(amount: Double): String {
     val format = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
     return format.format(amount).replace("Rp", "Rp ")
 }
+
+fun formatShortPrice(amount: Double): String {
+    val df = java.text.DecimalFormat("#.#")
+    return when {
+        amount >= 1_000_000_000 -> "${df.format(amount / 1_000_000_000)} milyar"
+        amount >= 1_000_000 -> "${df.format(amount / 1_000_000)}jt"
+        amount >= 1_000 -> "${df.format(amount / 1_000)}rb"
+        else -> amount.toInt().toString()
+    }
+}
