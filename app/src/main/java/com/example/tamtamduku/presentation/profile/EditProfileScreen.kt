@@ -108,7 +108,7 @@ fun EditProfileScreen(
                 readOnly = true
             )
 
-
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = { 
