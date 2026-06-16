@@ -61,7 +61,7 @@ fun PaymentSuccessScreen(
         )
     }
 
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = Color(0xFFFF8C00)
 
     Scaffold(
@@ -71,7 +71,7 @@ fun PaymentSuccessScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
@@ -86,7 +86,7 @@ fun PaymentSuccessScreen(
                         text = stringResource(R.string.selesai),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -132,14 +132,14 @@ fun PaymentSuccessScreen(
                 text = "Pembayaran Berhasil!",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.terima_kasih_pembayaran_anda_telah),
                 fontSize = 14.sp,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -150,8 +150,8 @@ fun PaymentSuccessScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
@@ -159,33 +159,33 @@ fun PaymentSuccessScreen(
                         text = "Rincian Transaksi",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    DetailRow("ID Transaksi", invoiceStr, Color.Black)
+                    DetailRow("ID Transaksi", invoiceStr, MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    DetailRow("Pekerja", workerName, Color.Black)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    DetailRow("Layanan", layanan, Color.Black)
+                    DetailRow("Pekerja", workerName, MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    DetailRow("Tanggal & Waktu", dateStr, Color.Black)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    DetailRow("Metode Pembayaran", paymentMethod, Color.Black)
+                    DetailRow("Layanan", layanan, MaterialTheme.colorScheme.onSurface)
                     Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Tanggal & Waktu", dateStr, MaterialTheme.colorScheme.onSurface)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    DetailRow("Metode Pembayaran", paymentMethod, MaterialTheme.colorScheme.onSurface)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
                     Spacer(modifier = Modifier.height(12.dp))
 
                     DetailRow("Total Pembayaran", "Rp${total.toLong()}", primaryOrange, isBold = true)
@@ -198,7 +198,7 @@ fun PaymentSuccessScreen(
             PremiumInfoBox(
                 icon = Icons.AutoMirrored.Outlined.Assignment,
                 iconColor = Color(0xFF8B4F30),
-                containerColor = Color(0xFFFFF2EC),
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
                 title = stringResource(R.string.langkah_selanjutnya),
                 description = "Penyedia jasa akan segera menerima pesanan Anda dan menghubungi Anda melalui chat."
             )
@@ -228,7 +228,7 @@ fun DetailRow(label: String, value: String, valueColor: Color, isBold: Boolean =
     ) {
         Text(
             text = label,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 14.sp
         )
         Text(
@@ -279,7 +279,7 @@ fun PremiumInfoBox(
                     text = title,
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(

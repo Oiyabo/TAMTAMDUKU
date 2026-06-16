@@ -48,7 +48,7 @@ fun ReviewScreen(
         uiState.workers.find { it.nama == workerName }
     }
     
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = Color(0xFFFF8C00)
 
     val ratingDescription = when (rating) {
@@ -68,7 +68,7 @@ fun ReviewScreen(
                         Text(
                             text = stringResource(R.string.beri_rating_ulasan),
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp
                         )
                     },
@@ -77,15 +77,15 @@ fun ReviewScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, 
                                 contentDescription = "Back", 
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
         containerColor = bgColor
@@ -103,8 +103,8 @@ fun ReviewScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -128,11 +128,11 @@ fun ReviewScreen(
                             text = worker?.nama ?: "JENO",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Text(
                             text = worker?.pekerjaan ?: "Design Analyst",
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 14.sp
                         )
                         Spacer(modifier = Modifier.height(4.dp))
@@ -146,7 +146,7 @@ fun ReviewScreen(
                             Spacer(modifier = Modifier.width(4.dp))
                             val ratingValue = worker?.reviewSummary?.averageRating ?: 5.0
                             val totalReviews = worker?.reviewSummary?.totalReviews ?: 1
-                            Text("${ratingValue} (${totalReviews} ulasan)", fontSize = 12.sp, color = Color.Gray)
+                            Text("${ratingValue} (${totalReviews} ulasan)", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -155,12 +155,12 @@ fun ReviewScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Rating
-            Text(stringResource(R.string.berikan_rating), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+            Text(stringResource(R.string.berikan_rating), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 "Seberapa puas Anda dengan layanan dari ${worker?.nama?.split(" ")?.get(0) ?: "Jeno"}?",
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -175,7 +175,7 @@ fun ReviewScreen(
                         Icon(
                             imageVector = if (index < rating) Icons.Default.Star else Icons.Outlined.Star,
                             contentDescription = null,
-                            tint = if (index < rating) Color(0xFFFFA000) else Color(0xFFE0E0E0),
+                            tint = if (index < rating) Color(0xFFFFA000) else MaterialTheme.colorScheme.outlineVariant,
                             modifier = Modifier.size(48.dp)
                         )
                     }
@@ -196,12 +196,12 @@ fun ReviewScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Bagian Tulis Review
-            Text(stringResource(R.string.tulis_ulasan), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.Black)
+            Text(stringResource(R.string.tulis_ulasan), fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 stringResource(R.string.ceritakan_pengalaman_anda_dengan_layanan),
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -209,18 +209,18 @@ fun ReviewScreen(
             OutlinedTextField(
                 value = reviewText,
                 onValueChange = { if (it.length <= 500) reviewText = it },
-                placeholder = { Text(stringResource(R.string.pekerja_sangat_profesinalnsangat_recommended), color = Color.Gray) },
+                placeholder = { Text(stringResource(R.string.pekerja_sangat_profesinalnsangat_recommended), color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor = Color.White,
-                    focusedContainerColor = Color.White,
-                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline,
                     focusedBorderColor = primaryOrange,
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                 )
             )
 
@@ -251,7 +251,7 @@ fun ReviewScreen(
             ) {
                 Text(
                     text = stringResource(R.string.kirim_ulasan), 
-                    color = Color.White, 
+                    color = MaterialTheme.colorScheme.onPrimary, 
                     fontWeight = FontWeight.Bold, 
                     fontSize = 16.sp
                 )

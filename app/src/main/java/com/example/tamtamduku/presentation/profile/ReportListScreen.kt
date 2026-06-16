@@ -1,4 +1,5 @@
 package com.example.tamtamduku.presentation.profile
+import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -58,7 +59,7 @@ fun ReportListScreen(
                 )
             )
         },
-        containerColor = Color(0xFFFAF9F6),
+        containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             Box(
                 modifier = Modifier
@@ -81,7 +82,7 @@ fun ReportListScreen(
                         text = "+ Tambah Laporan",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -117,13 +118,13 @@ fun ReportListScreen(
                         text = "Belum Ada Laporan Masalah",
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 20.sp,
-                        color = Color.Black
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Semua masalah yang Anda laporkan akan muncul di sini.",
                         fontSize = 14.sp,
-                        color = Color.Gray,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         textAlign = TextAlign.Center,
                         lineHeight = 20.sp,
                         modifier = Modifier.padding(horizontal = 16.dp)
@@ -156,7 +157,7 @@ fun ReportCard(
     val statusColor = when (report.status.lowercase()) {
         "selesai" -> Color(0xFFE8F5E9)
         "menunggu" -> Color(0xFFFFF3E0)
-        else -> Color(0xFFF5F5F5)
+        else -> MaterialTheme.colorScheme.surfaceVariant
     }
     val statusTextColor = when (report.status.lowercase()) {
         "selesai" -> Color(0xFF2E7D32)
@@ -175,10 +176,10 @@ fun ReportCard(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        border = BorderStroke(1.dp, Color(0xFFF0F0F0))
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
         Row(
             modifier = Modifier
@@ -226,13 +227,13 @@ fun ReportCard(
                     text = report.category,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = report.description,
                     fontSize = 14.sp,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
                     lineHeight = 20.sp
@@ -246,7 +247,7 @@ fun ReportCard(
                     Text(
                         text = report.date,
                         fontSize = 12.sp,
-                        color = Color.Gray
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Icon(
                         imageVector = Icons.Default.ChevronRight,

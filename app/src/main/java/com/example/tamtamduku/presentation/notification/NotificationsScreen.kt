@@ -137,7 +137,7 @@ fun NotificationRow(item: Notification, onClick: () -> Unit = {}) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .clickable { onClick() }
-            .background(if (item.isRead) Color(0xFFF5F5F5) else MaterialTheme.colorScheme.background)
+            .background(if (item.isRead) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.background)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

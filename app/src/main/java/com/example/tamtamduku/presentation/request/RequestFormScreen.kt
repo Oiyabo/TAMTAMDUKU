@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -71,7 +72,7 @@ fun RequestFormScreen(
 
     if (worker == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(stringResource(R.string.pekerja_tidak_ditemukan), color = Color.Black)
+            Text(stringResource(R.string.pekerja_tidak_ditemukan), color = MaterialTheme.colorScheme.onSurface)
         }
         return
     }
@@ -92,7 +93,7 @@ fun RequestFormScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { setShowDatePicker(false) }) { Text("Batal", color = Color.Gray) }
+                TextButton(onClick = { setShowDatePicker(false) }) { Text("Batal", color = MaterialTheme.colorScheme.onSurfaceVariant) }
             }
         ) {
             DatePicker(state = datePickerState)
@@ -114,7 +115,7 @@ fun RequestFormScreen(
                 }
             },
             dismissButton = {
-                TextButton(onClick = { setShowTimePicker(false) }) { Text("Batal", color = Color.Gray) }
+                TextButton(onClick = { setShowTimePicker(false) }) { Text("Batal", color = MaterialTheme.colorScheme.onSurfaceVariant) }
             },
             text = {
                 TimePicker(state = timePickerState)
@@ -126,7 +127,7 @@ fun RequestFormScreen(
         val locationOptions = uiState.userLocations.ifEmpty { listOf("Lokasi Saya") }
         AlertDialog(
             onDismissRequest = { setShowLocationPicker(false) },
-            title = { Text("Pilih Lokasi", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Black) },
+            title = { Text("Pilih Lokasi", fontWeight = FontWeight.Bold, fontSize = 20.sp, color = MaterialTheme.colorScheme.onSurface) },
             text = {
                 Column(
                     modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -141,8 +142,8 @@ fun RequestFormScreen(
                                     setShowLocationPicker(false)
                                 },
                             shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
-                            border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                         ) {
                             Column(
@@ -154,7 +155,7 @@ fun RequestFormScreen(
                                     text = "Alamat ${index + 1}",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp,
-                                    color = Color.Black
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
@@ -177,14 +178,14 @@ fun RequestFormScreen(
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF8C00))
                 ) {
-                    Text("Tutup", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.White)
+                    Text("Tutup", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
-            containerColor = Color.White
+            containerColor = MaterialTheme.colorScheme.surface
         )
     }
 
-    val bgColor = Color(0xFFFAF9F6)
+    val bgColor = MaterialTheme.colorScheme.background
     val primaryOrange = Color(0xFFFF8C00)
 
     Scaffold(
@@ -195,7 +196,7 @@ fun RequestFormScreen(
                         Text(
                             text = stringResource(R.string.detail_permintaan),
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 20.sp
                         )
                     },
@@ -204,15 +205,15 @@ fun RequestFormScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back",
-                                tint = Color.Black
+                                tint = MaterialTheme.colorScheme.onSurface
                             )
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.White
+                        containerColor = MaterialTheme.colorScheme.surface
                     )
                 )
-                HorizontalDivider(thickness = 1.dp, color = Color(0xFFEEEEEE))
+                HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outlineVariant)
             }
         },
         bottomBar = {
@@ -220,7 +221,7 @@ fun RequestFormScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .navigationBarsPadding()
-                    .background(Color.White)
+                    .background(MaterialTheme.colorScheme.surface)
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
                 Button(
@@ -252,7 +253,7 @@ fun RequestFormScreen(
                         text = stringResource(R.string.kirim_permintaan),
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = Color.White
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -272,8 +273,8 @@ fun RequestFormScreen(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                border = BorderStroke(1.dp, Color(0xFFEEEEEE)),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
             ) {
                 Row(
@@ -289,13 +290,13 @@ fun RequestFormScreen(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(CircleShape)
-                            .background(Color.LightGray)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
                             text = stringResource(R.string.pekerja),
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 12.sp
                         )
                         Spacer(modifier = Modifier.height(2.dp))
@@ -303,12 +304,12 @@ fun RequestFormScreen(
                             text = worker.nama,
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = worker.pekerjaan,
-                            color = Color.Gray,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontSize = 13.sp
                         )
                     }
@@ -429,13 +430,13 @@ fun PremiumFormField(
             modifier = Modifier
                 .size(48.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(Color(0xFFFFF2EC)),
+                .background(MaterialTheme.colorScheme.primaryContainer),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = placeholder,
-                tint = Color(0xFF4A3B32),
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(22.dp)
             )
         }
@@ -453,15 +454,15 @@ fun PremiumFormField(
                         value = value,
                         onValueChange = {},
                         readOnly = true,
-                        placeholder = { Text(placeholder, color = Color.Gray, fontSize = 14.sp) },
+                        placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                         colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor = Color.White,
-                            focusedContainerColor = Color.White,
-                            unfocusedBorderColor = Color(0xFFE0E0E0),
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                             focusedBorderColor = Color(0xFFFF8C00),
-                            focusedTextColor = Color.Black,
-                            unfocusedTextColor = Color.Black
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                         ),
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
@@ -488,17 +489,17 @@ fun PremiumFormField(
                     value = value,
                     onValueChange = onValueChange ?: {},
                     readOnly = readOnly || (onClick != null),
-                    placeholder = { Text(placeholder, color = Color.Gray, fontSize = 14.sp) },
+                    placeholder = { Text(placeholder, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(if (isTextArea) 120.dp else 56.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor = Color.White,
-                        focusedContainerColor = Color.White,
-                        unfocusedBorderColor = Color(0xFFE0E0E0),
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
                         focusedBorderColor = Color(0xFFFF8C00),
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black
+                        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onSurface
                     ),
                     shape = RoundedCornerShape(12.dp),
                     singleLine = !isTextArea,
