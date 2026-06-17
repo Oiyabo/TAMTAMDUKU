@@ -239,7 +239,7 @@ fun RegisterScreen(
                         if (nama.isNotEmpty() && emailOrPhone.isNotEmpty() && password.isNotEmpty() && password == konfirmasiPassword) {
                             val email = if (emailOrPhone.contains("@")) emailOrPhone else ""
                             val phone = if (!emailOrPhone.contains("@")) emailOrPhone else ""
-                            viewModel.register(nama, email, phone, onRegisterSuccess)
+                            viewModel.register(nama, email, phone, password, onRegisterSuccess)
                         } else {
                             Toast.makeText(context, pleaseCompleteDataMsg, Toast.LENGTH_SHORT).show()
                         }

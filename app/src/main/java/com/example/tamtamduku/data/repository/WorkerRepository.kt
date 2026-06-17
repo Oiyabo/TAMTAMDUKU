@@ -65,6 +65,45 @@ class WorkerRepository {
         }
     }
 
+    fun getUserByEmail(email: String, onResult: (User?) -> Unit) {
+        firestore.collection("users")
+            .whereEqualTo("email", email)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (!snapshot.isEmpty) {
+                    val user = mapDocument<User>(snapshot.documents[0])
+                    onResult(user)
+                } else {
+                    onResult(null)
+                }
+            }
+            .addOnFailureListener {
+                onResult(null)
+            }
+    }
+
+    fun checkAndCreateUser(user: User, onComplete: (Boolean) -> Unit) {
+        if (user.id.isEmpty()) {
+            onComplete(false)
+            return
+        }
+        val docRef = firestore.collection("users").document(user.id)
+        docRef.get().addOnSuccessListener { doc ->
+            if (!doc.exists()) {
+                // Akun belum ada, lakukan Silent Registration
+                docRef.set(user)
+                    .addOnSuccessListener { onComplete(true) }
+                    .addOnFailureListener { onComplete(false) }
+            } else {
+                // Akun sudah ada, lewati proses pembuatan
+                onComplete(true)
+            }
+        }.addOnFailureListener {
+            onComplete(false)
+        }
+    }
+
     fun getWorkers(): Flow<List<VocaWorker>> = callbackFlow {
         val listener = firestore.collection("workers")
             .addSnapshotListener { snapshot, error ->

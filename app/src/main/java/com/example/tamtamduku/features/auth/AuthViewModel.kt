@@ -60,51 +60,76 @@ class AuthViewModel @JvmOverloads constructor(
     fun login(emailInput: String, passwordInput: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, loginError = null) }
-            try {
-                // Resolve email to username if input looks like an email (contains '@')
-                val resolvedUsername = if (emailInput.contains("@")) {
-                    try {
-                        val filterResponse = ApiClient.dummyJsonApi.filterUsers(key = "email", value = emailInput)
-                        if (filterResponse.users.isNotEmpty()) {
-                            filterResponse.users.first().username
-                        } else {
-                            emailInput // Fallback to raw input if no user is found
+            
+            repository.getUserByEmail(emailInput) { localUser ->
+                if (localUser != null && localUser.password.isNotEmpty() && localUser.password == passwordInput) {
+                    // Local login success
+                    sessionManager.saveToken("local_token_${localUser.id}", localUser.id)
+                    _uiState.update { it.copy(isLoading = false, isLoggedIn = true, userAccount = localUser) }
+                    fetchAccount()
+                    
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val token = task.result
+                            repository.updateUserFcmToken(localUser.id, token)
                         }
-                    } catch (_: Exception) {
-                        emailInput // Fallback to raw input on API failure
                     }
+                    onSuccess()
                 } else {
-                    emailInput
-                }
+                    // Fallback to DummyJSON
+                    viewModelScope.launch {
+                        try {
+                            val resolvedUsername = if (emailInput.contains("@")) {
+                                try {
+                                    val filterResponse = ApiClient.dummyJsonApi.filterUsers(key = "email", value = emailInput)
+                                    if (filterResponse.users.isNotEmpty()) {
+                                        filterResponse.users.first().username
+                                    } else {
+                                        emailInput
+                                    }
+                                } catch (_: Exception) {
+                                    emailInput
+                                }
+                            } else {
+                                emailInput
+                            }
 
-                // Call login API with resolved username
-                val response = ApiClient.dummyJsonApi.login(
-                    LoginRequest(username = resolvedUsername, password = passwordInput)
-                )
-                sessionManager.saveToken(response.accessToken, response.id.toString())
-                
-                _uiState.update { it.copy(
-                    isLoading = false,
-                    isLoggedIn = true,
-                    userAccount = User(id = response.id.toString(), name = "${response.firstName} ${response.lastName}", email = response.email)
-                ) }
-                // Re-trigger fetchAccount to get Firestore data
-                fetchAccount()
-                
-                // Sync FCM Token
-                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val token = task.result
-                        repository.updateUserFcmToken(response.id.toString(), token)
+                            val response = ApiClient.dummyJsonApi.login(
+                                LoginRequest(username = resolvedUsername, password = passwordInput)
+                            )
+                            sessionManager.saveToken(response.accessToken, response.id.toString())
+                            
+                            val newUser = User(
+                                id = response.id.toString(),
+                                name = "${response.firstName} ${response.lastName}",
+                                email = response.email,
+                                profileUrl = response.image
+                            )
+
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                isLoggedIn = true,
+                                userAccount = newUser
+                            ) }
+
+                            repository.checkAndCreateUser(newUser) {
+                                fetchAccount()
+                                FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        val token = task.result
+                                        repository.updateUserFcmToken(response.id.toString(), token)
+                                    }
+                                }
+                                onSuccess()
+                            }
+                        } catch (_: Exception) {
+                            _uiState.update { it.copy(
+                                isLoading = false,
+                                loginError = "Email/Username atau Password Salah! (Gagal login ke server)"
+                            ) }
+                        }
                     }
                 }
-
-                onSuccess()
-            } catch (_: Exception) {
-                _uiState.update { it.copy(
-                    isLoading = false,
-                    loginError = "Email/Username atau Password Salah! (Gagal login ke server)"
-                ) }
             }
         }
     }
@@ -115,7 +140,7 @@ class AuthViewModel @JvmOverloads constructor(
         onLogout()
     }
 
-    fun register(name: String, email: String, phone: String, onSuccess: () -> Unit) {
+    fun register(name: String, email: String, phone: String, passwordInput: String, onSuccess: () -> Unit) {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             // Simulating API call for registration
@@ -125,6 +150,7 @@ class AuthViewModel @JvmOverloads constructor(
                 name = name,
                 email = email,
                 phone = phone,
+                password = passwordInput,
                 address = "",
                 favoriteWorkers = emptyList(),
                 settings = UserSettings()

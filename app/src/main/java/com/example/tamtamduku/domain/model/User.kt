@@ -19,6 +19,7 @@ data class User(
     val name: String = "",
     val email: String = "",
     val phone: String = "",
+    val password:  String = "",
     val address: String = "",
     val locations: List<String> = emptyList(),
     val addressList: List<UserAddress> = emptyList(),
