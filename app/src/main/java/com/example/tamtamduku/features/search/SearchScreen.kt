@@ -94,7 +94,7 @@ fun SearchScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Tune,
-                            contentDescription = "Filter",
+                            contentDescription = stringResource(R.string.filter),
                             tint = Color(0xFFFF8C00)
                         )
                     }
