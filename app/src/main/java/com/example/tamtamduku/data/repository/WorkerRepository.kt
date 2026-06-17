@@ -127,7 +127,7 @@ class WorkerRepository {
                     return@addSnapshotListener
                 }
                 val items = snapshot?.documents?.mapNotNull { doc ->
-                    mapDocument<ChatList>(doc)
+                    mapDocument<ChatList>(doc)?.copy(id = doc.id)
                 } ?: emptyList()
                 trySend(items)
             }
@@ -168,7 +168,7 @@ class WorkerRepository {
                     return@addSnapshotListener
                 }
                 val items = snapshot?.documents?.mapNotNull { doc ->
-                    mapDocument<TransactionData>(doc)
+                    mapDocument<TransactionData>(doc)?.copy(id = doc.id)
                 } ?: emptyList()
                 trySend(items)
             }
@@ -274,7 +274,7 @@ class WorkerRepository {
                     return@addSnapshotListener
                 }
                 val items = snapshot?.documents?.mapNotNull { doc ->
-                    mapDocument<Report>(doc)
+                    mapDocument<Report>(doc)?.copy(id = doc.id)
                 } ?: emptyList()
                 trySend(items)
             }
